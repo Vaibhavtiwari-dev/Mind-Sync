@@ -15,8 +15,7 @@ import {
 import { requireWorkspaceAuth } from "./shared";
 import { checkRateLimit } from "@/lib/rate-limiter";
 import { RateLimitError } from "@/lib/errors";
-import { getEnvOptional } from "@/lib/env";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { logger } from "@/lib/logger";
 import { parseNaturalLanguageTask } from "@/features/ai/natural-language";
 
@@ -45,7 +44,7 @@ export interface ParsedIntent {
 
 /**
  * Parse natural language input into a structured intent
- * Tries Gemini first, falls back to local chrono-node parser
+ * Tries OpenAI first, falls back to local chrono-node parser
  */
 export async function parseNaturalLanguageIntent(
   input: string
@@ -65,10 +64,10 @@ export async function parseNaturalLanguageIntent(
     }
 
     // Try AI parsing first
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (apiKey) {
       try {
-        const result = await parseWithGemini(trimmedInput, apiKey);
+        const result = await parseWithOpenAI(trimmedInput);
         return createSuccessResult(result);
       } catch (aiError) {
         logger.warn("AI parsing failed, falling back to local", {
@@ -93,15 +92,11 @@ export async function parseNaturalLanguageIntent(
 }
 
 /**
- * Parse input using Gemini AI for high-quality intent extraction
+ * Parse input using OpenAI AI for high-quality intent extraction
  */
-async function parseWithGemini(
-  input: string,
-  apiKey: string
+async function parseWithOpenAI(
+  input: string
 ): Promise<ParsedIntent> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
   const sanitizedInput = input
     .replace(/```/g, "'''")
     .replace(/---+/g, "___")
@@ -140,14 +135,12 @@ Hints for action detection:
 
 Current date: ${new Date().toISOString()}`;
 
-  const result = await model.generateContent(prompt);
-  const response = await result.response;
-  const text = response.text();
+  const text = await generateContent(prompt);
 
   // Extract JSON
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) {
-    throw new APIError("Gemini", "No JSON in response");
+    throw new APIError("OpenAI", "No JSON in response");
   }
 
   const parsed = JSON.parse(jsonMatch[0]);
