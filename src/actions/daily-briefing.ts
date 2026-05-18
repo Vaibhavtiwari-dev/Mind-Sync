@@ -2,13 +2,13 @@
 
 /**
  * AI-Powered Daily Briefing
- * Generates a personalized daily overview using Gemini
+ * Generates a personalized daily overview using OpenAI
  */
 
 import { db } from "@/db";
 import { tasks, events } from "@/db/schema";
 import { eq, and, gte, lte } from "drizzle-orm";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import {
   ActionResult,
   createSuccessResult,
@@ -104,16 +104,13 @@ export async function generateDailyBriefing(): Promise<ActionResult<DailyBriefin
       };
     };
 
-    // Check for Gemini API key
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    // Check for OpenAI API key
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (!apiKey) {
       return createSuccessResult(getFallbackBriefing());
     }
 
-    // Use Gemini for AI-powered briefing
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
+    // Use OpenAI for AI-powered briefing
     const taskList = userTasks
       .slice(0, 20)
       .map((t) => `- ${t.title} (Priority: ${t.priority || "P2"}, Due: ${t.dueDate ? format(new Date(t.dueDate), "MMM d") : "No date"})`)
@@ -143,8 +140,7 @@ Return ONLY a JSON object:
 }`;
 
     try {
-      const result = await model.generateContent(prompt);
-      const text = result.response.text();
+      const text = await generateContent(prompt);
       const jsonMatch = text.match(/\{[\s\S]*\}/);
       const aiData = jsonMatch ? JSON.parse(jsonMatch[0]) : null;
 
@@ -156,14 +152,14 @@ Return ONLY a JSON object:
         return createSuccessResult(briefing);
       }
     } catch (apiError) {
-      // If Gemini fails (e.g. 429 Quota Exceeded), log it but don't crash
-      logger.warn("Gemini API failed during briefing generation, using fallback", { 
+      // If OpenAI fails, log it but don't crash
+      logger.warn("OpenAI API failed during briefing generation, using fallback", { 
         error: apiError instanceof Error ? apiError.message : "Unknown error",
         action: "daily_briefing_api_error" 
       });
     }
 
-    // Fallback if AI response parsing fails or API throws 429 quota error
+    // Fallback if AI response parsing fails
     return createSuccessResult(getFallbackBriefing());
     
   } catch (error) {
@@ -172,6 +168,7 @@ Return ONLY a JSON object:
     return createErrorResult(error);
   }
 }
+
 function getTimeOfDay(): string {
   const hour = new Date().getHours();
   if (hour < 12) return "morning";
