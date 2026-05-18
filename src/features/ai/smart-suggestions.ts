@@ -1,6 +1,7 @@
 /**
  * AI-powered smart suggestions for MindSync
  * Analyzes calendar events and suggests tasks
+ * Integrated with OpenAI /v1/responses endpoint
  */
 
 "use server";
@@ -9,12 +10,10 @@ import { db } from "@/db";
 import { tasks, events } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { checkRateLimit } from "@/lib/rate-limiter";
 import { RateLimitError, APIError, ActionResult, createSuccessResult, createErrorResult } from "@/lib/errors";
 import { revalidatePath } from "next/cache";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 interface TaskSuggestion {
   title: string;
@@ -62,8 +61,6 @@ export async function suggestTasksFromCalendar(): Promise<ActionResult<TaskSugge
       .from(tasks)
       .where(eq(tasks.userId, userId));
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       You are an AI assistant helping a user prepare for their upcoming meetings and events.
 
@@ -91,20 +88,17 @@ export async function suggestTasksFromCalendar(): Promise<ActionResult<TaskSugge
       ]
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    const text = await generateContent(prompt);
 
     // Parse JSON
     const startIdx = text.indexOf("[");
     const endIdx = text.lastIndexOf("]");
-    if (startIdx !== -1 && endIdx !== -1) {
-      text = text.substring(startIdx, endIdx + 1);
-    } else {
-      throw new APIError("Gemini", "Invalid response format");
+    if (startIdx === -1 || endIdx === -1) {
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
+    const jsonText = text.substring(startIdx, endIdx + 1);
 
-    const suggestions: TaskSuggestion[] = JSON.parse(text);
+    const suggestions: TaskSuggestion[] = JSON.parse(jsonText);
     return createSuccessResult(suggestions);
   } catch (error) {
     console.error("[AI Suggest] Error:", error);
@@ -139,8 +133,6 @@ export async function autoPrioritizeTasks(): Promise<ActionResult<{ updated: num
       .from(events)
       .where(eq(events.userId, userId));
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       You are an AI assistant helping prioritize tasks.
 
@@ -159,20 +151,17 @@ export async function autoPrioritizeTasks(): Promise<ActionResult<{ updated: num
       Example: {"uuid-1": "P0", "uuid-2": "P2"}
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    const text = await generateContent(prompt);
 
     // Parse JSON
     const startIdx = text.indexOf("{");
     const endIdx = text.lastIndexOf("}");
-    if (startIdx !== -1 && endIdx !== -1) {
-      text = text.substring(startIdx, endIdx + 1);
-    } else {
-      throw new APIError("Gemini", "Invalid response format");
+    if (startIdx === -1 || endIdx === -1) {
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
+    const jsonText = text.substring(startIdx, endIdx + 1);
 
-    const priorities: Record<string, string> = JSON.parse(text);
+    const priorities: Record<string, string> = JSON.parse(jsonText);
 
     // Update tasks in DB
     let updated = 0;
@@ -243,8 +232,6 @@ export async function generateMeetingPrep(
       });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       You are preparing someone for a meeting: "${event.title}"
 
@@ -264,17 +251,16 @@ export async function generateMeetingPrep(
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    const text = await generateContent(prompt);
 
     const startIdx = text.indexOf("{");
     const endIdx = text.lastIndexOf("}");
-    if (startIdx !== -1 && endIdx !== -1) {
-      text = text.substring(startIdx, endIdx + 1);
+    if (startIdx === -1 || endIdx === -1) {
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
+    const jsonText = text.substring(startIdx, endIdx + 1);
 
-    const prep = JSON.parse(text);
+    const prep = JSON.parse(jsonText);
     return createSuccessResult(prep);
   } catch (error) {
     console.error("[AI Prep] Error:", error);
