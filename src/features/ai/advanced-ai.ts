@@ -1,6 +1,7 @@
 /**
  * Advanced AI features for MindSync
  * Includes sentiment analysis, productivity insights, and smart reminders
+ * Integrated with OpenAI /v1/responses endpoint
  */
 
 "use server";
@@ -9,7 +10,7 @@ import { db } from "@/db";
 import { tasks, events, notes } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { auth } from "@clerk/nextjs/server";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { checkRateLimit } from "@/lib/rate-limiter";
 import {
   RateLimitError,
@@ -18,8 +19,6 @@ import {
   createSuccessResult,
   createErrorResult,
 } from "@/lib/errors";
-
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 
 // Types
 export interface SentimentResult {
@@ -80,8 +79,6 @@ export async function analyzeSentiment(
       });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       Analyze the sentiment of this meeting transcript or note.
       
@@ -105,19 +102,17 @@ export async function analyzeSentiment(
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let responseText = response.text();
+    const responseText = await generateContent(prompt);
 
     // Parse JSON
     const startIdx = responseText.indexOf("{");
     const endIdx = responseText.lastIndexOf("}");
     if (startIdx === -1 || endIdx === -1) {
-      throw new APIError("Gemini", "Invalid response format");
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
-    responseText = responseText.substring(startIdx, endIdx + 1);
+    const jsonText = responseText.substring(startIdx, endIdx + 1);
 
-    const sentimentResult: SentimentResult = JSON.parse(responseText);
+    const sentimentResult: SentimentResult = JSON.parse(jsonText);
 
     // Update note with sentiment if noteId provided
     if (noteId) {
@@ -175,8 +170,6 @@ export async function getProductivityInsights(): Promise<
         ? Math.round((completedTasks.length / userTasks.length) * 100)
         : 0;
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       Analyze this user's productivity data and provide insights.
 
@@ -212,18 +205,16 @@ export async function getProductivityInsights(): Promise<
       ]
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let responseText = response.text();
+    const responseText = await generateContent(prompt);
 
     const startIdx = responseText.indexOf("[");
     const endIdx = responseText.lastIndexOf("]");
     if (startIdx === -1 || endIdx === -1) {
-      throw new APIError("Gemini", "Invalid response format");
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
-    responseText = responseText.substring(startIdx, endIdx + 1);
+    const jsonText = responseText.substring(startIdx, endIdx + 1);
 
-    const insights: ProductivityInsight[] = JSON.parse(responseText);
+    const insights: ProductivityInsight[] = JSON.parse(jsonText);
     return createSuccessResult(insights);
   } catch (error) {
     console.error("[AI Insights] Error:", error);
@@ -271,8 +262,6 @@ export async function generateSmartReminders(): Promise<
       return createSuccessResult([]);
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       Generate smart reminders for this user based on their tasks and events.
       Current time: ${now.toISOString()}
@@ -302,18 +291,16 @@ export async function generateSmartReminders(): Promise<
       ]
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let responseText = response.text();
+    const responseText = await generateContent(prompt);
 
     const startIdx = responseText.indexOf("[");
     const endIdx = responseText.lastIndexOf("]");
     if (startIdx === -1 || endIdx === -1) {
       return createSuccessResult([]);
     }
-    responseText = responseText.substring(startIdx, endIdx + 1);
+    const jsonText = responseText.substring(startIdx, endIdx + 1);
 
-    const reminders: SmartReminder[] = JSON.parse(responseText);
+    const reminders: SmartReminder[] = JSON.parse(jsonText);
     return createSuccessResult(reminders);
   } catch (error) {
     console.error("[AI Reminders] Error:", error);
@@ -352,8 +339,6 @@ export async function getTaskInsights(
       .from(tasks)
       .where(eq(tasks.userId, userId));
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       Analyze this task and provide helpful insights.
 
@@ -384,18 +369,16 @@ export async function getTaskInsights(
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let responseText = response.text();
+    const responseText = await generateContent(prompt);
 
     const startIdx = responseText.indexOf("{");
     const endIdx = responseText.lastIndexOf("}");
     if (startIdx === -1 || endIdx === -1) {
-      throw new APIError("Gemini", "Invalid response format");
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
-    responseText = responseText.substring(startIdx, endIdx + 1);
+    const jsonText = responseText.substring(startIdx, endIdx + 1);
 
-    const insight: TaskInsight = JSON.parse(responseText);
+    const insight: TaskInsight = JSON.parse(jsonText);
     return createSuccessResult(insight);
   } catch (error) {
     console.error("[AI Task Insight] Error:", error);
@@ -450,8 +433,6 @@ export async function generateWeeklyReport(): Promise<
       (e) => new Date(e.startTime) >= oneWeekAgo
     );
 
-    const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
     const prompt = `
       Generate a weekly productivity report for this user.
 
@@ -480,18 +461,16 @@ export async function generateWeeklyReport(): Promise<
       }
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let responseText = response.text();
+    const responseText = await generateContent(prompt);
 
     const startIdx = responseText.indexOf("{");
     const endIdx = responseText.lastIndexOf("}");
     if (startIdx === -1 || endIdx === -1) {
-      throw new APIError("Gemini", "Invalid response format");
+      throw new APIError("OpenAI", "Invalid response format from AI");
     }
-    responseText = responseText.substring(startIdx, endIdx + 1);
+    const jsonText = responseText.substring(startIdx, endIdx + 1);
 
-    const report = JSON.parse(responseText);
+    const report = JSON.parse(jsonText);
     return createSuccessResult(report);
   } catch (error) {
     console.error("[AI Weekly Report] Error:", error);
