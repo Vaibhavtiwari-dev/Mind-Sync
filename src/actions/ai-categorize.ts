@@ -15,8 +15,7 @@ import {
   createErrorResult,
 } from "@/lib/errors";
 import { requireWorkspaceAuth } from "./shared";
-import { getEnvOptional } from "@/lib/env";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { logger } from "@/lib/logger";
 import { revalidateTag } from "next/cache";
 import { CACHE_TAGS } from "@/lib/data-fetchers";
@@ -134,10 +133,10 @@ export async function autoCategorizeTask(
     let result: { priority: "P0" | "P1" | "P2" | "P3"; tags: string[]; estimate: number };
 
     // Try AI categorization
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (apiKey) {
       try {
-        result = await categorizeWithAI(task.title, task.description ?? undefined, apiKey);
+        result = await categorizeWithAI(task.title, task.description ?? undefined);
       } catch (aiError) {
         logger.warn("AI categorization failed, using local heuristics", {
           action: "autoCategorizeTask",
@@ -191,12 +190,8 @@ export async function autoCategorizeTask(
 
 async function categorizeWithAI(
   title: string,
-  description: string | undefined,
-  apiKey: string
+  description: string | undefined
 ): Promise<{ priority: "P0" | "P1" | "P2" | "P3"; tags: string[]; estimate: number }> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
   const sanitized = `${title} ${description ?? ""}`
     .replace(/```/g, "'''")
     .replace(/<[^>]*>/g, "")
@@ -219,8 +214,7 @@ Priority guide: P0=critical/urgent, P1=high/important, P2=normal, P3=low
 Tags: choose from [bug, feature, docs, testing, design, devops, refactor, meeting, research, personal, health, finance]
 Estimate: realistic minutes to complete`;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
+  const text = await generateContent(prompt);
   const jsonMatch = text.match(/\{[\s\S]*\}/);
 
   if (!jsonMatch) {
