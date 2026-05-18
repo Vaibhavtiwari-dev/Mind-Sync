@@ -14,8 +14,7 @@ import {
   createErrorResult,
 } from "@/lib/errors";
 import { requireWorkspaceAuth } from "./shared";
-import { getEnvOptional } from "@/lib/env";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { logger } from "@/lib/logger";
 
 // --- Types ---
@@ -162,10 +161,10 @@ export async function suggestAlternativeSlots(
     }
 
     // If we have an API key, ask AI to rank/recommend
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (apiKey && slots.length > 2) {
       try {
-        const ranked = await rankSlotsWithAI(slots, apiKey);
+        const ranked = await rankSlotsWithAI(slots);
         return createSuccessResult(ranked);
       } catch {
         // Fallback to unranked
@@ -194,12 +193,8 @@ function formatTimeRange(start: Date, end: Date): string {
 }
 
 async function rankSlotsWithAI(
-  slots: AlternativeSlot[],
-  apiKey: string
+  slots: AlternativeSlot[]
 ): Promise<AlternativeSlot[]> {
-  const genAI = new GoogleGenerativeAI(apiKey);
-  const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
-
   const slotDescriptions = slots
     .map((s, i) => `${i}: ${s.label} (${s.reason})`)
     .join("\n");
@@ -212,8 +207,7 @@ ${slotDescriptions}
 
 Example output: [2, 0, 1, 3]`;
 
-  const result = await model.generateContent(prompt);
-  const text = result.response.text();
+  const text = await generateContent(prompt);
   const match = text.match(/\[[\d,\s]+\]/);
 
   if (match) {
