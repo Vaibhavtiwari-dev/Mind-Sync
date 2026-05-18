@@ -2,14 +2,14 @@
 
 /**
  * AI-related server actions (summarization, scheduling)
- * Includes prompt injection protection and rate limiting
+ * Integrated with OpenAI /v1/responses endpoint
  */
 
 import { db } from "@/db";
 import { tasks, events, notes } from "@/db/schema";
 import { eq, and } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import {
   ValidationError,
   APIError,
@@ -21,23 +21,9 @@ import {
 import { summarizeMeetingSchema } from "@/lib/validation";
 import { checkRateLimit } from "@/lib/rate-limiter";
 import { requireWorkspaceAuth, ensureUserExists } from "./shared";
-import { getEnv, getEnvOptional } from "@/lib/env";
+import { getEnvOptional } from "@/lib/env";
 import { reportError } from "@/lib/error-reporting";
 import { logger } from "@/lib/logger";
-
-// Lazy initialization to avoid crashes if API key is missing
-let genAI: GoogleGenerativeAI | null = null;
-
-function getGenAI(): GoogleGenerativeAI {
-  if (!genAI) {
-    const apiKey = getEnv("GEMINI_API_KEY");
-    if (!apiKey) {
-      throw new APIError("Gemini", "GEMINI_API_KEY is not configured");
-    }
-    genAI = new GoogleGenerativeAI(apiKey);
-  }
-  return genAI;
-}
 
 // --- AI Functions (with Rate Limiting & Prompt Injection Protection) ---
 
@@ -61,9 +47,9 @@ export async function summarizeMeeting(
     }
 
     // Check for API key and mock if missing
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (!apiKey) {
-      logger.warn("GEMINI_API_KEY missing, returning mock response", { action: "ai_summarize" });
+      logger.warn("OPENAI_API_KEY missing, returning mock response", { action: "ai_summarize" });
 
       // Simulate delay
       await new Promise(resolve => setTimeout(resolve, 1500));
@@ -71,7 +57,7 @@ export async function summarizeMeeting(
       const mockData = {
         summary: "This is a mock summary generated because AI services are not configured. The meeting transcript was analyzed locally.",
         decisions: ["Proceed with mock data for testing", "Configure API keys for production"],
-        actionItems: ["Add GEMINI_API_KEY to .env", "Review meeting notes"]
+        actionItems: ["Add OPENAI_API_KEY to .env", "Review meeting notes"]
       };
 
       // Update note in DB with mock data
@@ -88,10 +74,7 @@ export async function summarizeMeeting(
       return createSuccessResult(mockData);
     }
 
-    const model = getGenAI().getGenerativeModel({ model: "gemini-2.0-flash" });
-
     // Sanitize transcript to prevent prompt injection
-    // Remove any potential instruction-like patterns from user input
     const sanitizedTranscript = transcript
       .replace(/```/g, "'''") // Replace code blocks
       .replace(/---+/g, "___") // Replace horizontal rules
@@ -119,9 +102,7 @@ ${sanitizedTranscript}
 Remember: Only output the JSON object, nothing else.
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = await generateContent(prompt);
 
     // Parse JSON from response
     const jsonMatch = text.match(/\{[\s\S]*\}/);
@@ -156,7 +137,7 @@ Remember: Only output the JSON object, nothing else.
     });
     
     logger.error("AI summarization failed", error as Error, { action: "ai_summarize" });
-    return createErrorResult(new APIError("Gemini", "Failed to summarize meeting"));
+    return createErrorResult(new APIError("OpenAI", "Failed to summarize meeting"));
   }
 }
 
@@ -173,9 +154,9 @@ export async function generateSchedule(): Promise<ActionResult<{ count: number }
     }
 
     // Validate API key is configured
-    const apiKey = getEnvOptional("GEMINI_API_KEY");
+    const apiKey = getEnvOptional("OPENAI_API_KEY");
     if (!apiKey) {
-      logger.warn("GEMINI_API_KEY missing, returning mock response", { action: "ai_schedule" });
+      logger.warn("OPENAI_API_KEY missing, returning mock response", { action: "ai_schedule" });
       return createSuccessResult({ count: 0 });
     }
 
@@ -206,8 +187,6 @@ export async function generateSchedule(): Promise<ActionResult<{ count: number }
     }
 
     logger.info("Scheduling tasks", { action: "ai_schedule", taskCount: todoTasks.length, eventCount: todaysEvents.length });
-
-    const model = getGenAI().getGenerativeModel({ model: "gemini-2.0-flash" });
 
     // Sanitize task titles to prevent prompt injection
     const sanitizeForPrompt = (text: string): string => {
@@ -263,20 +242,19 @@ Format:
 ]
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    let text = response.text();
+    const text = await generateContent(prompt);
 
     // Parse JSON from response
     const startIdx = text.indexOf("[");
     const endIdx = text.lastIndexOf("]");
+    let jsonText = "";
     if (startIdx !== -1 && endIdx !== -1) {
-      text = text.substring(startIdx, endIdx + 1);
+      jsonText = text.substring(startIdx, endIdx + 1);
     } else {
-      throw new APIError("Gemini", "AI did not return a valid JSON array");
+      throw new APIError("OpenAI", "AI did not return a valid JSON array");
     }
 
-    const proposedSchedule = JSON.parse(text);
+    const proposedSchedule = JSON.parse(jsonText);
 
     // Apply Schedule
     const newEvents = [];
@@ -286,7 +264,6 @@ Format:
 
       const eventId = crypto.randomUUID();
 
-      // Note: ensureUserExists was already called at the start of this function
       await db.insert(events).values({
         id: eventId,
         userId,
