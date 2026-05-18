@@ -1,6 +1,6 @@
 "use server";
 
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { generateContent } from "@/lib/openai";
 import { logger } from "@/lib/logger";
 
 interface MeetingMinutesResult {
@@ -11,9 +11,9 @@ interface MeetingMinutesResult {
 
 export async function generateMeetingMinutes(transcript: string): Promise<MeetingMinutesResult> {
   try {
-    const apiKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const apiKey = process.env.OPENAI_API_KEY;
     if (!apiKey) {
-      logger.warn("Missing GOOGLE_GENERATIVE_AI_API_KEY. Using mock response for development.", { action: "generateMeetingMinutes" });
+      logger.warn("Missing OPENAI_API_KEY. Using mock response for development.", { action: "generateMeetingMinutes" });
       // Fallback for development if no key is present
       return {
         success: true,
@@ -30,9 +30,6 @@ export async function generateMeetingMinutes(transcript: string): Promise<Meetin
       };
     }
 
-    const genAI = new GoogleGenerativeAI(apiKey);
-    const model = genAI.getGenerativeModel({ model: "gemini-pro" });
-
     const prompt = `
       You are an expert meeting assistant. Analyze the following transcript and generate a structured set of meeting minutes.
 
@@ -47,9 +44,7 @@ export async function generateMeetingMinutes(transcript: string): Promise<Meetin
       Output Format: HTML (use <h3> for headers, <ul>/<li> for lists, <p> for text)
     `;
 
-    const result = await model.generateContent(prompt);
-    const response = await result.response;
-    const text = response.text();
+    const text = await generateContent(prompt);
 
     return { success: true, data: text };
   } catch (error) {
