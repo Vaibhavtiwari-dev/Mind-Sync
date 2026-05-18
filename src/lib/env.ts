@@ -18,8 +18,8 @@ const envSchema = z.object({
   NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: z.string().min(1, "Clerk publishable key is required"),
   CLERK_SECRET_KEY: z.string().min(1, "Clerk secret key is required"),
 
-  // Google AI (optional for development, required for AI features)
-  GEMINI_API_KEY: z.string().optional(),
+  // OpenAI AI (required for AI features)
+  OPENAI_API_KEY: z.string().min(1, "OPENAI_API_KEY is required"),
 
   // Error Tracking (Sentry)
   SENTRY_DSN: z.string().optional(),
@@ -32,6 +32,8 @@ const envSchema = z.object({
   message: "NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY is required",
 }).refine((data) => data.CLERK_SECRET_KEY, {
   message: "CLERK_SECRET_KEY is required",
+}).refine((data) => data.OPENAI_API_KEY, {
+  message: "OPENAI_API_KEY is required",
 });
 
 type EnvSchema = z.infer<typeof envSchema>;
