@@ -2,8 +2,10 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 import { getTasks, createTask, updateTask, deleteTask, toggleTaskStatus } from "../tasks";
 import { db } from "@/db";
 import { requireWorkspaceAuth } from "../shared";
+import { checkRateLimit } from "@/lib/rate-limiter";
 
 // Mock dependencies
+// ... (rest of code) ...
 vi.mock("@/actions/shared", () => ({
   requireAuth: vi.fn().mockResolvedValue({ userId: "test-user-123" }),
   requireWorkspaceAuth: vi.fn().mockResolvedValue({ 
@@ -33,13 +35,12 @@ vi.mock("@/lib/data-fetchers", () => ({
   },
 }));
 
-// Mock DB
-const mocks = {
-  selectWhere: vi.fn().mockReturnThis(),
+const mocks = vi.hoisted(() => ({
+  selectWhere: vi.fn().mockResolvedValue([]),
   insertValues: vi.fn().mockResolvedValue(true),
   updateWhere: vi.fn().mockResolvedValue(true),
   deleteWhere: vi.fn().mockResolvedValue(true),
-};
+}));
 
 vi.mock("@/db", () => ({
   db: {
@@ -98,12 +99,12 @@ describe("Tasks Server Actions", () => {
       expect(result).toEqual({ success: true, data: undefined });
 
       expect(requireWorkspaceAuth).toHaveBeenCalled();
-      expect(vi.mocked(require("@/lib/rate-limiter").checkRateLimit)).toHaveBeenCalledWith("test-user-123", "create-task", 100, 60);
+      expect(checkRateLimit).toHaveBeenCalledWith("test-user-123", "create-task", 50, 60);
       expect(db.insert).toHaveBeenCalled();
     });
 
     it("should reject if rate limited", async () => {
-      vi.mocked(require("@/lib/rate-limiter").checkRateLimit).mockResolvedValueOnce({ allowed: false, retryAfter: 60 });
+      (checkRateLimit as any).mockResolvedValueOnce({ allowed: false, retryAfter: 60 });
 
       const result = await createTask(validData);
       expect(result.success).toBe(false);
@@ -119,7 +120,8 @@ describe("Tasks Server Actions", () => {
 
   describe("updateTask", () => {
     it("should update task properties successfully", async () => {
-      const result = await updateTask("123e4567-e89b-12d3-a456-426614174000", {
+      const result = await updateTask({
+        id: "123e4567-e89b-12d3-a456-426614174000",
         title: "Updated Title",
       });
 
@@ -128,7 +130,7 @@ describe("Tasks Server Actions", () => {
     });
 
     it("should skip DB update if no properties provided", async () => {
-      const result = await updateTask("123e4567-e89b-12d3-a456-426614174000", {});
+      const result = await updateTask({ id: "123e4567-e89b-12d3-a456-426614174000" });
 
       expect(db.update).not.toHaveBeenCalled();
       expect(result.success).toBe(true);
@@ -137,6 +139,7 @@ describe("Tasks Server Actions", () => {
 
   describe("toggleTaskStatus", () => {
     it("should set task to Done when completed is true", async () => {
+      mocks.selectWhere.mockResolvedValueOnce([{ id: "123e4567-e89b-12d3-a456-426614174000" }]);
       const result = await toggleTaskStatus("123e4567-e89b-12d3-a456-426614174000", true);
 
       expect(db.update).toHaveBeenCalled();

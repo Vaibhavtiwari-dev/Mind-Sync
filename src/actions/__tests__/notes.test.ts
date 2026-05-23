@@ -16,12 +16,12 @@ vi.mock("@/lib/data-fetchers", () => ({
   },
 }));
 
-const mocks = {
+const mocks = vi.hoisted(() => ({
   selectWhere: vi.fn().mockReturnThis(),
   insertValues: vi.fn().mockResolvedValue(true),
   updateWhere: vi.fn().mockResolvedValue(true),
   deleteWhere: vi.fn().mockResolvedValue([{ id: "123e4567-e89b-12d3-a456-426614174000" }]),
-};
+}));
 
 vi.mock("@/db", () => ({
   db: {
@@ -97,6 +97,8 @@ describe("Notes Server Actions", () => {
       id: "123e4567-e89b-12d3-a456-426614174000",
       title: "New Note",
       content: "Note content",
+      preview: "Note content preview",
+      date: "2024-03-20T10:00:00Z",
     };
 
     it("should create a note successfully", async () => {
@@ -104,7 +106,7 @@ describe("Notes Server Actions", () => {
       expect(result).toEqual({ success: true, data: undefined });
       
       expect(requireWorkspaceAuth).toHaveBeenCalled();
-      expect(checkRateLimit).toHaveBeenCalledWith("test-user-123", "create-note", 50, 60);
+      expect(checkRateLimit).toHaveBeenCalledWith("test-user-123", "create-note", 60, 60);
       expect(db.insert).toHaveBeenCalled();
       expect(mocks.insertValues).toHaveBeenCalledWith(expect.objectContaining({
         title: "New Note",

@@ -20,7 +20,7 @@ vi.mock("@/lib/data-fetchers", () => ({
 
 vi.mock("@/db", () => {
   const dbMocks = {
-    selectWhere: vi.fn().mockReturnThis(),
+    selectWhere: vi.fn().mockResolvedValue([{ id: "123e4567-e89b-12d3-a456-426614174000", googleEventId: "local-123" }]),
     insertValues: vi.fn().mockResolvedValue(true),
     updateWhere: vi.fn().mockResolvedValue(true),
     deleteWhere: vi.fn().mockResolvedValue([{ id: "123e4567-e89b-12d3-a456-426614174000" }]),
@@ -42,6 +42,7 @@ vi.mock("@/db", () => {
       delete: vi.fn().mockReturnValue({
         where: dbMocks.deleteWhere,
       }),
+      _mocks: dbMocks,
     },
     // Export mocks for use in tests if needed via vi.mocked
     _mocks: dbMocks,
@@ -111,8 +112,8 @@ describe("Events Server Actions", () => {
     const validData = {
       id: "123e4567-e89b-12d3-a456-426614174000",
       title: "Team Meeting",
-      startTime: new Date("2024-03-20T10:00:00Z"),
-      endTime: new Date("2024-03-20T11:00:00Z"),
+      start: "2024-03-20T10:00:00Z",
+      end: "2024-03-20T11:00:00Z",
       type: "work" as const,
     };
 
