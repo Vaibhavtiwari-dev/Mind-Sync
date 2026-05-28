@@ -2,161 +2,109 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import {
-  LayoutDashboard,
-  Calendar,
-  FileText,
-  Timer,
-  BarChart3,
-  Kanban,
-  Settings,
-  Sparkles,
-  Search,
-  Target,
-} from "lucide-react";
-import { motion } from "framer-motion";
-import { UserButton, useUser } from "@clerk/nextjs";
-import { Logo } from "@/components/ui/Logo";
-import { WorkspaceSwitcher } from "@/components/workspace/workspace-switcher";
-
-const navItems = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/habits", label: "Habits", icon: Target },
-  { href: "/calendar", label: "Calendar", icon: Calendar },
-  { href: "/notes", label: "Notes", icon: FileText },
-  { href: "/focus", label: "Focus", icon: Timer },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/kanban", label: "Kanban", icon: Kanban },
-];
+import { useUser } from "@clerk/nextjs";
 
 export function AppSidebar() {
   const pathname = usePathname();
   const { user, isLoaded } = useUser();
 
+  const navItems = [
+    { href: "/dashboard", label: "Dashboard", icon: "space_dashboard" },
+    { href: "/habits", label: "Habits", icon: "psychology" },
+    { href: "/focus", label: "Focus", icon: "self_improvement" },
+    { href: "/kanban", label: "Kanban", icon: "hub" },
+    { href: "/analytics", label: "Analytics", icon: "monitoring" },
+    { href: "/meeting", label: "Meeting Mode", icon: "auto_fix_high" },
+    { href: "/notes", label: "Notes", icon: "auto_stories" },
+  ];
+
+  const isSettingsActive = pathname === "/settings" || pathname.startsWith("/settings/");
+
   return (
-    <aside className="glass-sidebar h-full w-full flex flex-col transition-all duration-300 pl-safe">
-      {/* Logo */}
-      <div className="border-b border-border/30 p-4 flex items-center justify-between">
-        <Logo size="sm" />
-      </div>
-
-      {/* Workspace Switcher */}
-      <div className="border-b border-border/30 px-2 py-2">
-        <WorkspaceSwitcher />
-      </div>
-
-      {/* Quick Search */}
-      <div className="px-3 py-3">
-        <div className="relative group">
-          <Search
-            size={14}
-            className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 group-hover:text-primary transition-colors"
-          />
-          <input
-            type="text"
-            placeholder="Quick Search (Cmd+K)"
-            className="bg-muted/50 border-border/50 focus:border-primary/50 focus:ring-primary/20 placeholder:text-muted-foreground/60 hover:bg-muted/80 w-full cursor-pointer rounded-lg border py-2 pl-9 text-sm transition-all focus:ring-2 focus:outline-none"
-            readOnly
-            onClick={() => {
-              const down = new KeyboardEvent("keydown", {
-                key: "k",
-                metaKey: true,
-                ctrlKey: true,
-              });
-              document.dispatchEvent(down);
-            }}
-          />
-        </div>
+    <aside className="glass-sidebar h-full w-full flex flex-col py-6 px-4 z-50 select-none">
+      {/* Brand */}
+      <div className="mb-8 px-4">
+        <h1 
+          className="font-headline-lg font-bold bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent"
+          style={{ fontSize: "32px", lineHeight: "1.3", fontFamily: "Inter, sans-serif" }}
+        >
+          Mind-Sync
+        </h1>
+        <p className="font-label-sm text-label-sm text-on-surface-variant tracking-widest mt-1">
+          ELITE TIER
+        </p>
       </div>
 
       {/* Navigation */}
-      <nav className="custom-scrollbar flex-1 overflow-y-auto px-2 py-2 space-y-1">
+      <nav className="flex-1 space-y-1 md:space-y-1.5">
         {navItems.map((item) => {
-          const isActive = pathname === item.href;
-          const Icon = item.icon;
+          const isActive = pathname === item.href || pathname.startsWith(item.href + "/");
 
           return (
             <Link
               key={item.href}
               href={item.href}
-              className={`group relative flex items-center gap-3 rounded-xl px-3 py-2.5 transition-all duration-200 ${
+              className={`flex items-center gap-3 py-2.5 px-4 rounded-xl transition-all duration-300 ${
                 isActive
-                  ? "bg-primary/10 text-primary font-medium shadow-sm"
-                  : "text-muted-foreground hover:bg-muted/60 hover:text-foreground"
+                  ? "text-primary bg-primary-container/20 border-r-2 border-primary scale-[0.98]"
+                  : "text-on-surface-variant hover:text-on-surface hover:bg-white/5"
               }`}
             >
-              <Icon
-                size={18}
-                className={`transition-all duration-200 ${
-                  isActive 
-                    ? "text-primary drop-shadow-sm" 
-                    : "text-muted-foreground group-hover:text-foreground"
-                }`}
-              />
-              <span className="text-sm">{item.label}</span>
-              
-              {isActive && (
-                <motion.div
-                  layoutId="activeIndicator"
-                  className="absolute left-0 h-6 w-1 rounded-r-full bg-primary shadow-[0_0_10px_2px_rgba(139,92,246,0.3)]"
-                  initial={false}
-                  transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                />
-              )}
+              <span className="material-symbols-outlined text-xl">{item.icon}</span>
+              <span className="font-label-sm text-label-sm">{item.label}</span>
             </Link>
           );
         })}
       </nav>
 
       {/* Bottom Section */}
-      <div className="border-t border-border/30 space-y-2 p-4">
-        <Link
-          href="/settings"
-          className="text-muted-foreground hover:bg-muted/60 hover:text-foreground flex items-center gap-3 rounded-xl px-3 py-2.5 transition-colors"
-        >
-          <Settings size={18} />
-          <span className="text-sm font-medium">Settings</span>
-        </Link>
+      <div className="mt-auto space-y-4 md:space-y-5">
+        {/* Promo Panel */}
+        <div className="p-3.5 rounded-2xl bg-primary-container/10 border border-primary/20">
+          <p className="font-label-sm text-[10px] text-primary mb-1.5">PRO PERFORMANCE</p>
+          <button className="w-full py-2 bg-primary text-on-primary font-bold rounded-lg text-label-sm hover:shadow-[0_0_15px_rgba(211,187,255,0.4)] transition-all cursor-pointer border-none outline-none">
+            Upgrade to Pro
+          </button>
+        </div>
 
-        {/* Meeting Mode / AI CTA */}
-        <Link
-          href="/meeting"
-          className="relative overflow-hidden group mb-2 flex items-center gap-2 rounded-lg p-[1px]"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-primary/20 via-primary/10 to-primary/20 group-hover:opacity-50 transition-opacity" />
-          <div className="relative bg-card/80 backdrop-blur-md flex items-center gap-2 w-full p-2.5 rounded-[7px] border border-primary/20 group-hover:border-primary/40 transition-all">
-            <Sparkles size={16} className="text-primary transition-transform group-hover:scale-110 group-hover:rotate-12" />
-            <span className="text-foreground text-xs font-semibold">Meeting Mode</span>
-          </div>
-        </Link>
+        {/* Settings & Support */}
+        <div className="flex flex-col gap-1.5">
+          <Link
+            href="/settings"
+            className={`flex items-center gap-3 py-2 px-4 rounded-lg transition-all duration-300 ${
+              isSettingsActive
+                ? "text-primary bg-primary-container/20 border-r-2 border-primary scale-[0.98]"
+                : "text-on-surface-variant hover:text-on-surface hover:bg-white/5"
+            }`}
+          >
+            <span className="material-symbols-outlined text-xl">settings</span>
+            <span className="font-label-sm text-label-sm">Settings</span>
+          </Link>
+          <Link
+            href="#"
+            className="flex items-center gap-3 py-2 px-4 text-on-surface-variant hover:text-on-surface transition-all rounded-lg hover:bg-white/5"
+          >
+            <span className="material-symbols-outlined text-xl">help_outline</span>
+            <span className="font-label-sm text-label-sm">Support</span>
+          </Link>
+        </div>
 
         {/* User Profile */}
-        <div className="bg-muted/40 border-border/50 flex items-center gap-3 rounded-xl border p-3 hover:bg-muted/60 transition-colors cursor-pointer">
-          <div className="flex-shrink-0">
-            <UserButton
-              appearance={{
-                elements: {
-                  avatarBox: "w-8 h-8 ring-2 ring-primary/20",
-                },
-              }}
-            />
-          </div>
-          <div className="min-w-0 flex-1 overflow-hidden">
-            {isLoaded && user ? (
-              <>
-                <p className="text-foreground truncate text-sm font-medium">
-                  {user.fullName || user.username || "User"}
-                </p>
-                <p className="text-muted-foreground truncate text-xs">
-                  {user.primaryEmailAddress?.emailAddress}
-                </p>
-              </>
-            ) : (
-              <div className="space-y-1">
-                <div className="bg-white/10 h-3 w-20 animate-pulse rounded" />
-                <div className="bg-white/10 h-2 w-16 animate-pulse rounded" />
-              </div>
-            )}
+        <div className="flex items-center gap-3 px-4 pt-4 border-t border-white/5">
+          <img
+            alt="User Intelligence Profile"
+            className="w-10 h-10 rounded-full border-2 border-primary/40 object-cover"
+            src={
+              isLoaded && user?.imageUrl
+                ? user.imageUrl
+                : "https://lh3.googleusercontent.com/aida-public/AB6AXuCZU3PsxUpi-jOsV6ihu_fYai7A_IJxhS3OKCBoMqZbj35iukk8UgwJ2idAKd6q5qy60VL1FDMVgCQAF6Tjs2LPTMvLHGBKjs03-iuGl26nMmvJKRRexgoEYir0lYCUiMICBzjlqWSaefuYR1qZqff6ep6yn_vRj1nDMH7UzlnW9mCyEqmibr23X3xXfDQJxSNXu-F6iqzOTlxo7jQFUkWXCddLrBreau9QHh1Ur4jyKSxu-BZFD0gHX2c76bwoLYNDXGA9S1NtCgc"
+            }
+          />
+          <div className="min-w-0 flex-1">
+            <p className="font-label-sm text-on-surface font-bold truncate leading-tight">
+              {isLoaded && user ? (user.fullName || user.username || "Alexander Vance") : "Alexander Vance"}
+            </p>
+            <p className="text-[10px] text-on-surface-variant mt-0.5">Elite Member</p>
           </div>
         </div>
       </div>
