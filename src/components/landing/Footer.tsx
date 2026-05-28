@@ -1,70 +1,29 @@
-'use client';
-
 import Link from 'next/link';
-import { Github, Twitter } from 'lucide-react';
 
 export function Footer() {
   return (
-    <footer className="border-t border-border/50 py-12 px-4">
-      <div className="max-w-6xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8">
-          {/* Brand */}
-          <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-black font-bold text-sm">
-                M
-              </div>
-              <span className="font-semibold">Mind-Sync</span>
-            </div>
-            <p className="text-sm text-muted-foreground">
-              Your AI-powered productivity companion.
-            </p>
+    <footer className="py-16 px-6 md:px-16 border-t border-outline-variant/10">
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-12">
+        {/* Brand/Copyright */}
+        <div className="flex items-center gap-3 opacity-60">
+          <div className="size-6 text-on-surface">
+            <svg fill="none" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg" className="w-full h-full">
+              <path clipRule="evenodd" d="M39.475 21.6262C40.358 21.4363 40.6863 21.5589 40.7581 21.5934C40.7876 21.655 40.8547 21.857 40.8082 22.3336C40.7408 23.0255 40.4502 24.0046 39.8572 25.2301C38.6799 27.6631 36.5085 30.6631 33.5858 33.5858C30.6631 36.5085 27.6632 38.6799 25.2301 39.8572C24.0046 40.4502 23.0255 40.7407 22.3336 40.8082C21.8571 40.8547 21.6551 40.7875 21.5934 40.7581C21.5589 40.6863 21.4363 40.358 21.6262 39.475C21.8562 38.4054 22.4689 36.9657 23.5038 35.2817C24.7575 33.2417 26.5497 30.9744 28.7621 28.762C30.9744 26.5497 33.2417 24.7574 35.2817 23.5037C36.9657 22.4689 38.4054 21.8562 39.475 21.6262ZM4.41189 29.2403L18.7597 43.5881C19.8813 44.7097 21.4027 44.9179 22.7217 44.7893C24.0585 44.659 25.5148 44.1631 26.9723 43.4579C29.9052 42.0387 33.2618 39.5667 36.4142 36.4142C39.5667 33.2618 42.0387 29.9052 43.4579 26.9723C44.1631 25.5148 44.659 24.0585 44.7893 22.7217C44.9179 21.4027 44.7097 19.8813 43.5881 18.7597L29.2403 4.41187C27.8527 3.02428 25.8765 3.02573 24.2861 3.36776C22.6081 3.72863 20.7334 4.58419 18.8396 5.74801C16.4978 7.18716 13.9881 9.18353 11.5858 11.5858C9.18354 13.988 7.18717 16.4978 5.74802 18.8396C4.58421 20.7334 3.72865 22.6081 3.36778 24.2861C3.02574 25.8765 3.02429 27.8527 4.41189 29.2403Z" fill="currentColor" fillRule="evenodd" />
+            </svg>
           </div>
-
-          {/* Product */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm">Product</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="#features" className="hover:text-foreground transition-colors">Features</Link></li>
-              <li><Link href="#pricing" className="hover:text-foreground transition-colors">Pricing</Link></li>
-              <li><Link href="#changelog" className="hover:text-foreground transition-colors">Changelog</Link></li>
-            </ul>
-          </div>
-
-          {/* Resources */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm">Resources</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="#docs" className="hover:text-foreground transition-colors">Documentation</Link></li>
-              <li><Link href="#guides" className="hover:text-foreground transition-colors">Guides</Link></li>
-              <li><Link href="#support" className="hover:text-foreground transition-colors">Support</Link></li>
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="font-semibold mb-4 text-sm">Legal</h4>
-            <ul className="space-y-2 text-sm text-muted-foreground">
-              <li><Link href="#privacy" className="hover:text-foreground transition-colors">Privacy</Link></li>
-              <li><Link href="#terms" className="hover:text-foreground transition-colors">Terms</Link></li>
-            </ul>
-          </div>
+          <span className="font-bold">Mind-Sync</span>
         </div>
 
-        {/* Bottom */}
-        <div className="flex flex-col md:flex-row justify-between items-center pt-8 border-t border-border/50">
-          <p className="text-sm text-muted-foreground mb-4 md:mb-0">
-            &copy; {new Date().getFullYear()} Mind-Sync. All rights reserved.
-          </p>
-          <div className="flex gap-4">
-            <Link href="https://github.com" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Github className="w-5 h-5" />
-            </Link>
-            <Link href="https://twitter.com" className="text-muted-foreground hover:text-foreground transition-colors">
-              <Twitter className="w-5 h-5" />
-            </Link>
-          </div>
+        {/* Links */}
+        <div className="flex gap-8 text-sm text-outline uppercase tracking-widest font-label-sm">
+          <Link className="hover:text-primary transition-colors" href="#">Privacy</Link>
+          <Link className="hover:text-primary transition-colors" href="#">Terms</Link>
+          <Link className="hover:text-primary transition-colors" href="#">Twitter</Link>
+          <Link className="hover:text-primary transition-colors" href="#">GitHub</Link>
         </div>
+
+        {/* Copyright */}
+        <p className="text-sm opacity-40">© 2024 Mind-Sync AI Labs.</p>
       </div>
     </footer>
   );

@@ -1,101 +1,46 @@
 'use client';
 
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { GradientButton } from './GradientButton';
-import { Button } from '@/components/ui/button';
+import dynamic from 'next/dynamic';
+
+const Hero3D = dynamic(
+  () => import('./Hero3D').then((mod) => mod.Hero3D),
+  { ssr: false }
+);
 
 export function HeroSection() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-black">
-      {/* Background - Solid Black with subtle noise if desired, but sticking to pure polished black */}
-      
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        className="relative z-10 text-center px-4 max-w-4xl mx-auto"
-      >
-        {/* Logo */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.5 }}
-          className="mx-auto flex h-20 w-20 items-center justify-center rounded-2xl bg-primary text-black shadow-glow mb-8"
-        >
-          <span className="text-4xl font-bold">M</span>
-        </motion.div>
+    <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden bg-transparent">
+      {/* Three.js Orb */}
+      <Hero3D />
 
-        {/* Main heading with gradient text */}
-        <motion.h1
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.2 }}
-          className="text-5xl md:text-7xl font-bold tracking-tight"
-        >
-          <span className="gradient-text-animated">
-            Mind-Sync
-          </span>
-        </motion.h1>
-
-        {/* Tagline */}
-        <motion.p
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-6 text-xl md:text-2xl text-muted-foreground max-w-2xl mx-auto text-balance"
-        >
-          Your AI-powered productivity companion.
-          <span className="block mt-2 text-lg text-muted-foreground/80">
-            Bridge the gap between planning and execution.
-          </span>
-        </motion.p>
-
-        {/* CTA Buttons */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.6 }}
-          className="mt-10 flex flex-col sm:flex-row gap-4 justify-center"
-        >
+      {/* Hero Content */}
+      <div className="text-center max-w-4xl z-10">
+        <h1 className="text-5xl md:text-8xl font-black tracking-tighter leading-tight mb-6 gradient-text-animated">
+          Intelligent &apos;Second Brain&apos; Workspace
+        </h1>
+        <p className="text-on-surface-variant text-lg md:text-xl mb-12 max-w-2xl mx-auto">
+          Sync your cognition with our neural-inspired interface. Experience the peak of human-AI collaborative productivity.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
           <Link href="/sign-up">
-            <GradientButton size="lg">
-              Get Started Free
-            </GradientButton>
+            <button className="shimmer-btn px-8 py-4 rounded-xl text-lg font-bold bg-primary text-on-primary shadow-xl hover:scale-105 transition-transform cursor-pointer">
+              Start Syncing For Free
+            </button>
           </Link>
           <Link href="/sign-in">
-            <Button size="lg" variant="outline" className="hover-lift">
-              Sign In
-            </Button>
+            <button className="px-8 py-4 rounded-xl text-lg font-bold border border-outline-variant hover:bg-white/5 transition-colors cursor-pointer text-on-surface">
+              Watch Demo
+            </button>
           </Link>
-        </motion.div>
+        </div>
+      </div>
 
-        {/* Social proof hint */}
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="mt-8 text-sm text-muted-foreground"
-        >
-          Trusted by thousands of productivity enthusiasts
-        </motion.p>
-      </motion.div>
-
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.8, delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2"
-      >
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-muted-foreground/30 flex items-start justify-center p-2"
-        >
-          <motion.div className="w-1.5 h-1.5 rounded-full bg-muted-foreground/50" />
-        </motion.div>
-      </motion.div>
+      {/* Ambient Mesh Background Effect */}
+      <div className="absolute inset-0 -z-20 opacity-30 pointer-events-none">
+        <div className="absolute top-1/4 -left-1/4 w-[600px] h-[600px] bg-primary/20 blur-[120px] rounded-full"></div>
+        <div className="absolute bottom-1/4 -right-1/4 w-[600px] h-[600px] bg-secondary/20 blur-[120px] rounded-full"></div>
+      </div>
     </section>
   );
 }

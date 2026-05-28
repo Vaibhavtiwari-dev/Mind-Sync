@@ -1,53 +1,103 @@
 'use client';
 
 import { Canvas, useFrame } from '@react-three/fiber';
-import { MeshDistortMaterial, Sphere, Float } from '@react-three/drei';
-import { useRef, Suspense } from 'react';
+import { useRef, Suspense, useMemo, useState, useEffect } from 'react';
 import * as THREE from 'three';
 
 function AnimatedSphere() {
   const meshRef = useRef<THREE.Mesh>(null);
+  const geomRef = useRef<THREE.IcosahedronGeometry>(null);
 
-  useFrame(({ clock }) => {
-    if (meshRef.current) {
-      meshRef.current.rotation.x = clock.getElapsedTime() * 0.1;
-      meshRef.current.rotation.y = clock.getElapsedTime() * 0.15;
+  // Store the initial vertex positions to compute relative noise offset
+  const initialPositions = useMemo(() => {
+    const geom = new THREE.IcosahedronGeometry(1.5, 64);
+    const pos = geom.attributes.position.array.slice() as Float32Array;
+    geom.dispose();
+    return pos;
+  }, []);
+
+  useFrame(({ clock, camera }) => {
+    // Override camera aspect ratio to force the exact vertical stretching of the design
+    if (camera instanceof THREE.PerspectiveCamera) {
+      const targetAspect = window.innerWidth / window.innerHeight;
+      if (camera.aspect !== targetAspect) {
+        camera.aspect = targetAspect;
+        camera.updateProjectionMatrix();
+      }
+    }
+
+    if (meshRef.current && geomRef.current) {
+      const time = clock.getElapsedTime();
+      const geom = geomRef.current;
+      const positions = geom.attributes.position.array as Float32Array;
+
+      for (let i = 0; i < positions.length; i += 3) {
+        const x = initialPositions[i];
+        const y = initialPositions[i + 1];
+        const z = initialPositions[i + 2];
+
+        const noise =
+          Math.sin(x * 2 + time) * 0.15 +
+          Math.cos(y * 2 + time) * 0.15 +
+          Math.sin(z * 2 + time) * 0.15;
+
+        positions[i] = x * (1 + noise);
+        positions[i + 1] = y * (1 + noise);
+        positions[i + 2] = z * (1 + noise);
+      }
+
+      geom.attributes.position.needsUpdate = true;
+      meshRef.current.rotation.y += 0.005;
+      meshRef.current.rotation.x += 0.003;
     }
   });
 
   return (
-    <Float speed={2} rotationIntensity={0.5} floatIntensity={1}>
-      <Sphere ref={meshRef} args={[1, 64, 64]} scale={2.5}>
-        <MeshDistortMaterial
-          color="#EAB308"
-          attach="material"
-          distort={0.4}
-          speed={2}
-          roughness={0.2}
-          metalness={0.9}
-        />
-      </Sphere>
-    </Float>
+    <mesh ref={meshRef} scale={[1, 1, 1]}>
+      <icosahedronGeometry ref={geomRef} args={[1.5, 64]} />
+      <meshPhongMaterial
+        color="#d3bbff"
+        wireframe={true}
+        transparent={true}
+        opacity={0.4}
+      />
+    </mesh>
   );
 }
 
 function Scene() {
   return (
     <>
-      <ambientLight intensity={0.5} />
-      <directionalLight position={[10, 10, 5]} intensity={1} color="#FDE047" />
-      <pointLight position={[-10, -10, -5]} color="#D97706" intensity={0.5} />
-      <pointLight position={[10, -10, 5]} color="#FFFFFF" intensity={0.3} />
+      <ambientLight intensity={0.5} color="#adc6ff" />
+      <directionalLight position={[2, 2, 5]} intensity={1.5} color="#ffb0ca" />
       <AnimatedSphere />
     </>
   );
 }
 
 export function Hero3D() {
+  const [size, setSize] = useState(800);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setSize(Math.min(window.innerWidth, 800));
+    };
+    handleResize();
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   return (
-    <div className="absolute inset-0 -z-10 opacity-60">
+    <div
+      id="canvas-container"
+      className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 -z-10 pointer-events-none"
+      style={{ width: size, height: size }}
+    >
       <Suspense fallback={null}>
-        <Canvas camera={{ position: [0, 0, 6], fov: 45 }}>
+        <Canvas
+          camera={{ position: [0, 0, 4], fov: 75 }}
+          style={{ display: 'block', width: '100%', height: '100%' }}
+        >
           <Scene />
         </Canvas>
       </Suspense>
