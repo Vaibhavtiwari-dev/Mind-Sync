@@ -68,7 +68,7 @@ export default function KanbanPage() {
         </Header>
       </div>
       
-      <GlassCard className="flex-1 overflow-hidden p-0 border-dashed border-2 bg-transparent shadow-none" hover="none">
+      <GlassCard className="flex-1 overflow-hidden p-0 border-none bg-transparent shadow-none" hover="none">
         <KanbanBoard />
       </GlassCard>
     </div>

@@ -61,6 +61,7 @@ const SortableTaskCard = memo(function SortableTaskCard({
   selectionMode,
   viewSettings,
   taskMap,
+  onCardClick,
 }: {
   task: Task;
   onToggle: (id: string) => void;
@@ -69,6 +70,7 @@ const SortableTaskCard = memo(function SortableTaskCard({
   selectionMode: boolean;
   viewSettings: ViewSettings;
   taskMap: Map<string, Task>;
+  onCardClick?: (task: Task) => void;
 }) {
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
     id: task.id,
@@ -91,7 +93,7 @@ const SortableTaskCard = memo(function SortableTaskCard({
 
     if (isPast(date) && !task.completed) {
       return (
-        <span className="flex items-center gap-1 text-xs text-red-500 dark:text-red-400">
+        <span className="flex items-center gap-1 text-xs text-rose-500 font-semibold dark:text-rose-400">
           <Calendar className="h-3 w-3" />
           {!isCompact && "Overdue"}
         </span>
@@ -99,7 +101,7 @@ const SortableTaskCard = memo(function SortableTaskCard({
     }
     if (isToday(date)) {
       return (
-        <span className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
+        <span className="flex items-center gap-1 text-xs text-amber-600 font-semibold dark:text-amber-400">
           <Calendar className="h-3 w-3" />
           {!isCompact && "Today"}
         </span>
@@ -107,7 +109,7 @@ const SortableTaskCard = memo(function SortableTaskCard({
     }
     if (isTomorrow(date)) {
       return (
-        <span className="flex items-center gap-1 text-xs text-blue-500 dark:text-blue-400">
+        <span className="flex items-center gap-1 text-xs text-indigo-500 font-semibold dark:text-indigo-400">
           <Calendar className="h-3 w-3" />
           {!isCompact && "Tomorrow"}
         </span>
@@ -134,12 +136,12 @@ const SortableTaskCard = memo(function SortableTaskCard({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, scale: 0.95 }}
       className={cn(
-        "border-border bg-card cursor-grab rounded-lg border shadow-sm active:cursor-grabbing",
-        "group hover:border-primary/30 card-hover relative transition-all duration-200 hover:shadow-lg",
-        isDragging && "ring-primary opacity-50 shadow-xl ring-2",
-        isSelected && "border-primary bg-primary/10 ring-primary ring-2",
-        isBlocked && "opacity-60 border-orange-300 dark:border-orange-700",
-        isCompact ? "p-2" : "p-3"
+        "bg-white/70 dark:bg-slate-900/60 backdrop-blur-md border border-slate-200/80 dark:border-slate-800/80 rounded-xl cursor-grab active:cursor-grabbing",
+        "group hover:border-indigo-500/40 dark:hover:border-indigo-500/40 relative transition-all duration-300 hover:shadow-[0_8px_30px_rgb(0,0,0,0.04)] dark:hover:shadow-[0_8px_30px_rgb(0,0,0,0.25)] hover:-translate-y-0.5",
+        isDragging && "ring-2 ring-indigo-500 opacity-40 shadow-2xl scale-[1.02]",
+        isSelected && "border-indigo-500 bg-indigo-500/5 ring-2 ring-indigo-500/30",
+        isBlocked && "opacity-60 border-orange-300/60 dark:border-orange-700/60 bg-orange-500/[0.02]",
+        isCompact ? "p-2.5" : "p-4"
       )}
       {...attributes}
       {...listeners}
@@ -148,23 +150,27 @@ const SortableTaskCard = memo(function SortableTaskCard({
           e.preventDefault();
           e.stopPropagation();
           onSelect(task.id);
+        } else if (onCardClick) {
+          e.preventDefault();
+          e.stopPropagation();
+          onCardClick(task);
         }
       }}
     >
       {/* Blocked Indicator */}
       {isBlocked && (
-        <div className="absolute -top-2 -right-2 z-10 rounded-full bg-orange-500 p-1" title={`Blocked by: ${blockingTask?.title}`}>
+        <div className="absolute -top-2 -right-2 z-10 rounded-full bg-orange-500 p-1 shadow-md shadow-orange-500/20" title={`Blocked by: ${blockingTask?.title}`}>
           <Lock className="h-3 w-3 text-white" />
         </div>
       )}
       {/* Cover Image */}
       {viewSettings.showCoverImages && task.coverImage && !isCompact && (
-        <div className="relative mb-3 h-32 w-full overflow-hidden rounded-md bg-slate-100 dark:bg-slate-900">
+        <div className="relative mb-3 h-32 w-full overflow-hidden rounded-lg bg-slate-100 dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800/50">
           <Image
             src={task.coverImage}
             alt={task.title}
             fill
-            className="object-cover"
+            className="object-cover transition-transform duration-500 group-hover:scale-105"
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
@@ -172,51 +178,47 @@ const SortableTaskCard = memo(function SortableTaskCard({
 
       <div className="flex items-start gap-3">
         {!isCompact && (
-          <GripVertical className="text-muted-foreground/50 mt-1 h-4 w-4 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
+          <GripVertical className="text-muted-foreground/30 mt-1 h-4 w-4 flex-shrink-0 opacity-0 transition-opacity group-hover:opacity-100" aria-hidden="true" />
         )}
         <div className="min-w-0 flex-1">
           <div className="flex items-start justify-between gap-2">
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 min-w-0 flex-1">
               <Checkbox
                 checked={selectionMode ? isSelected : task.completed}
                 onCheckedChange={() => {
                   if (selectionMode) onSelect(task.id);
                   else onToggle(task.id);
                 }}
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
                 className={cn(
-                  "mt-0.5",
+                  "mt-0.5 shadow-sm border-slate-300 dark:border-slate-700 data-[state=checked]:bg-indigo-600 data-[state=checked]:border-indigo-600",
                   selectionMode ? "border-blue-500 data-[state=checked]:bg-blue-500" : ""
                 )}
               />
               <span
                 className={cn(
-                  "truncate text-sm font-medium",
-                  task.completed && !selectionMode && "text-muted-foreground line-through"
+                  "truncate text-sm font-semibold tracking-tight text-slate-800 dark:text-slate-200",
+                  task.completed && !selectionMode && "text-muted-foreground/60 line-through"
                 )}
               >
                 {task.title}
               </span>
             </div>
-            {task.priority && !isCompact && <PriorityBadge priority={task.priority} size="sm" />}
-            {task.priority && isCompact && (
-              <div
-                className={cn(
-                  "h-2 w-2 flex-shrink-0 rounded-full",
-                  task.priority === "P0"
-                    ? "bg-red-500"
-                    : task.priority === "P1"
-                      ? "bg-orange-500"
-                      : task.priority === "P2"
-                        ? "bg-blue-500"
-                        : "bg-slate-500"
-                )}
-              />
+            {task.priority && (
+              <div 
+                className="flex-shrink-0"
+                onPointerDown={(e) => e.stopPropagation()}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <PriorityBadge priority={task.priority} size="sm" />
+              </div>
             )}
           </div>
 
           {!isCompact && (
             <>
-              <div className="mt-2 ml-6 flex items-center gap-3">
+              <div className="mt-2.5 ml-6 flex items-center gap-3">
                 {getDueDateDisplay()}
                 {task.estimatedMinutes && (
                   <span className="text-muted-foreground flex items-center gap-1 text-xs">
@@ -225,9 +227,9 @@ const SortableTaskCard = memo(function SortableTaskCard({
                   </span>
                 )}
                 {task.tags && task.tags.length > 0 && (
-                  <div className="flex gap-1">
+                  <div className="flex gap-1.5">
                     {task.tags.slice(0, 2).map((tag) => (
-                      <Badge key={tag} variant="secondary" className="px-1 py-0 text-[10px]">
+                      <Badge key={tag} variant="secondary" className="px-2 py-0 text-[10px] bg-slate-100 dark:bg-slate-800/80 text-slate-600 dark:text-slate-300 border-none font-medium">
                         {tag}
                       </Badge>
                     ))}
@@ -237,23 +239,23 @@ const SortableTaskCard = memo(function SortableTaskCard({
 
               {/* Subtask Progress */}
               {totalSubtasks > 0 && (
-                <div className="mt-2 ml-6 space-y-1">
-                  <div className="text-muted-foreground flex items-center justify-between text-xs">
+                <div className="mt-2.5 ml-6 space-y-1.5">
+                  <div className="text-muted-foreground flex items-center justify-between text-[11px] font-medium">
                     <span>
                       {completedSubtasks}/{totalSubtasks} subtasks
                     </span>
                     <span>{Math.round(progress)}%</span>
                   </div>
-                  <Progress value={progress} className="h-1.5" />
+                  <Progress value={progress} className="h-1.5 bg-slate-100 dark:bg-slate-800" />
                 </div>
               )}
 
               {/* Footer with Assignees */}
               {task.assignees && task.assignees.length > 0 && (
-                <div className="mt-3 ml-6 flex -space-x-2 overflow-hidden">
+                <div className="mt-3.5 ml-6 flex -space-x-2 overflow-hidden">
                   {task.assignees.map((assignee, i) => (
-                    <Avatar key={i} className="ring-background inline-block h-6 w-6 ring-2">
-                      <AvatarFallback className="bg-primary/10 text-primary text-[10px]">
+                    <Avatar key={i} className="ring-background inline-block h-6 w-6 ring-2 dark:ring-slate-900 border border-black/5 dark:border-white/10 shadow-sm">
+                      <AvatarFallback className="bg-gradient-to-br from-indigo-500/10 to-violet-500/10 text-indigo-600 dark:text-indigo-400 text-[10px] font-bold">
                         {assignee.charAt(0)}
                       </AvatarFallback>
                     </Avatar>
@@ -271,7 +273,8 @@ const SortableTaskCard = memo(function SortableTaskCard({
   prev.isSelected === next.isSelected &&
   prev.selectionMode === next.selectionMode &&
   prev.viewSettings === next.viewSettings &&
-  prev.taskMap === next.taskMap
+  prev.taskMap === next.taskMap &&
+  prev.onCardClick === next.onCardClick
 ));
 
 // Task Card for Drag Overlay
@@ -297,6 +300,7 @@ const KanbanColumn = memo(function KanbanColumn({
   onSelectTask,
   viewSettings,
   taskMap,
+  onCardClick,
 }: {
   column: Column;
   tasks: Task[];
@@ -306,6 +310,7 @@ const KanbanColumn = memo(function KanbanColumn({
   onSelectTask: (id: string) => void;
   viewSettings: ViewSettings;
   taskMap: Map<string, Task>;
+  onCardClick?: (task: Task) => void;
 }) {
   const isOverLimit =
     column.wipLimit && tasks.length > column.wipLimit && column.id === "InProgress";
@@ -319,22 +324,73 @@ const KanbanColumn = memo(function KanbanColumn({
     },
   });
 
+  // Premium custom styling mapping
+  const getColumnGlassStyle = (columnId: string) => {
+    switch (columnId) {
+      case "Todo":
+        return cn(
+          "bg-slate-500/5 dark:bg-slate-400/5 backdrop-blur-xl",
+          "border border-slate-500/10 dark:border-slate-400/10",
+          "shadow-[0_8px_32px_rgba(100,116,139,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.15)]",
+          "hover:border-slate-500/20 dark:hover:border-slate-400/20 transition-all duration-300"
+        );
+      case "InProgress":
+        return cn(
+          "bg-indigo-500/5 dark:bg-indigo-400/5 backdrop-blur-xl",
+          "border border-indigo-500/10 dark:border-indigo-400/10",
+          "shadow-[0_8px_32px_rgba(99,102,241,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]",
+          "hover:border-indigo-500/20 dark:hover:border-indigo-400/20 transition-all duration-300"
+        );
+      case "Done":
+        return cn(
+          "bg-emerald-500/5 dark:bg-emerald-400/5 backdrop-blur-xl",
+          "border border-emerald-500/10 dark:border-emerald-400/10",
+          "shadow-[0_8px_32px_rgba(16,185,129,0.04)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.2)]",
+          "hover:border-emerald-500/20 dark:hover:border-emerald-400/20 transition-all duration-300"
+        );
+      case "Backlog":
+        return cn(
+          "bg-amber-500/5 dark:bg-amber-400/5 backdrop-blur-xl",
+          "border border-amber-500/10 dark:border-amber-400/10",
+          "shadow-[0_8px_32px_rgba(245,158,11,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.15)]",
+          "hover:border-amber-500/20 dark:hover:border-amber-400/20 transition-all duration-300"
+        );
+      default:
+        return "bg-black/5 dark:bg-white/5 border border-black/5 dark:border-white/10 backdrop-blur-md";
+    }
+  };
+
+  const getHeaderBadgeStyle = (columnId: string) => {
+    switch (columnId) {
+      case "Todo":
+        return "bg-slate-500/10 text-slate-700 dark:text-slate-300 border border-slate-500/20";
+      case "InProgress":
+        return "bg-indigo-500/10 text-indigo-700 dark:text-indigo-300 border border-indigo-500/20";
+      case "Done":
+        return "bg-emerald-500/10 text-emerald-700 dark:text-emerald-300 border border-emerald-500/20";
+      case "Backlog":
+        return "bg-amber-500/10 text-amber-700 dark:text-amber-300 border border-amber-500/20";
+      default:
+        return "bg-secondary text-secondary-foreground border border-border";
+    }
+  };
+
   return (
     <div
       ref={setNodeRef}
       className={cn(
-        "flex flex-col rounded-xl p-4",
+        "flex flex-col rounded-xl p-4 transition-all duration-300",
         "max-h-[50vh] md:max-h-[calc(100vh-12rem)]",
         "w-full md:max-w-[360px] md:min-w-[280px] md:flex-1",
-        "bg-black/5 dark:bg-white/5 backdrop-blur-md border-black/5 dark:border-white/10 border",
+        getColumnGlassStyle(column.id),
         isOverLimit && "bg-destructive/10 ring-destructive/20 ring-2",
         isOver && "ring-primary ring-2 ring-inset"
       )}
     >
       <div className="mb-4 flex flex-shrink-0 items-center justify-between">
         <div className="flex items-center gap-2">
-          <h3 className={cn("font-semibold", column.color)}>{column.title}</h3>
-          <Badge variant={isOverLimit ? "destructive" : "secondary"} className="text-xs">
+          <h3 className={cn("font-bold tracking-wide", column.color)}>{column.title}</h3>
+          <Badge className={cn("text-xs font-semibold px-2 py-0.5", getHeaderBadgeStyle(column.id))}>
             {tasks.length}
             {column.wipLimit ? `/${column.wipLimit}` : ""}
           </Badge>
@@ -342,8 +398,9 @@ const KanbanColumn = memo(function KanbanColumn({
         <Button
           variant="ghost"
           size="icon"
-          className="h-6 w-6"
+          className="h-6 w-6 rounded-full hover:bg-black/10 dark:hover:bg-white/10"
           onClick={() => onAddTask(column.id)}
+          onPointerDown={(e) => e.stopPropagation()}
           aria-label={`Add task to ${column.title}`}
         >
           <Plus className="h-4 w-4" />
@@ -351,7 +408,7 @@ const KanbanColumn = memo(function KanbanColumn({
       </div>
 
       <SortableContext items={tasks.map((t) => t.id)} strategy={verticalListSortingStrategy}>
-        <div className="scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 min-h-[100px] flex-1 space-y-2 overflow-y-auto pr-1">
+        <div className="scrollbar-thin scrollbar-thumb-slate-200 dark:scrollbar-thumb-slate-700 min-h-[100px] flex-1 space-y-2.5 overflow-y-auto pr-1">
           <AnimatePresence>
             {tasks.map((task) => (
               <SortableTaskCard
@@ -363,11 +420,12 @@ const KanbanColumn = memo(function KanbanColumn({
                 selectionMode={selectedIds.length > 0}
                 viewSettings={viewSettings}
                 taskMap={taskMap}
+                onCardClick={onCardClick}
               />
             ))}
           </AnimatePresence>
           {tasks.length === 0 && (
-            <div className="text-muted-foreground rounded-lg border-2 border-dashed py-8 text-center text-sm">
+            <div className="text-muted-foreground rounded-xl border border-dashed border-slate-300 dark:border-slate-800 bg-white/20 dark:bg-slate-900/10 py-10 text-center text-sm backdrop-blur-sm">
               Drop tasks here
             </div>
           )}
@@ -391,8 +449,7 @@ export function KanbanBoard() {
   const [activeColumnIndex, setActiveColumnIndex] = useState(0);
   const scrollRef = useRef<HTMLDivElement>(null);
 
-  // Memoize task map for O(1) lookups
-  const taskMap = useMemo(() => new Map(tasks.map((t) => [t.id, t])), [tasks]);
+  const taskMap = useMemo(() => new Map<string, Task>(tasks.map((t) => [t.id, t])), [tasks]);
 
   const sensors = useSensors(
     useSensor(PointerSensor, {
@@ -597,6 +654,7 @@ export function KanbanBoard() {
                 onSelectTask={toggleSelection}
                 viewSettings={viewSettings}
                 taskMap={taskMap}
+                onCardClick={setPreviewTask}
               />
             </div>
           ))}
