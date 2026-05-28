@@ -9,6 +9,7 @@ import { cn } from "@/lib/utils"
 interface ProgressProps extends React.ComponentProps<typeof ProgressPrimitive.Root> {
   variant?: "default" | "gradient" | "success" | "warning";
   animated?: boolean;
+  indicatorClassName?: string;
 }
 
 function Progress({
@@ -16,6 +17,7 @@ function Progress({
   value,
   variant = "default",
   animated = true,
+  indicatorClassName,
   ...props
 }: ProgressProps) {
   const indicatorVariants = {
@@ -41,7 +43,7 @@ function Progress({
           data-slot="progress-indicator"
           className={cn(
             "h-full rounded-full relative overflow-hidden",
-            indicatorVariants[variant]
+            indicatorClassName || indicatorVariants[variant]
           )}
           initial={{ width: 0 }}
           animate={{ width: `${value || 0}%` }}
@@ -56,7 +58,7 @@ function Progress({
           data-slot="progress-indicator"
           className={cn(
             "h-full w-full flex-1 transition-all duration-500 ease-out",
-            indicatorVariants[variant]
+            indicatorClassName || indicatorVariants[variant]
           )}
           style={{ transform: `translateX(-${100 - (value || 0)}%)` }}
         />

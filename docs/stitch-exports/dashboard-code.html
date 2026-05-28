@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Mind-Sync Premium Hub</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;family=JetBrains+Mono:wght@500;600&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary-container": "#1c6ee1",
+                        "surface-container": "#221e28",
+                        "surface-tint": "#d3bbff",
+                        "secondary-fixed-dim": "#ffb0ca",
+                        "on-primary-fixed-variant": "#5b00c4",
+                        "surface-container-low": "#1e1a24",
+                        "on-error": "#690005",
+                        "surface-bright": "#3c3742",
+                        "surface-container-lowest": "#100d16",
+                        "on-background": "#e8dfee",
+                        "secondary-container": "#a2035b",
+                        "inverse-surface": "#e8dfee",
+                        "primary-container": "#8a49f8",
+                        "on-surface": "#e8dfee",
+                        "on-tertiary-container": "#f9f8ff",
+                        "surface-variant": "#37333e",
+                        "primary": "#d3bbff",
+                        "secondary": "#ffb0ca",
+                        "on-primary-container": "#fef7ff",
+                        "on-secondary-container": "#ffb0ca",
+                        "surface": "#15121b",
+                        "on-primary-fixed": "#260059",
+                        "on-surface-variant": "#ccc3d8",
+                        "outline": "#968da1",
+                        "on-secondary": "#640036",
+                        "error-container": "#93000a",
+                        "secondary-fixed": "#ffd9e3",
+                        "tertiary-fixed-dim": "#adc6ff",
+                        "primary-fixed-dim": "#d3bbff",
+                        "on-error-container": "#ffdad6",
+                        "on-primary": "#40008d",
+                        "tertiary-fixed": "#d8e2ff",
+                        "on-tertiary-fixed": "#001a42",
+                        "tertiary": "#adc6ff",
+                        "on-secondary-fixed-variant": "#8d004e",
+                        "surface-container-highest": "#37333e",
+                        "inverse-on-surface": "#332e39",
+                        "primary-fixed": "#ebddff",
+                        "surface-dim": "#15121b",
+                        "on-secondary-fixed": "#3e001f",
+                        "on-tertiary-fixed-variant": "#004395",
+                        "surface-container-high": "#2c2833",
+                        "outline-variant": "#4a4455",
+                        "inverse-primary": "#752ee2",
+                        "error": "#ffb4ab",
+                        "on-tertiary": "#002e6a",
+                        "background": "#15121b"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "sidebar-primary": "280px",
+                        "margin-mobile": "20px",
+                        "unit": "8px",
+                        "margin-desktop": "64px",
+                        "gutter": "32px",
+                        "sidebar-secondary": "80px",
+                        "container-max": "1440px"
+                    },
+                    "fontFamily": {
+                        "headline-xl": ["Inter"],
+                        "label-sm": ["JetBrains Mono"],
+                        "headline-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"],
+                        "display-lg-mobile": ["Inter"],
+                        "stat-lg": ["JetBrains Mono"]
+                    },
+                    "fontSize": {
+                        "headline-xl": ["48px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                        "label-sm": ["12px", {"lineHeight": "1.0", "letterSpacing": "0.1em", "fontWeight": "500"}],
+                        "headline-lg": ["32px", {"lineHeight": "1.3", "fontWeight": "600"}],
+                        "display-lg": ["72px", {"lineHeight": "1.1", "letterSpacing": "-0.04em", "fontWeight": "800"}],
+                        "body-lg": ["18px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.6", "fontWeight": "400"}],
+                        "display-lg-mobile": ["40px", {"lineHeight": "1.2", "letterSpacing": "-0.02em", "fontWeight": "800"}],
+                        "stat-lg": ["24px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+<style>
+        body {
+            background-color: #15121b;
+            color: #e8dfee;
+            overflow-x: hidden;
+        }
+        .mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -1;
+            background: radial-gradient(at 0% 0%, #260059 0%, transparent 50%),
+                        radial-gradient(at 100% 0%, #3e001f 0%, transparent 50%),
+                        radial-gradient(at 100% 100%, #001a42 0%, transparent 50%),
+                        radial-gradient(at 0% 100%, #15121b 0%, transparent 50%);
+            opacity: 0.6;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(24px);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            border-left: 1px solid rgba(255, 255, 255, 0.05);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background 0.3s ease;
+        }
+        .glass-card:hover {
+            transform: translateY(-8px);
+            background: rgba(255, 255, 255, 0.06);
+            box-shadow: 0 0 30px rgba(211, 187, 255, 0.1);
+        }
+        .gradient-text {
+            background: linear-gradient(135deg, #d3bbff 0%, #adc6ff 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: rgba(211, 187, 255, 0.2);
+            border-radius: 10px;
+        }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
+        }
+    </style>
+</head>
+<body class="font-body-md text-body-md antialiased">
+<div class="mesh-bg"></div>
+<!-- Layout Container -->
+<div class="flex min-h-screen">
+<!-- SideNavBar (Shared Component Identity) -->
+<aside class="w-sidebar-primary h-screen fixed left-0 top-0 border-r border-white/10 bg-surface/60 backdrop-blur-3xl flex flex-col py-8 px-4 z-50">
+<div class="mb-12 px-4">
+<h1 class="font-headline-lg text-headline-lg font-bold bg-gradient-to-r from-primary to-tertiary bg-clip-text text-transparent">Mind-Sync</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant tracking-widest mt-1">ELITE TIER</p>
+</div>
+<nav class="flex-1 space-y-2">
+<a class="flex items-center gap-4 py-3 px-4 rounded-xl text-primary bg-primary-container/20 border-r-2 border-primary transition-all duration-300 scale-[0.98]" href="#">
+<span class="material-symbols-outlined">space_dashboard</span>
+<span class="font-label-sm text-label-sm">Workspace</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">psychology</span>
+<span class="font-label-sm text-label-sm">Cognitive Sync</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">hub</span>
+<span class="font-label-sm text-label-sm">Neural Maps</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">auto_stories</span>
+<span class="font-label-sm text-label-sm">Library</span>
+</a>
+<a class="flex items-center gap-4 py-3 px-4 rounded-xl text-on-surface-variant hover:text-on-surface hover:bg-white/5 transition-all duration-300" href="#">
+<span class="material-symbols-outlined">monitoring</span>
+<span class="font-label-sm text-label-sm">Analytics</span>
+</a>
+</nav>
+<div class="mt-auto space-y-6">
+<div class="p-4 rounded-2xl bg-primary-container/10 border border-primary/20">
+<p class="font-label-sm text-[10px] text-primary mb-2">PRO PERFORMANCE</p>
+<button class="w-full py-2 bg-primary text-on-primary font-bold rounded-lg text-label-sm hover:shadow-[0_0_15px_rgba(211,187,255,0.4)] transition-all">Upgrade to Pro</button>
+</div>
+<div class="flex flex-col gap-2">
+<a class="flex items-center gap-4 py-2 px-4 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-sm text-label-sm">Settings</span>
+</a>
+<a class="flex items-center gap-4 py-2 px-4 text-on-surface-variant hover:text-on-surface transition-all" href="#">
+<span class="material-symbols-outlined">help_outline</span>
+<span class="font-label-sm text-label-sm">Support</span>
+</a>
+</div>
+<div class="flex items-center gap-3 px-4 pt-6 border-t border-white/5">
+<img alt="User Intelligence Profile" class="w-10 h-10 rounded-full border-2 border-primary/40 object-cover" data-alt="Close-up portrait of a high-tech professional with futuristic interface lighting reflecting on their face. The lighting is composed of neon violet and deep blue tones, highlighting a focused and intelligent expression. The background is a soft-focus laboratory or high-end office environment, creating an elite and advanced atmosphere." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCZU3PsxUpi-jOsV6ihu_fYai7A_IJxhS3OKCBoMqZbj35iukk8UgwJ2idAKd6q5qy60VL1FDMVgCQAF6Tjs2LPTMvLHGBKjs03-iuGl26nMmvJKRRexgoEYir0lYCUiMICBzjlqWSaefuYR1qZqff6ep6yn_vRj1nDMH7UzlnW9mCyEqmibr23X3xXfDQJxSNXu-F6iqzOTlxo7jQFUkWXCddLrBreau9QHh1Ur4jyKSxu-BZFD0gHX2c76bwoLYNDXGA9S1NtCgc"/>
+<div>
+<p class="font-label-sm text-on-surface font-bold">Alexander Vance</p>
+<p class="text-[10px] text-on-surface-variant">Elite Member</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Content Window -->
+<main class="ml-sidebar-primary flex-1 p-margin-desktop overflow-y-auto custom-scrollbar">
+<!-- Top Bar Section -->
+<header class="flex justify-between items-center mb-12">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface">Universal Hub</h2>
+<p class="text-on-surface-variant">Good morning, Alexander. Your cognitive flow is at 98% today.</p>
+</div>
+<div class="flex items-center gap-6">
+<div class="relative group">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline group-focus-within:text-primary transition-colors">search</span>
+<input class="bg-surface-container-low border border-outline-variant/30 rounded-full pl-10 pr-6 py-2 w-64 focus:ring-1 focus:ring-primary focus:border-primary bg-opacity-50 backdrop-blur-md outline-none transition-all font-label-sm" placeholder="Neural Search..." type="text"/>
+</div>
+<div class="flex gap-4">
+<button class="w-10 h-10 rounded-full flex items-center justify-center border border-white/10 hover:bg-white/5 transition-all">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="px-6 py-2 bg-white text-surface font-bold rounded-full text-label-sm hover:scale-105 transition-all">Ascend Now</button>
+</div>
+</div>
+</header>
+<!-- Analytics Stat Grid -->
+<section class="grid grid-cols-1 md:grid-cols-4 gap-gutter mb-12">
+<div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
+<span class="material-symbols-outlined text-primary mb-4">timer</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Focus Hours</p>
+<p class="font-stat-lg text-stat-lg mt-1">124.5<span class="text-primary text-sm ml-1">hrs</span></p>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
+<span class="material-symbols-outlined text-secondary mb-4">task_alt</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Tasks Completed</p>
+<p class="font-stat-lg text-stat-lg mt-1">842</p>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl flex flex-col justify-between border-primary/20">
+<div class="flex justify-between items-start">
+<span class="material-symbols-outlined text-orange-400 mb-4">local_fire_department</span>
+<span class="bg-orange-500/20 text-orange-400 text-[10px] px-2 py-0.5 rounded-full font-label-sm">MAX FLOW</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Current Streak</p>
+<p class="font-stat-lg text-stat-lg mt-1">18 Days 🔥</p>
+</div>
+</div>
+<div class="glass-card p-6 rounded-3xl flex flex-col justify-between">
+<span class="material-symbols-outlined text-tertiary mb-4">auto_fix_high</span>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Meeting Time Saved</p>
+<p class="font-stat-lg text-stat-lg mt-1">14.2<span class="text-tertiary text-sm ml-1">hrs</span></p>
+</div>
+</div>
+</section>
+<!-- AI Daily Briefing & Zen Mode -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter mb-12">
+<div class="lg:col-span-2 relative overflow-hidden rounded-[2rem] p-8 group border border-white/10 shadow-2xl">
+<div class="absolute inset-0 bg-gradient-to-br from-primary-container/40 via-surface/80 to-tertiary-container/30 z-0"></div>
+<div class="relative z-10 flex flex-col h-full justify-center">
+<div class="flex items-center gap-2 mb-4">
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1;">bolt</span>
+<span class="font-label-sm text-primary uppercase tracking-widest">AI Intelligence Brief</span>
+</div>
+<h3 class="font-headline-lg text-headline-lg text-on-surface mb-4">Strategic Synthesis complete.</h3>
+<p class="text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+                            Based on your last 72 hours of activity, your neural peak is between <span class="text-on-surface font-bold italic">09:00 - 11:30 AM</span>. 
+                            We've deferred 4 non-critical meetings to tomorrow to protect your Focus Window today. 
+                            Your priority P0 task "Global Architecture Review" is waiting.
+                        </p>
+<div class="mt-8 flex gap-4">
+<button class="bg-primary text-on-primary px-8 py-3 rounded-full font-bold text-label-sm hover:brightness-110 transition-all">Execute Priorities</button>
+<button class="bg-white/5 border border-white/10 px-8 py-3 rounded-full font-bold text-label-sm hover:bg-white/10 transition-all">Full Analysis</button>
+</div>
+</div>
+</div>
+<div class="relative rounded-[2rem] p-8 overflow-hidden group border border-secondary/20 flex flex-col items-center text-center justify-center bg-surface-container-lowest">
+<div class="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(255,176,202,0.1),transparent_70%)] group-hover:scale-125 transition-transform duration-1000"></div>
+<span class="material-symbols-outlined text-secondary text-5xl mb-6">self_improvement</span>
+<h4 class="font-headline-lg text-2xl text-on-surface mb-2">Zen Mode</h4>
+<p class="text-on-surface-variant mb-8 text-sm px-4">Instant neural silence. 40Hz binaural beats. Zero distractions.</p>
+<button class="w-full py-4 bg-gradient-to-r from-secondary-container to-secondary text-on-secondary-container font-black rounded-2xl hover:shadow-[0_0_20px_rgba(255,176,202,0.3)] transition-all">Launch Focus Session</button>
+</div>
+</section>
+<!-- Task Panel & Activity Log -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-gutter">
+<!-- Task Panel -->
+<div class="glass-card rounded-[2rem] p-8">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline-lg text-2xl text-on-surface">Priority Tasks</h4>
+<button class="text-primary font-label-sm hover:underline">View All</button>
+</div>
+<div class="space-y-4">
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all group border-b border-white/5">
+<div class="w-2 h-10 rounded-full bg-error"></div>
+<div class="flex-1">
+<h5 class="text-on-surface font-semibold">Global Architecture Review</h5>
+<p class="text-xs text-on-surface-variant">Core Protocol Design • Sync required</p>
+</div>
+<span class="bg-error-container text-on-error-container px-3 py-1 rounded-full text-[10px] font-label-sm">P0</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all group border-b border-white/5">
+<div class="w-2 h-10 rounded-full bg-secondary"></div>
+<div class="flex-1">
+<h5 class="text-on-surface font-semibold">Intelligence Model Feedback</h5>
+<p class="text-xs text-on-surface-variant">Dataset Validation • 14 pending logs</p>
+</div>
+<span class="bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-[10px] font-label-sm">P1</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all group border-b border-white/5">
+<div class="w-2 h-10 rounded-full bg-tertiary"></div>
+<div class="flex-1">
+<h5 class="text-on-surface font-semibold">Team Alignment Workshop</h5>
+<p class="text-xs text-on-surface-variant">Resource Allocation • Low effort</p>
+</div>
+<span class="bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-[10px] font-label-sm">P2</span>
+</div>
+<div class="flex items-center gap-4 p-4 rounded-2xl hover:bg-white/5 transition-all group border-b border-white/5">
+<div class="w-2 h-10 rounded-full bg-outline"></div>
+<div class="flex-1">
+<h5 class="text-on-surface font-semibold">Monthly Performance Report</h5>
+<p class="text-xs text-on-surface-variant">Documentation • Auto-generated</p>
+</div>
+<span class="bg-surface-variant text-on-surface-variant px-3 py-1 rounded-full text-[10px] font-label-sm">P3</span>
+</div>
+</div>
+</div>
+<!-- Activity Log Timeline -->
+<div class="glass-card rounded-[2rem] p-8">
+<div class="flex justify-between items-center mb-8">
+<h4 class="font-headline-lg text-2xl text-on-surface">Neural Activity Log</h4>
+<span class="material-symbols-outlined text-outline cursor-pointer">tune</span>
+</div>
+<div class="relative pl-8 space-y-10">
+<div class="absolute left-[7px] top-2 bottom-2 w-px bg-gradient-to-b from-primary via-secondary to-transparent opacity-30"></div>
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-primary ring-4 ring-primary/20 shadow-[0_0_15px_rgba(211,187,255,0.6)]"></div>
+<div>
+<p class="text-xs font-label-sm text-primary mb-1">08:42 AM</p>
+<h5 class="text-on-surface font-semibold">Deep Focus Initialized</h5>
+<p class="text-sm text-on-surface-variant">Neural noise reduced by 94%. Core systems focused on Architecture.</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-secondary ring-4 ring-secondary/20"></div>
+<div>
+<p class="text-xs font-label-sm text-secondary mb-1">09:15 AM</p>
+<h5 class="text-on-surface font-semibold">Insight Synthesis</h5>
+<p class="text-sm text-on-surface-variant">AI detected a bottleneck in the current protocol stack. Adjusting...</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-tertiary ring-4 ring-tertiary/20"></div>
+<div>
+<p class="text-xs font-label-sm text-tertiary mb-1">10:30 AM</p>
+<h5 class="text-on-surface font-semibold">Meeting Suppression</h5>
+<p class="text-sm text-on-surface-variant">Blocked 2 incoming calls to maintain cognitive flow state.</p>
+</div>
+</div>
+<div class="relative">
+<div class="absolute -left-[31px] top-1 w-4 h-4 rounded-full bg-outline-variant ring-4 ring-outline-variant/20"></div>
+<div>
+<p class="text-xs font-label-sm text-on-surface-variant mb-1">11:00 AM</p>
+<h5 class="text-on-surface font-semibold">Sync Point Reached</h5>
+<p class="text-sm text-on-surface-variant">Project "Global Arch" at 65% completion. Optimal flow sustained.</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+</div>
+<!-- Footer (Shared Component Identity) -->
+<footer class="ml-sidebar-primary border-t border-outline-variant/20 bg-surface-container-lowest mt-12 py-12 px-margin-desktop">
+<div class="max-w-container-max mx-auto flex flex-col items-center gap-8">
+<div class="flex flex-wrap justify-center gap-8">
+<a class="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">Privacy Protocol</a>
+<a class="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">Neural Terms</a>
+<a class="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">System Status</a>
+<a class="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">Elite Support</a>
+</div>
+<div class="text-center">
+<p class="font-headline-lg text-2xl font-bold text-on-surface mb-2">Mind-Sync</p>
+<p class="text-on-surface-variant text-sm font-label-sm">© 2024 Mind-Sync. All Rights Reserved.</p>
+</div>
+</div>
+</footer>
+<script>
+        // Micro-interactions and atmospheric movement
+        document.addEventListener('mousemove', (e) => {
+            const mesh = document.querySelector('.mesh-bg');
+            const x = e.clientX / window.innerWidth;
+            const y = e.clientY / window.innerHeight;
+            
+            mesh.style.background = `radial-gradient(at ${x * 100}% ${y * 100}%, #260059 0%, transparent 50%),
+                                    radial-gradient(at ${100 - x * 100}% ${100 - y * 100}%, #3e001f 0%, transparent 50%),
+                                    radial-gradient(at 100% 100%, #001a42 0%, transparent 50%),
+                                    radial-gradient(at 0% 100%, #15121b 0%, transparent 50%)`;
+        });
+
+        // Pulsing progress effect simulation
+        const stats = document.querySelectorAll('.font-stat-lg');
+        stats.forEach(stat => {
+            stat.addEventListener('mouseenter', () => {
+                stat.style.transition = 'all 0.5s ease';
+                stat.style.letterSpacing = '0.05em';
+            });
+            stat.addEventListener('mouseleave', () => {
+                stat.style.letterSpacing = 'normal';
+            });
+        });
+    </script>
+</body></html>

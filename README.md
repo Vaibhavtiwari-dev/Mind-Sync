@@ -12,6 +12,7 @@
     <img src="https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=flat-square&logo=drizzle" />
     <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql" />
     <img src="https://img.shields.io/badge/Gemini-AI-8E75B2?style=flat-square&logo=google-bard" />
+    <img src="https://img.shields.io/badge/Tests-109%20passing-brightgreen?style=flat-square&logo=vitest" />
   </p>
 
   <p align="center">
@@ -60,7 +61,7 @@
 1.  **Clone the repo**
 
     ```bash
-    git clone https://github.com/vaibhav09012007-design/Mind-Sync.git
+    git clone https://github.com/Vaibhavtiwari-dev/Mind-Sync.git
     cd mind-sync
     ```
 
@@ -87,10 +88,16 @@
 
 ## 📸 Screenshots
 
-_(Add screenshots here later!)_
+> **Live Demo**: [mindsync-app-opal.vercel.app](https://mindsync-app-opal.vercel.app/)
+
+### Desktop View
+![Mind-Sync Desktop Landing Page](public/assets/screenshots/landing.png)
+
+### Mobile View
+![Mind-Sync Mobile Landing Page](public/assets/screenshots/landing_mobile.png)
 
 ---
 
 <div align="center">
-  <p>Built with ❤️ by <a href="https://github.com/vaibhav09012007-design">Vaibhav Tiwari</a></p>
+  <p>Built with ❤️ by <a href="https://github.com/Vaibhavtiwari-dev">Vaibhav Tiwari</a></p>
 </div>

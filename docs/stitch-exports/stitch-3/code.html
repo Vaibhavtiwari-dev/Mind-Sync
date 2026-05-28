@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>EuroGrant AI - Executive Dashboard</title>
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Theme Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#e1e3e0",
+                      "on-error-container": "#ffdad6",
+                      "on-primary-container": "#80bea6",
+                      "secondary-container": "#ab4c00",
+                      "on-primary-fixed-variant": "#0b513d",
+                      "surface-variant": "#323533",
+                      "on-secondary-fixed-variant": "#763300",
+                      "on-secondary-fixed": "#331200",
+                      "on-tertiary-container": "#ff9939",
+                      "outline": "#89938d",
+                      "surface-container-high": "#272b29",
+                      "surface-bright": "#373a38",
+                      "secondary-fixed-dim": "#ffb68e",
+                      "tertiary-fixed-dim": "#ffb77d",
+                      "surface-container-lowest": "#0c0f0d",
+                      "surface-container-highest": "#323533",
+                      "primary-fixed": "#b0f0d6",
+                      "on-secondary-container": "#ffe2d5",
+                      "error-container": "#93000a",
+                      "on-surface-variant": "#bfc9c3",
+                      "primary": "#95d3ba",
+                      "on-secondary": "#532200",
+                      "inverse-surface": "#e1e3e0",
+                      "secondary": "#ffb68e",
+                      "background": "#111412",
+                      "on-tertiary": "#4d2600",
+                      "outline-variant": "#404944",
+                      "primary-container": "#064e3b",
+                      "inverse-on-surface": "#2e312f",
+                      "tertiary-fixed": "#ffdcc3",
+                      "on-tertiary-fixed-variant": "#6e3900",
+                      "on-primary-fixed": "#002117",
+                      "tertiary-container": "#6a3700",
+                      "surface": "#111412",
+                      "on-error": "#690005",
+                      "surface-tint": "#95d3ba",
+                      "on-surface": "#e1e3e0",
+                      "on-primary": "#003829",
+                      "on-tertiary-fixed": "#2f1500",
+                      "primary-fixed-dim": "#95d3ba",
+                      "error": "#ffb4ab",
+                      "inverse-primary": "#2b6954",
+                      "tertiary": "#ffb77d",
+                      "secondary-fixed": "#ffdbca",
+                      "surface-container": "#1d201e",
+                      "surface-dim": "#111412",
+                      "surface-container-low": "#191c1b"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "xl": "80px",
+                      "xs": "4px",
+                      "margin-mobile": "16px",
+                      "margin-desktop": "64px",
+                      "md": "24px",
+                      "base": "8px",
+                      "sm": "12px",
+                      "lg": "48px",
+                      "gutter": "24px"
+              },
+              "fontFamily": {
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "display": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.02em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "display": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        /* Base typography enforcement to ensure correct rendering if classes are missed on wrappers */
+        body {
+            font-family: 'Inter', sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        /* Custom scrollbar for a premium feel */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #404944; /* outline-variant */
+            border-radius: 9999px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #89938d; /* outline */
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md text-body-md min-h-screen flex overflow-hidden">
+<!-- SIDE NAVIGATION BAR (Predicted Component) -->
+<nav class="h-screen w-64 fixed left-0 top-0 bg-surface dark:bg-surface bg-surface-container-high dark:bg-surface-container-high border-r border-outline-variant/20 flex flex-col py-md hidden md:flex z-50">
+<!-- Brand Header -->
+<div class="px-md pb-lg">
+<div class="flex items-center gap-sm mb-xs">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center shadow-[0_0_15px_rgba(6,78,59,0.4)] border border-primary-fixed/30">
+<span class="material-symbols-outlined text-background text-[20px]" style="font-variation-settings: 'FILL' 1;">view_in_ar</span>
+</div>
+<h1 class="font-headline-md text-headline-md text-primary">EuroGrant AI</h1>
+</div>
+<p class="font-label-sm text-label-sm text-on-surface-variant ml-10">The Modern Atelier</p>
+</div>
+<!-- CTA Button -->
+<div class="px-md mb-lg">
+<button class="w-full bg-secondary-container hover:bg-secondary text-on-secondary-container font-label-md text-label-md py-sm px-md rounded-lg flex items-center justify-center gap-sm transition-all duration-300 shadow-[0_0_20px_rgba(171,76,0,0.15)] hover:shadow-[0_0_25px_rgba(171,76,0,0.3)] border border-secondary-fixed-dim/20">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Proposal
+            </button>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col space-y-xs w-full">
+<!-- Active Tab: Dashboard -->
+<a class="group flex items-center space-x-sm py-sm px-md hover:bg-surface-variant/50 hover:text-secondary-fixed transition-all duration-300 text-primary dark:text-primary-fixed border-r-4 border-secondary bg-surface-variant/20" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Inactive Tab: Analytics -->
+<a class="group flex items-center space-x-sm py-sm px-md hover:bg-surface-variant/50 hover:text-secondary-fixed transition-all duration-300 text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">insights</span>
+<span class="font-label-md text-label-md">Analytics</span>
+</a>
+<!-- Inactive Tab: Grant Search -->
+<a class="group flex items-center space-x-sm py-sm px-md hover:bg-surface-variant/50 hover:text-secondary-fixed transition-all duration-300 text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">search</span>
+<span class="font-label-md text-label-md">Grant Search</span>
+</a>
+<!-- Inactive Tab: My Proposals -->
+<a class="group flex items-center space-x-sm py-sm px-md hover:bg-surface-variant/50 hover:text-secondary-fixed transition-all duration-300 text-on-surface-variant dark:text-on-surface-variant" href="#">
+<span class="material-symbols-outlined">description</span>
+<span class="font-label-md text-label-md">My Proposals</span>
+</a>
+<!-- Inactive Tab: Settings -->
+<a class="group flex items-center space-x-sm py-sm px-md hover:bg-surface-variant/50 hover:text-secondary-fixed transition-all duration-300 text-on-surface-variant dark:text-on-surface-variant mt-auto" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+</nav>
+<!-- MAIN CONTENT CANVAS -->
+<main class="flex-1 flex flex-col md:ml-64 h-screen bg-background relative overflow-hidden">
+<!-- Subtle Ambient Background Glow -->
+<div class="absolute top-0 left-1/4 w-[800px] h-[400px] bg-primary-container/10 rounded-full blur-[120px] pointer-events-none"></div>
+<!-- TOP APP BAR (Predicted Component) -->
+<header class="w-full h-16 bg-background dark:bg-background bg-surface-container dark:bg-surface-container border-b border-outline-variant/30 flex justify-between items-center px-margin-desktop sticky top-0 z-40 backdrop-blur-md bg-opacity-80">
+<!-- Search Bar (on left) -->
+<div class="flex-1 max-w-md relative group">
+<span class="material-symbols-outlined absolute left-sm top-1/2 -translate-y-1/2 text-on-surface-variant group-focus-within:text-primary transition-colors">search</span>
+<input class="w-full bg-surface-container-high border border-outline-variant/50 rounded-full py-2 pl-10 pr-4 font-body-md text-body-md text-on-surface placeholder:text-on-surface-variant focus:outline-none focus:border-secondary-container focus:ring-1 focus:ring-secondary-container transition-all shadow-inner" placeholder="Search proposals, grants, or keywords..." type="text"/>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md ml-auto">
+<div class="flex items-center gap-sm">
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-80 relative">
+<span class="material-symbols-outlined">notifications</span>
+<span class="absolute top-2 right-2 w-2 h-2 bg-secondary-container rounded-full border border-surface-container"></span>
+</button>
+<button class="w-10 h-10 rounded-full flex items-center justify-center text-on-surface-variant hover:text-secondary transition-colors duration-200 cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">help_outline</span>
+</button>
+</div>
+<div class="w-px h-6 bg-outline-variant/30 mx-sm"></div>
+<!-- Profile Avatar -->
+<button class="flex items-center gap-sm cursor-pointer active:opacity-80 group">
+<div class="w-9 h-9 rounded-full overflow-hidden border border-outline-variant/50 group-hover:border-primary transition-colors">
+<img alt="User profile avatar" class="w-full h-full object-cover" data-alt="A close-up, professional studio portrait of a corporate executive. The lighting is dramatic and moody, utilizing deep shadows and crisp, high-end commercial photography techniques. The background is completely black, emphasizing authority and focus. Subtle rim lighting traces the silhouette." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB0lqEU-OEh5httuR3zkAYjzjv2pwz6PWpmMtIHEt4QA2Ig1ctqvjyngcU_VsDPVlKTTOh1WAOXDG3LJfysLDpYmloiKJxYuWVIpQgwxtYSEMJXMlkVw8yXIuBP9d8FTDu3n-UCTvqhcZ7D7nU5iZrqYInC25Sbpa13KiKPgK0sE98U2ib1RpdEH-_ElP_pmnd5MHQEdQBMUTfRIXoRQzgMgJ3kPplDqJjQUj8mjlBKbZiJ-RlxWFESJYDMA_yCt8id7viTlrE0KKb-"/>
+</div>
+</button>
+</div>
+</header>
+<!-- DASHBOARD CONTENT SCROLL AREA -->
+<div class="flex-1 overflow-y-auto px-margin-mobile md:px-margin-desktop py-lg space-y-md z-10">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between mb-lg gap-sm">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface mb-xs">Executive Overview</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant">Real-time telemetry on active funding opportunities and generation pipelines.</p>
+</div>
+<div class="flex items-center gap-sm text-sm text-on-surface-variant bg-surface-container-high px-sm py-xs rounded-lg border border-outline-variant/20">
+<span class="material-symbols-outlined text-[16px] text-primary">sync</span>
+<span class="font-label-sm text-label-sm">Last synced: Just now</span>
+</div>
+</div>
+<!-- KEY METRICS ROW (Glassmorphic Cards) -->
+<section class="grid grid-cols-1 md:grid-cols-3 gap-gutter">
+<!-- Metric 1: Active Matches -->
+<div class="bg-surface-container/40 backdrop-blur-md border border-secondary-container/30 rounded-xl p-md relative overflow-hidden group hover:bg-surface-container/60 transition-all duration-300">
+<div class="absolute top-0 right-0 p-sm opacity-20 group-hover:opacity-40 transition-opacity">
+<span class="material-symbols-outlined text-display">radar</span>
+</div>
+<p class="font-label-md text-label-md text-on-surface-variant mb-sm uppercase tracking-wider">Active High Matches</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-display text-display text-on-surface">42</h3>
+<span class="font-label-sm text-label-sm text-primary bg-primary-container/30 px-2 py-0.5 rounded flex items-center gap-xs">
+<span class="material-symbols-outlined text-[14px]">arrow_upward</span> 12%
+                        </span>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Across Horizon Europe &amp; EIC Accelerator</p>
+</div>
+<!-- Metric 2: Proposal Success Engine (Emerald Focus) -->
+<div class="bg-surface-container/40 backdrop-blur-md border border-primary/30 rounded-xl p-md relative overflow-hidden shadow-[0_0_30px_rgba(6,78,59,0.15)] group hover:shadow-[0_0_40px_rgba(6,78,59,0.25)] transition-all duration-300">
+<div class="absolute top-0 left-0 w-1 h-full bg-primary"></div>
+<p class="font-label-md text-label-md text-primary mb-sm uppercase tracking-wider">AI Generation Quality</p>
+<div class="flex items-baseline gap-sm">
+<h3 class="font-display text-display text-primary">94<span class="text-headline-md">%</span></h3>
+</div>
+<div class="mt-sm w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 94%"></div>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Average match score to evaluator criteria</p>
+</div>
+<!-- Metric 3: Pipeline Value -->
+<div class="bg-surface-container/40 backdrop-blur-md border border-outline-variant/30 rounded-xl p-md relative overflow-hidden group hover:border-secondary-container/40 transition-all duration-300">
+<p class="font-label-md text-label-md text-on-surface-variant mb-sm uppercase tracking-wider">Total Pipeline Value</p>
+<div class="flex items-baseline gap-xs">
+<span class="font-headline-md text-headline-md text-on-surface-variant">€</span>
+<h3 class="font-display text-display text-on-surface">18.5<span class="text-headline-md">M</span></h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant mt-sm">Projected funding from active generations</p>
+</div>
+</section>
+<!-- BENTO GRID COMPLEX SECTION -->
+<section class="grid grid-cols-1 lg:grid-cols-3 gap-gutter">
+<!-- RAG PIPELINE PROGRESS (Col span 2) -->
+<div class="lg:col-span-2 bg-surface-container/40 backdrop-blur-md border border-outline-variant/30 rounded-xl flex flex-col overflow-hidden">
+<div class="p-md border-b border-outline-variant/20 flex justify-between items-center bg-surface-container-low/50">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary-container">account_tree</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">RAG Pipeline Progress</h3>
+</div>
+<button class="font-label-md text-label-md text-primary hover:text-primary-fixed transition-colors">View All</button>
+</div>
+<div class="p-md flex-1 overflow-y-auto space-y-md">
+<!-- Pipeline Item 1 -->
+<div class="group bg-surface-container-high rounded-lg p-sm border border-transparent hover:border-secondary-container/30 transition-all duration-200">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">EIC-2024-ACCELERATOR-01</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">Project GreenLithium • €2.5M Request</p>
+</div>
+<span class="px-2 py-1 bg-secondary-container/20 text-secondary border border-secondary-container/50 rounded text-[11px] font-bold uppercase tracking-wider">Generating</span>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between text-[12px] font-label-sm text-on-surface-variant">
+<span>Context Assembling (RAG)</span>
+<span>65%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1 overflow-hidden">
+<div class="bg-secondary-container h-full rounded-full relative" style="width: 65%">
+<div class="absolute top-0 right-0 w-10 h-full bg-gradient-to-r from-transparent to-white/30 animate-pulse"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Pipeline Item 2 -->
+<div class="group bg-surface-container-high rounded-lg p-sm border border-transparent hover:border-primary/30 transition-all duration-200">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">HORIZON-CL5-2024-D3-02</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">NextGen SolarGrid • Consortium Lead</p>
+</div>
+<span class="px-2 py-1 bg-primary-container/30 text-primary border border-primary/30 rounded text-[11px] font-bold uppercase tracking-wider flex items-center gap-1">
+<span class="material-symbols-outlined text-[12px]">check_circle</span> Ready
+                                </span>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between text-[12px] font-label-sm text-on-surface-variant">
+<span>Review Phase</span>
+<span>100%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1 overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 100%"></div>
+</div>
+</div>
+</div>
+<!-- Pipeline Item 3 -->
+<div class="group bg-surface-container-high rounded-lg p-sm border border-transparent hover:border-outline-variant/50 transition-all duration-200">
+<div class="flex justify-between items-start mb-sm">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">DIGITAL-2024-AI-06</h4>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">GovTech AI Framework • Drafting Phase</p>
+</div>
+<span class="px-2 py-1 bg-surface-variant text-on-surface-variant border border-outline-variant rounded text-[11px] font-bold uppercase tracking-wider">Queued</span>
+</div>
+<div class="space-y-xs">
+<div class="flex justify-between text-[12px] font-label-sm text-on-surface-variant">
+<span>Awaiting Context Verification</span>
+<span>10%</span>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1 overflow-hidden">
+<div class="bg-outline-variant h-full rounded-full" style="width: 10%"></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- HIGH MATCH ALERTS FEED (Col span 1) -->
+<div class="lg:col-span-1 bg-surface-container/40 backdrop-blur-md border border-secondary-container/50 rounded-xl flex flex-col overflow-hidden shadow-[inset_0_0_20px_rgba(171,76,0,0.05)]">
+<div class="p-md border-b border-secondary-container/20 flex justify-between items-center bg-secondary-container/5">
+<div class="flex items-center gap-sm">
+<span class="material-symbols-outlined text-secondary" style="font-variation-settings: 'FILL' 1;">local_fire_department</span>
+<h3 class="font-headline-md text-headline-md text-on-surface">Hot Matches</h3>
+</div>
+</div>
+<div class="p-md flex-1 overflow-y-auto space-y-sm">
+<!-- Alert Card 1 -->
+<div class="p-sm bg-surface-container border-l-2 border-secondary-container hover:bg-surface-container-high transition-colors cursor-pointer rounded-r-lg">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-sm text-label-sm text-secondary-fixed-dim bg-secondary-container/10 px-1.5 py-0.5 rounded">98% Match</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">2h ago</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface mb-xs leading-tight">Innovate UK: Smart Sustainable Manufacturing</h4>
+<p class="font-body-md text-[13px] text-on-surface-variant line-clamp-2">Direct alignment with your recent portfolio updates regarding IoT deployment in heavy industry...</p>
+</div>
+<!-- Alert Card 2 -->
+<div class="p-sm bg-surface-container border-l-2 border-primary hover:bg-surface-container-high transition-colors cursor-pointer rounded-r-lg">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-sm text-label-sm text-primary bg-primary-container/20 px-1.5 py-0.5 rounded">92% Match</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">5h ago</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface mb-xs leading-tight">BMBF: AI in Healthcare Diagnostics</h4>
+<p class="font-body-md text-[13px] text-on-surface-variant line-clamp-2">Strong consortium opportunity available. Partner search matching your MedTech startup profile...</p>
+</div>
+<!-- Alert Card 3 -->
+<div class="p-sm bg-surface-container border-l-2 border-outline hover:bg-surface-container-high transition-colors cursor-pointer rounded-r-lg">
+<div class="flex justify-between items-start mb-xs">
+<span class="font-label-sm text-label-sm text-on-surface-variant bg-surface-variant px-1.5 py-0.5 rounded">85% Match</span>
+<span class="text-[10px] text-on-surface-variant uppercase tracking-wider">1d ago</span>
+</div>
+<h4 class="font-label-md text-label-md text-on-surface mb-xs leading-tight">Eurostars: Joint R&amp;D Projects</h4>
+<p class="font-body-md text-[13px] text-on-surface-variant line-clamp-2">Deadline approaching. Suggesting integration of your proprietary LLM framework into existing drafts...</p>
+</div>
+</div>
+</div>
+</section>
+</div>
+</main>
+</body></html>

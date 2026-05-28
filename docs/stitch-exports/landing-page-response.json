@@ -1,0 +1,293 @@
+﻿{
+    "screenshot":  {
+                       "name":  "projects/1863478323971775082/files/12547075125096569687",
+                       "downloadUrl":  "https://lh3.googleusercontent.com/aida/ADBb0ui4pDrazbw4dOyd-Anke0U15teRhzWGm1Kw_DCmb1nFetr35AdylKERLL3KV955WaGsJNF93vgTigWykHxN6YmkvPBzP1XnKmOcFdr9wKgIw6kB898Amc1qA0S5gbbro3roer8sr979gujnPYyYjkDEAISRYCYYvZTrFSG0yYqqxaAx249ltYGpK5HwXidEemsVmR-D9yxpZu5IDBnbfo2SujCLXwN-XBOdZRyqRJ82e8WLQcZOnPhCRQ"
+                   },
+    "htmlCode":  {
+                     "name":  "projects/1863478323971775082/files/3294041492978502079",
+                     "downloadUrl":  "https://contribution.usercontent.google.com/download?c=CgthaWRhX2NvZGVmeBJ7Eh1hcHBfY29tcGFuaW9uX2dlbmVyYXRlZF9maWxlcxpaCiVodG1sXzAwMDY1MmM3NDdhYTQxZmUwMzMyZmFhZmIwMDA4ZDg5EgsSBxCJ5K_flQ8YAZIBIwoKcHJvamVjdF9pZBIVQhMxODYzNDc4MzIzOTcxNzc1MDgy\u0026filename=\u0026opi=89354086",
+                     "mimeType":  "text/html"
+                 },
+    "id":  "0a2cb0dfa3a5495a80f71a80a978ec45",
+    "generatedBy":  "figaro_agent",
+    "width":  "2560",
+    "height":  "6890",
+    "title":  "Mind-Sync - Premium 3D Landing Page",
+    "prompt":  "Landing Page for Mind-Sync Premium 3D Redesign. \n- Sections: \n  * Header: [Logo] Mind-Sync [Sign In] [Start Syncing For Free].\n  * Hero: Large \u0027gradient-text-animated\u0027 heading \"Intelligent \u0027Second Brain\u0027 Workspace\". 3D Sphere Orb (Three.js distorted sphere mesh) morphing in the center. Shimmering \u0027Start Syncing For Free\u0027 CTA.\n  * Stats: 3-column animated counters: [10K+ Users], [1M+ Tasks], [99% Uptime]. Use JetBrains Mono.\n  * Features: 4-column glass-card grid: \u0027Smart Planner\u0027, \u0027Kanban Board\u0027, \u0027Focus Mode\u0027, \u0027Notes\u0027. Each card with hover-lift (y: -8) and glowing borders.\n  * Social Proof: Infinite auto-scrolling row of glassmorphic testimonials.\n  * Footer: Bottom pitch card \u0027Ready to sync your mind?\u0027 and minimal footer links.\n- Style: Glassmorphism, deep dark mode, gradient-borders, and high-impact whitespace.",
+    "name":  "projects/1863478323971775082/screens/0a2cb0dfa3a5495a80f71a80a978ec45",
+    "theme":  {
+                  "colorMode":  "DARK",
+                  "font":  "INTER",
+                  "roundness":  "ROUND_EIGHT",
+                  "customColor":  "#8a49f8",
+                  "headlineFont":  "INTER",
+                  "bodyFont":  "INTER",
+                  "labelFont":  "JETBRAINS_MONO",
+                  "namedColors":  {
+                                      "surface_container_lowest":  "#100d16",
+                                      "on_background":  "#e8dfee",
+                                      "on_primary_container":  "#fef7ff",
+                                      "tertiary_fixed":  "#d8e2ff",
+                                      "on_primary":  "#40008d",
+                                      "secondary_container":  "#a2035b",
+                                      "primary_fixed_dim":  "#d3bbff",
+                                      "surface_container_high":  "#2c2833",
+                                      "on_primary_fixed":  "#260059",
+                                      "on_error_container":  "#ffdad6",
+                                      "surface":  "#15121b",
+                                      "on_secondary_fixed":  "#3e001f",
+                                      "surface_dim":  "#15121b",
+                                      "error_container":  "#93000a",
+                                      "inverse_surface":  "#e8dfee",
+                                      "inverse_primary":  "#752ee2",
+                                      "surface_container":  "#221e28",
+                                      "surface_container_low":  "#1e1a24",
+                                      "tertiary_fixed_dim":  "#adc6ff",
+                                      "on_tertiary_fixed_variant":  "#004395",
+                                      "error":  "#ffb4ab",
+                                      "on_tertiary_fixed":  "#001a42",
+                                      "primary_container":  "#8a49f8",
+                                      "outline_variant":  "#4a4455",
+                                      "secondary":  "#ffb0ca",
+                                      "tertiary":  "#adc6ff",
+                                      "on_secondary_container":  "#ffb0ca",
+                                      "background":  "#15121b",
+                                      "on_primary_fixed_variant":  "#5b00c4",
+                                      "secondary_fixed_dim":  "#ffb0ca",
+                                      "on_error":  "#690005",
+                                      "on_surface_variant":  "#ccc3d8",
+                                      "secondary_fixed":  "#ffd9e3",
+                                      "inverse_on_surface":  "#332e39",
+                                      "surface_container_highest":  "#37333e",
+                                      "surface_variant":  "#37333e",
+                                      "on_tertiary":  "#002e6a",
+                                      "surface_tint":  "#d3bbff",
+                                      "on_secondary_fixed_variant":  "#8d004e",
+                                      "surface_bright":  "#3c3742",
+                                      "outline":  "#968da1",
+                                      "primary":  "#d3bbff",
+                                      "on_tertiary_container":  "#f9f8ff",
+                                      "primary_fixed":  "#ebddff",
+                                      "on_secondary":  "#640036",
+                                      "on_surface":  "#e8dfee",
+                                      "tertiary_container":  "#1c6ee1"
+                                  },
+                  "designMd":  "---\nname: Aetheric High-Tech\ncolors:\n  surface: \u0027#15121b\u0027\n  surface-dim: \u0027#15121b\u0027\n  surface-bright: \u0027#3c3742\u0027\n  surface-container-lowest: \u0027#100d16\u0027\n  surface-container-low: \u0027#1e1a24\u0027\n  surface-container: \u0027#221e28\u0027\n  surface-container-high: \u0027#2c2833\u0027\n  surface-container-highest: \u0027#37333e\u0027\n  on-surface: \u0027#e8dfee\u0027\n  on-surface-variant: \u0027#ccc3d8\u0027\n  inverse-surface: \u0027#e8dfee\u0027\n  inverse-on-surface: \u0027#332e39\u0027\n  outline: \u0027#968da1\u0027\n  outline-variant: \u0027#4a4455\u0027\n  surface-tint: \u0027#d3bbff\u0027\n  primary: \u0027#d3bbff\u0027\n  on-primary: \u0027#40008d\u0027\n  primary-container: \u0027#8a49f8\u0027\n  on-primary-container: \u0027#fef7ff\u0027\n  inverse-primary: \u0027#752ee2\u0027\n  secondary: \u0027#ffb0ca\u0027\n  on-secondary: \u0027#640036\u0027\n  secondary-container: \u0027#a2035b\u0027\n  on-secondary-container: \u0027#ffb0ca\u0027\n  tertiary: \u0027#adc6ff\u0027\n  on-tertiary: \u0027#002e6a\u0027\n  tertiary-container: \u0027#1c6ee1\u0027\n  on-tertiary-container: \u0027#f9f8ff\u0027\n  error: \u0027#ffb4ab\u0027\n  on-error: \u0027#690005\u0027\n  error-container: \u0027#93000a\u0027\n  on-error-container: \u0027#ffdad6\u0027\n  primary-fixed: \u0027#ebddff\u0027\n  primary-fixed-dim: \u0027#d3bbff\u0027\n  on-primary-fixed: \u0027#260059\u0027\n  on-primary-fixed-variant: \u0027#5b00c4\u0027\n  secondary-fixed: \u0027#ffd9e3\u0027\n  secondary-fixed-dim: \u0027#ffb0ca\u0027\n  on-secondary-fixed: \u0027#3e001f\u0027\n  on-secondary-fixed-variant: \u0027#8d004e\u0027\n  tertiary-fixed: \u0027#d8e2ff\u0027\n  tertiary-fixed-dim: \u0027#adc6ff\u0027\n  on-tertiary-fixed: \u0027#001a42\u0027\n  on-tertiary-fixed-variant: \u0027#004395\u0027\n  background: \u0027#15121b\u0027\n  on-background: \u0027#e8dfee\u0027\n  surface-variant: \u0027#37333e\u0027\ntypography:\n  display-lg:\n    fontFamily: Inter\n    fontSize: 72px\n    fontWeight: \u0027800\u0027\n    lineHeight: \u00271.1\u0027\n    letterSpacing: -0.04em\n  display-lg-mobile:\n    fontFamily: Inter\n    fontSize: 40px\n    fontWeight: \u0027800\u0027\n    lineHeight: \u00271.2\u0027\n    letterSpacing: -0.02em\n  headline-xl:\n    fontFamily: Inter\n    fontSize: 48px\n    fontWeight: \u0027700\u0027\n    lineHeight: \u00271.2\u0027\n    letterSpacing: -0.02em\n  headline-lg:\n    fontFamily: Inter\n    fontSize: 32px\n    fontWeight: \u0027600\u0027\n    lineHeight: \u00271.3\u0027\n  body-lg:\n    fontFamily: Inter\n    fontSize: 18px\n    fontWeight: \u0027400\u0027\n    lineHeight: \u00271.6\u0027\n  body-md:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: \u0027400\u0027\n    lineHeight: \u00271.6\u0027\n  stat-lg:\n    fontFamily: JetBrains Mono\n    fontSize: 24px\n    fontWeight: \u0027600\u0027\n    lineHeight: \u00271.2\u0027\n  label-sm:\n    fontFamily: JetBrains Mono\n    fontSize: 12px\n    fontWeight: \u0027500\u0027\n    lineHeight: \u00271.0\u0027\n    letterSpacing: 0.1em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  unit: 8px\n  container-max: 1440px\n  sidebar-primary: 280px\n  sidebar-secondary: 80px\n  gutter: 32px\n  margin-mobile: 20px\n  margin-desktop: 64px\n---\n\n## Brand \u0026 Style\nThis design system embodies a \"Future Tech\" aesthetic that balances high-end luxury with cutting-edge performance. Targeted at elite users seeking peak cognitive performance, the UI evokes a sense of \"Royal Intelligence\"—authoritative, sophisticated, and infinitely capable.\n\nThe style is a refined **Glassmorphism**, characterized by deep spatial layering, ultra-refined backdrop blurs, and luminous accents. We leverage gradient meshes to simulate organic, fluid movement within the background, creating a living interface that feels responsive to the user\u0027s presence. Every element is treated as a high-fidelity artifact, combining the weight of premium materials with the ethereal nature of light-based interfaces.\n\n## Colors\nThe palette is rooted in a \"Void Black\" foundation, allowing the HSL-defined brand gradients to pierce through with maximum vibrance.\n\n- **Primary Gradient:** A tri-tone sweep from Brand Purple `hsl(262, 83%, 58%)` through Brand Pink `hsl(330, 81%, 60%)` to Brand Blue `hsl(217, 91%, 60%)`. Use this for high-impact actions and data visualizations.\n- **Glass Surfaces:** Use `rgba(15, 15, 25, 0.6)` for containers, paired with a `20px` to `40px` backdrop-blur.\n- **Luminous Glow:** A soft atmospheric glow `hsla(262, 83%, 58%, 0.15)` is applied to active states, focus rings, and secondary borders to simulate light emission.\n\n## Typography\nThe system uses **Inter** for its neutral, highly legible character, allowing the brand\u0027s expressive gradients to take center stage without typographic competition. For technical data, timestamps, and performance metrics, **JetBrains Mono** is employed to provide a precise, \"engineered\" feel.\n\nLarge display headings should utilize the brand gradient via `background-clip: text`. Maintain tight letter spacing on larger headings to reinforce the \"Premium\" and \"Futuristic\" density.\n\n## Layout \u0026 Spacing\nThe layout follows a fluid-fixed hybrid model. High-intensity dashboards utilize a **dual-pane sidebar** (a slim iconic navigation alongside a contextual expansion pane). \n\n- **Whitespace:** Use expansive 64px+ margins for hero sections to evoke a sense of \"Royal\" scale.\n- **Grid:** A 12-column system with a 32px gutter.\n- **Breakpoints:** \n  - Mobile (\u003c768px): Single column, reduced margins.\n  - Tablet (768px - 1280px): Collapsed secondary sidebar.\n  - Desktop (\u003e1280px): Full dual-pane visibility with fixed-width container maxing at 1440px.\n\n## Elevation \u0026 Depth\nDepth is not achieved through traditional drop shadows, but through **translucency and refraction**.\n\n1.  **Base Layer:** Background mesh gradients (animated, low-frequency movement).\n2.  **Surface Layer:** `backdrop-filter: blur(24px)` with a `1px` semi-transparent border `rgba(255,255,255,0.1)`.\n3.  **Raised Layer:** Used for active cards. Includes a `y: -8px` hover-lift and a secondary \"inner-glow\" border using the Primary Gradient at 30% opacity.\n4.  **Overlay Layer:** Modals and tooltips utilize a higher blur (40px) and a subtle drop shadow `rgba(0,0,0,0.5)` to separate from the blurred background.\n\n## Shapes\nThe shape language is sophisticated and modern. A consistent **0.5rem (8px)** base radius is used for standard components, while cards and primary containers use **1rem (16px)** to feel more substantial. \n\nInteractive elements like chips and primary buttons use the **rounded-xl (1.5rem)** setting to provide a softer, more inviting touchpoint against the sharp, technical layout.\n\n## Components\n\n- **Buttons:** Primary buttons feature a full Brand Gradient background. Secondary buttons use a \"Ghost\" style with a gradient border and a 5% white fill on hover. All buttons include a subtle `0 0 15px` outer glow in the primary brand color when hovered.\n- **Glass Cards:** Must include a `1px` top-down linear gradient border (white to transparent) to simulate a \"light catch\" on the top edge.\n- **Input Fields:** Semi-transparent dark fills. On focus, the border transitions to a Brand Purple glow, and the label (using JetBrains Mono) shifts to a gradient-text color.\n- **Chips/Badges:** High-contrast backgrounds with JetBrains Mono text. Use status colors (Emerald, Amber, Rose) with 10% opacity fills and 100% opacity borders.\n- **Lists:** Items should be separated by `1px` low-opacity lines. Hover states trigger a subtle horizontal slide (+4px) and a background tint change.\n- **Progress Indicators:** Use the Primary Gradient for the fill, with a \"pulsing\" glow animation at the leading edge to indicate movement and life.",
+                  "colorVariant":  "FIDELITY",
+                  "overridePrimaryColor":  "#8a49f8",
+                  "overrideSecondaryColor":  "#e94a91",
+                  "overrideTertiaryColor":  "#3b82f6",
+                  "spacingScale":  2,
+                  "typography":  {
+                                     "body-md":  {
+                                                     "fontFamily":  "Inter",
+                                                     "fontSize":  "16px",
+                                                     "fontWeight":  "400",
+                                                     "lineHeight":  "1.6"
+                                                 },
+                                     "display-lg-mobile":  {
+                                                               "fontFamily":  "Inter",
+                                                               "fontSize":  "40px",
+                                                               "fontWeight":  "800",
+                                                               "lineHeight":  "1.2",
+                                                               "letterSpacing":  "-0.02em"
+                                                           },
+                                     "body-lg":  {
+                                                     "fontFamily":  "Inter",
+                                                     "fontSize":  "18px",
+                                                     "fontWeight":  "400",
+                                                     "lineHeight":  "1.6"
+                                                 },
+                                     "display-lg":  {
+                                                        "fontFamily":  "Inter",
+                                                        "fontSize":  "72px",
+                                                        "fontWeight":  "800",
+                                                        "lineHeight":  "1.1",
+                                                        "letterSpacing":  "-0.04em"
+                                                    },
+                                     "headline-xl":  {
+                                                         "fontFamily":  "Inter",
+                                                         "fontSize":  "48px",
+                                                         "fontWeight":  "700",
+                                                         "lineHeight":  "1.2",
+                                                         "letterSpacing":  "-0.02em"
+                                                     },
+                                     "stat-lg":  {
+                                                     "fontFamily":  "JetBrains Mono",
+                                                     "fontSize":  "24px",
+                                                     "fontWeight":  "600",
+                                                     "lineHeight":  "1.2"
+                                                 },
+                                     "headline-lg":  {
+                                                         "fontFamily":  "Inter",
+                                                         "fontSize":  "32px",
+                                                         "fontWeight":  "600",
+                                                         "lineHeight":  "1.3"
+                                                     },
+                                     "label-sm":  {
+                                                      "fontFamily":  "JetBrains Mono",
+                                                      "fontSize":  "12px",
+                                                      "fontWeight":  "500",
+                                                      "lineHeight":  "1.0",
+                                                      "letterSpacing":  "0.1em"
+                                                  }
+                                 },
+                  "spacing":  {
+                                  "unit":  "8px",
+                                  "container-max":  "1440px",
+                                  "gutter":  "32px",
+                                  "margin-mobile":  "20px",
+                                  "sidebar-secondary":  "80px",
+                                  "margin-desktop":  "64px",
+                                  "sidebar-primary":  "280px"
+                              },
+                  "headlineFontFamily":  "Inter",
+                  "bodyFontFamily":  "Inter",
+                  "labelFontFamily":  "Jetbrains Mono"
+              },
+    "deviceType":  "DESKTOP",
+    "screenType":  "DESIGN",
+    "screenMetadata":  {
+                           "agentType":  "PRO_AGENT",
+                           "status":  "COMPLETE",
+                           "displayMode":  "HTML"
+                       },
+    "designSystem":  {
+                         "name":  "assets/5cb0b247209f4737a6e3037f4276c584",
+                         "designSystem":  {
+                                              "displayName":  "Aetheric High-Tech",
+                                              "styleGuidelines":  "## Brand \u0026 Style\nThis design system embodies a \"Future Tech\" aesthetic that balances high-end luxury with cutting-edge performance. Targeted at elite users seeking peak cognitive performance, the UI evokes a sense of \"Royal Intelligence\"—authoritative, sophisticated, and infinitely capable.\n\nThe style is a refined **Glassmorphism**, characterized by deep spatial layering, ultra-refined backdrop blurs, and luminous accents. We leverage gradient meshes to simulate organic, fluid movement within the background, creating a living interface that feels responsive to the user\u0027s presence. Every element is treated as a high-fidelity artifact, combining the weight of premium materials with the ethereal nature of light-based interfaces.\n\n## Layout \u0026 Spacing\nThe layout follows a fluid-fixed hybrid model. High-intensity dashboards utilize a **dual-pane sidebar** (a slim iconic navigation alongside a contextual expansion pane). \n\n- **Whitespace:** Use expansive 64px+ margins for hero sections to evoke a sense of \"Royal\" scale.\n- **Grid:** A 12-column system with a 32px gutter.\n- **Breakpoints:** \n  - Mobile (\u003c768px): Single column, reduced margins.\n  - Tablet (768px - 1280px): Collapsed secondary sidebar.\n  - Desktop (\u003e1280px): Full dual-pane visibility with fixed-width container maxing at 1440px.\n\n## Elevation \u0026 Depth\nDepth is not achieved through traditional drop shadows, but through **translucency and refraction**.\n\n1.  **Base Layer:** Background mesh gradients (animated, low-frequency movement).\n2.  **Surface Layer:** `backdrop-filter: blur(24px)` with a `1px` semi-transparent border `rgba(255,255,255,0.1)`.\n3.  **Raised Layer:** Used for active cards. Includes a `y: -8px` hover-lift and a secondary \"inner-glow\" border using the Primary Gradient at 30% opacity.\n4.  **Overlay Layer:** Modals and tooltips utilize a higher blur (40px) and a subtle drop shadow `rgba(0,0,0,0.5)` to separate from the blurred background.\n\n## Components\n\n- **Buttons:** Primary buttons feature a full Brand Gradient background. Secondary buttons use a \"Ghost\" style with a gradient border and a 5% white fill on hover. All buttons include a subtle `0 0 15px` outer glow in the primary brand color when hovered.\n- **Glass Cards:** Must include a `1px` top-down linear gradient border (white to transparent) to simulate a \"light catch\" on the top edge.\n- **Input Fields:** Semi-transparent dark fills. On focus, the border transitions to a Brand Purple glow, and the label (using JetBrains Mono) shifts to a gradient-text color.\n- **Chips/Badges:** High-contrast backgrounds with JetBrains Mono text. Use status colors (Emerald, Amber, Rose) with 10% opacity fills and 100% opacity borders.\n- **Lists:** Items should be separated by `1px` low-opacity lines. Hover states trigger a subtle horizontal slide (+4px) and a background tint change.\n- **Progress Indicators:** Use the Primary Gradient for the fill, with a \"pulsing\" glow animation at the leading edge to indicate movement and life.",
+                                              "theme":  {
+                                                            "colorMode":  "DARK",
+                                                            "font":  "INTER",
+                                                            "roundness":  "ROUND_EIGHT",
+                                                            "customColor":  "#8a49f8",
+                                                            "headlineFont":  "INTER",
+                                                            "bodyFont":  "INTER",
+                                                            "labelFont":  "JETBRAINS_MONO",
+                                                            "namedColors":  {
+                                                                                "primary_fixed_dim":  "#d3bbff",
+                                                                                "surface_container_high":  "#2c2833",
+                                                                                "surface_container_lowest":  "#100d16",
+                                                                                "on_background":  "#e8dfee",
+                                                                                "on_primary_container":  "#fef7ff",
+                                                                                "tertiary_fixed":  "#d8e2ff",
+                                                                                "on_primary":  "#40008d",
+                                                                                "secondary_container":  "#a2035b",
+                                                                                "inverse_primary":  "#752ee2",
+                                                                                "surface_container":  "#221e28",
+                                                                                "surface_container_low":  "#1e1a24",
+                                                                                "tertiary_fixed_dim":  "#adc6ff",
+                                                                                "error_container":  "#93000a",
+                                                                                "inverse_surface":  "#e8dfee",
+                                                                                "error":  "#ffb4ab",
+                                                                                "on_tertiary_fixed":  "#001a42",
+                                                                                "on_tertiary_fixed_variant":  "#004395",
+                                                                                "on_primary_fixed":  "#260059",
+                                                                                "on_secondary_fixed":  "#3e001f",
+                                                                                "surface_dim":  "#15121b",
+                                                                                "on_error_container":  "#ffdad6",
+                                                                                "surface":  "#15121b",
+                                                                                "on_primary_fixed_variant":  "#5b00c4",
+                                                                                "on_error":  "#690005",
+                                                                                "secondary_fixed_dim":  "#ffb0ca",
+                                                                                "background":  "#15121b",
+                                                                                "on_surface_variant":  "#ccc3d8",
+                                                                                "secondary_fixed":  "#ffd9e3",
+                                                                                "outline_variant":  "#4a4455",
+                                                                                "primary_container":  "#8a49f8",
+                                                                                "tertiary":  "#adc6ff",
+                                                                                "on_secondary_container":  "#ffb0ca",
+                                                                                "secondary":  "#ffb0ca",
+                                                                                "on_secondary":  "#640036",
+                                                                                "on_surface":  "#e8dfee",
+                                                                                "on_tertiary_container":  "#f9f8ff",
+                                                                                "primary_fixed":  "#ebddff",
+                                                                                "tertiary_container":  "#1c6ee1",
+                                                                                "surface_tint":  "#d3bbff",
+                                                                                "on_secondary_fixed_variant":  "#8d004e",
+                                                                                "surface_container_highest":  "#37333e",
+                                                                                "inverse_on_surface":  "#332e39",
+                                                                                "surface_variant":  "#37333e",
+                                                                                "on_tertiary":  "#002e6a",
+                                                                                "outline":  "#968da1",
+                                                                                "primary":  "#d3bbff",
+                                                                                "surface_bright":  "#3c3742"
+                                                                            },
+                                                            "designMd":  "---\nname: Aetheric High-Tech\ncolors:\n  surface: \u0027#15121b\u0027\n  surface-dim: \u0027#15121b\u0027\n  surface-bright: \u0027#3c3742\u0027\n  surface-container-lowest: \u0027#100d16\u0027\n  surface-container-low: \u0027#1e1a24\u0027\n  surface-container: \u0027#221e28\u0027\n  surface-container-high: \u0027#2c2833\u0027\n  surface-container-highest: \u0027#37333e\u0027\n  on-surface: \u0027#e8dfee\u0027\n  on-surface-variant: \u0027#ccc3d8\u0027\n  inverse-surface: \u0027#e8dfee\u0027\n  inverse-on-surface: \u0027#332e39\u0027\n  outline: \u0027#968da1\u0027\n  outline-variant: \u0027#4a4455\u0027\n  surface-tint: \u0027#d3bbff\u0027\n  primary: \u0027#d3bbff\u0027\n  on-primary: \u0027#40008d\u0027\n  primary-container: \u0027#8a49f8\u0027\n  on-primary-container: \u0027#fef7ff\u0027\n  inverse-primary: \u0027#752ee2\u0027\n  secondary: \u0027#ffb0ca\u0027\n  on-secondary: \u0027#640036\u0027\n  secondary-container: \u0027#a2035b\u0027\n  on-secondary-container: \u0027#ffb0ca\u0027\n  tertiary: \u0027#adc6ff\u0027\n  on-tertiary: \u0027#002e6a\u0027\n  tertiary-container: \u0027#1c6ee1\u0027\n  on-tertiary-container: \u0027#f9f8ff\u0027\n  error: \u0027#ffb4ab\u0027\n  on-error: \u0027#690005\u0027\n  error-container: \u0027#93000a\u0027\n  on-error-container: \u0027#ffdad6\u0027\n  primary-fixed: \u0027#ebddff\u0027\n  primary-fixed-dim: \u0027#d3bbff\u0027\n  on-primary-fixed: \u0027#260059\u0027\n  on-primary-fixed-variant: \u0027#5b00c4\u0027\n  secondary-fixed: \u0027#ffd9e3\u0027\n  secondary-fixed-dim: \u0027#ffb0ca\u0027\n  on-secondary-fixed: \u0027#3e001f\u0027\n  on-secondary-fixed-variant: \u0027#8d004e\u0027\n  tertiary-fixed: \u0027#d8e2ff\u0027\n  tertiary-fixed-dim: \u0027#adc6ff\u0027\n  on-tertiary-fixed: \u0027#001a42\u0027\n  on-tertiary-fixed-variant: \u0027#004395\u0027\n  background: \u0027#15121b\u0027\n  on-background: \u0027#e8dfee\u0027\n  surface-variant: \u0027#37333e\u0027\ntypography:\n  display-lg:\n    fontFamily: Inter\n    fontSize: 72px\n    fontWeight: \u0027800\u0027\n    lineHeight: \u00271.1\u0027\n    letterSpacing: -0.04em\n  display-lg-mobile:\n    fontFamily: Inter\n    fontSize: 40px\n    fontWeight: \u0027800\u0027\n    lineHeight: \u00271.2\u0027\n    letterSpacing: -0.02em\n  headline-xl:\n    fontFamily: Inter\n    fontSize: 48px\n    fontWeight: \u0027700\u0027\n    lineHeight: \u00271.2\u0027\n    letterSpacing: -0.02em\n  headline-lg:\n    fontFamily: Inter\n    fontSize: 32px\n    fontWeight: \u0027600\u0027\n    lineHeight: \u00271.3\u0027\n  body-lg:\n    fontFamily: Inter\n    fontSize: 18px\n    fontWeight: \u0027400\u0027\n    lineHeight: \u00271.6\u0027\n  body-md:\n    fontFamily: Inter\n    fontSize: 16px\n    fontWeight: \u0027400\u0027\n    lineHeight: \u00271.6\u0027\n  stat-lg:\n    fontFamily: JetBrains Mono\n    fontSize: 24px\n    fontWeight: \u0027600\u0027\n    lineHeight: \u00271.2\u0027\n  label-sm:\n    fontFamily: JetBrains Mono\n    fontSize: 12px\n    fontWeight: \u0027500\u0027\n    lineHeight: \u00271.0\u0027\n    letterSpacing: 0.1em\nrounded:\n  sm: 0.25rem\n  DEFAULT: 0.5rem\n  md: 0.75rem\n  lg: 1rem\n  xl: 1.5rem\n  full: 9999px\nspacing:\n  unit: 8px\n  container-max: 1440px\n  sidebar-primary: 280px\n  sidebar-secondary: 80px\n  gutter: 32px\n  margin-mobile: 20px\n  margin-desktop: 64px\n---\n\n## Brand \u0026 Style\nThis design system embodies a \"Future Tech\" aesthetic that balances high-end luxury with cutting-edge performance. Targeted at elite users seeking peak cognitive performance, the UI evokes a sense of \"Royal Intelligence\"—authoritative, sophisticated, and infinitely capable.\n\nThe style is a refined **Glassmorphism**, characterized by deep spatial layering, ultra-refined backdrop blurs, and luminous accents. We leverage gradient meshes to simulate organic, fluid movement within the background, creating a living interface that feels responsive to the user\u0027s presence. Every element is treated as a high-fidelity artifact, combining the weight of premium materials with the ethereal nature of light-based interfaces.\n\n## Colors\nThe palette is rooted in a \"Void Black\" foundation, allowing the HSL-defined brand gradients to pierce through with maximum vibrance.\n\n- **Primary Gradient:** A tri-tone sweep from Brand Purple `hsl(262, 83%, 58%)` through Brand Pink `hsl(330, 81%, 60%)` to Brand Blue `hsl(217, 91%, 60%)`. Use this for high-impact actions and data visualizations.\n- **Glass Surfaces:** Use `rgba(15, 15, 25, 0.6)` for containers, paired with a `20px` to `40px` backdrop-blur.\n- **Luminous Glow:** A soft atmospheric glow `hsla(262, 83%, 58%, 0.15)` is applied to active states, focus rings, and secondary borders to simulate light emission.\n\n## Typography\nThe system uses **Inter** for its neutral, highly legible character, allowing the brand\u0027s expressive gradients to take center stage without typographic competition. For technical data, timestamps, and performance metrics, **JetBrains Mono** is employed to provide a precise, \"engineered\" feel.\n\nLarge display headings should utilize the brand gradient via `background-clip: text`. Maintain tight letter spacing on larger headings to reinforce the \"Premium\" and \"Futuristic\" density.\n\n## Layout \u0026 Spacing\nThe layout follows a fluid-fixed hybrid model. High-intensity dashboards utilize a **dual-pane sidebar** (a slim iconic navigation alongside a contextual expansion pane). \n\n- **Whitespace:** Use expansive 64px+ margins for hero sections to evoke a sense of \"Royal\" scale.\n- **Grid:** A 12-column system with a 32px gutter.\n- **Breakpoints:** \n  - Mobile (\u003c768px): Single column, reduced margins.\n  - Tablet (768px - 1280px): Collapsed secondary sidebar.\n  - Desktop (\u003e1280px): Full dual-pane visibility with fixed-width container maxing at 1440px.\n\n## Elevation \u0026 Depth\nDepth is not achieved through traditional drop shadows, but through **translucency and refraction**.\n\n1.  **Base Layer:** Background mesh gradients (animated, low-frequency movement).\n2.  **Surface Layer:** `backdrop-filter: blur(24px)` with a `1px` semi-transparent border `rgba(255,255,255,0.1)`.\n3.  **Raised Layer:** Used for active cards. Includes a `y: -8px` hover-lift and a secondary \"inner-glow\" border using the Primary Gradient at 30% opacity.\n4.  **Overlay Layer:** Modals and tooltips utilize a higher blur (40px) and a subtle drop shadow `rgba(0,0,0,0.5)` to separate from the blurred background.\n\n## Shapes\nThe shape language is sophisticated and modern. A consistent **0.5rem (8px)** base radius is used for standard components, while cards and primary containers use **1rem (16px)** to feel more substantial. \n\nInteractive elements like chips and primary buttons use the **rounded-xl (1.5rem)** setting to provide a softer, more inviting touchpoint against the sharp, technical layout.\n\n## Components\n\n- **Buttons:** Primary buttons feature a full Brand Gradient background. Secondary buttons use a \"Ghost\" style with a gradient border and a 5% white fill on hover. All buttons include a subtle `0 0 15px` outer glow in the primary brand color when hovered.\n- **Glass Cards:** Must include a `1px` top-down linear gradient border (white to transparent) to simulate a \"light catch\" on the top edge.\n- **Input Fields:** Semi-transparent dark fills. On focus, the border transitions to a Brand Purple glow, and the label (using JetBrains Mono) shifts to a gradient-text color.\n- **Chips/Badges:** High-contrast backgrounds with JetBrains Mono text. Use status colors (Emerald, Amber, Rose) with 10% opacity fills and 100% opacity borders.\n- **Lists:** Items should be separated by `1px` low-opacity lines. Hover states trigger a subtle horizontal slide (+4px) and a background tint change.\n- **Progress Indicators:** Use the Primary Gradient for the fill, with a \"pulsing\" glow animation at the leading edge to indicate movement and life.",
+                                                            "colorVariant":  "FIDELITY",
+                                                            "overridePrimaryColor":  "#8a49f8",
+                                                            "overrideSecondaryColor":  "#e94a91",
+                                                            "overrideTertiaryColor":  "#3b82f6",
+                                                            "spacingScale":  2,
+                                                            "typography":  {
+                                                                               "body-lg":  {
+                                                                                               "fontFamily":  "Inter",
+                                                                                               "fontSize":  "18px",
+                                                                                               "fontWeight":  "400",
+                                                                                               "lineHeight":  "1.6"
+                                                                                           },
+                                                                               "display-lg":  {
+                                                                                                  "fontFamily":  "Inter",
+                                                                                                  "fontSize":  "72px",
+                                                                                                  "fontWeight":  "800",
+                                                                                                  "lineHeight":  "1.1",
+                                                                                                  "letterSpacing":  "-0.04em"
+                                                                                              },
+                                                                               "stat-lg":  {
+                                                                                               "fontFamily":  "JetBrains Mono",
+                                                                                               "fontSize":  "24px",
+                                                                                               "fontWeight":  "600",
+                                                                                               "lineHeight":  "1.2"
+                                                                                           },
+                                                                               "headline-xl":  {
+                                                                                                   "fontFamily":  "Inter",
+                                                                                                   "fontSize":  "48px",
+                                                                                                   "fontWeight":  "700",
+                                                                                                   "lineHeight":  "1.2",
+                                                                                                   "letterSpacing":  "-0.02em"
+                                                                                               },
+                                                                               "headline-lg":  {
+                                                                                                   "fontFamily":  "Inter",
+                                                                                                   "fontSize":  "32px",
+                                                                                                   "fontWeight":  "600",
+                                                                                                   "lineHeight":  "1.3"
+                                                                                               },
+                                                                               "label-sm":  {
+                                                                                                "fontFamily":  "JetBrains Mono",
+                                                                                                "fontSize":  "12px",
+                                                                                                "fontWeight":  "500",
+                                                                                                "lineHeight":  "1.0",
+                                                                                                "letterSpacing":  "0.1em"
+                                                                                            },
+                                                                               "body-md":  {
+                                                                                               "fontFamily":  "Inter",
+                                                                                               "fontSize":  "16px",
+                                                                                               "fontWeight":  "400",
+                                                                                               "lineHeight":  "1.6"
+                                                                                           },
+                                                                               "display-lg-mobile":  {
+                                                                                                         "fontFamily":  "Inter",
+                                                                                                         "fontSize":  "40px",
+                                                                                                         "fontWeight":  "800",
+                                                                                                         "lineHeight":  "1.2",
+                                                                                                         "letterSpacing":  "-0.02em"
+                                                                                                     }
+                                                                           },
+                                                            "spacing":  {
+                                                                            "unit":  "8px",
+                                                                            "container-max":  "1440px",
+                                                                            "gutter":  "32px",
+                                                                            "margin-mobile":  "20px",
+                                                                            "sidebar-secondary":  "80px",
+                                                                            "margin-desktop":  "64px",
+                                                                            "sidebar-primary":  "280px"
+                                                                        },
+                                                            "headlineFontFamily":  "Inter",
+                                                            "bodyFontFamily":  "Inter",
+                                                            "labelFontFamily":  "Jetbrains Mono"
+                                                        }
+                                          },
+                         "version":  "1"
+                     }
+}

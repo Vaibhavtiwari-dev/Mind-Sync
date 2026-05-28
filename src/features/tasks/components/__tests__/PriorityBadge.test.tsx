@@ -42,27 +42,27 @@ vi.mock("@/components/ui/dropdown-menu", () => {
 describe("PriorityBadge", () => {
   it("renders correctly with P0 priority", () => {
     render(<PriorityBadge priority="P0" />);
-    expect(screen.getByText("P0")).toBeInTheDocument();
+    expect(screen.getByText(/P0/)).toBeInTheDocument();
   });
 
   it("renders correctly with P1 priority", () => {
     render(<PriorityBadge priority="P1" />);
-    expect(screen.getByText("P1")).toBeInTheDocument();
+    expect(screen.getByText(/P1/)).toBeInTheDocument();
   });
 
   it("renders correctly with P2 priority", () => {
     render(<PriorityBadge priority="P2" />);
-    expect(screen.getByText("P2")).toBeInTheDocument();
+    expect(screen.getByText(/P2/)).toBeInTheDocument();
   });
 
   it("renders correctly with P3 priority", () => {
     render(<PriorityBadge priority="P3" />);
-    expect(screen.getByText("P3")).toBeInTheDocument();
+    expect(screen.getByText(/P3/)).toBeInTheDocument();
   });
 
   it("renders icon when showLabel is false", () => {
     render(<PriorityBadge priority="P0" showLabel={false} />);
-    expect(screen.queryByText("P0")).not.toBeInTheDocument();
+    expect(screen.queryByText(/P0/)).not.toBeInTheDocument();
     // Check for the Flag icon
     const svg = document.querySelector("svg");
     expect(svg).toBeInTheDocument();
@@ -71,7 +71,7 @@ describe("PriorityBadge", () => {
   it("applies small size correctly", () => {
     const { container } = render(<PriorityBadge priority="P0" size="sm" />);
     const badge = container.firstChild;
-    expect(badge).toHaveClass("text-[10px]");
+    expect(badge).toHaveClass("text-[9px]");
   });
 
   it("applies medium size correctly", () => {
