@@ -2,10 +2,11 @@
 
 import { useMemo } from "react";
 import { useTasks, useTimerState } from "@/store/selectors";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { GlassCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { format, startOfWeek, endOfWeek, isWithinInterval } from "date-fns";
 import { Target, Flame, Clock, TrendingUp, CheckCircle2, LucideIcon } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface FocusGoal {
   id: string;
@@ -124,10 +125,10 @@ export function FocusSidebar() {
   return (
     <div className="space-y-4">
       {/* Focus Goals */}
-      <Card>
+      <GlassCard className="bg-card/30 backdrop-blur-xl border border-white/5 shadow-xl p-0 py-4" hover="none">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Flame className="h-4 w-4 text-warning" />
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground/90">
+            <Flame className="h-4 w-4 text-brand-pink" />
             Focus Goals
           </CardTitle>
         </CardHeader>
@@ -138,73 +139,79 @@ export function FocusSidebar() {
 
             return (
               <div key={goal.id} className="space-y-2">
-                <div className="flex items-center justify-between text-sm">
+                <div className="flex items-center justify-between text-xs">
                   <span className="text-muted-foreground flex items-center gap-2">
-                    <goal.icon className={`h-3.5 w-3.5 ${isComplete ? "text-success" : ""}`} />
+                    <goal.icon className={cn("h-3.5 w-3.5", isComplete ? "text-emerald-400" : "text-muted-foreground/60")} />
                     {goal.label}
                   </span>
-                  <span className={`font-medium ${isComplete ? "text-success" : ""}`}>
+                  <span className={cn("font-medium", isComplete ? "text-emerald-400 font-semibold" : "text-foreground")}>
                     {goal.current}/{goal.target} {goal.unit}
                   </span>
                 </div>
                 <Progress
                   value={progress}
-                  className={`h-2 ${isComplete ? "[&>div]:bg-success-solid" : ""}`}
+                  className="h-1.5 bg-white/5"
+                  indicatorClassName={cn(isComplete ? "bg-gradient-to-r from-emerald-500 to-teal-400" : "bg-gradient-to-r from-brand-purple to-brand-pink")}
                 />
               </div>
             );
           })}
         </CardContent>
-      </Card>
+      </GlassCard>
 
       {/* Today's Stats */}
-      <Card>
+      <GlassCard className="bg-card/30 backdrop-blur-xl border border-white/5 shadow-xl p-0 py-4" hover="none">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <TrendingUp className="h-4 w-4 text-info" />
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground/90">
+            <TrendingUp className="h-4 w-4 text-brand-blue" />
             Today&apos;s Progress
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-3 gap-4 text-center">
-            <div>
-              <div className="text-2xl font-bold">{todayStats.sessions}</div>
-              <div className="text-muted-foreground text-xs">Sessions</div>
+          <div className="grid grid-cols-3 gap-3 text-center">
+            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-2">
+              <div className="text-xl font-bold tracking-tight text-foreground">{todayStats.sessions}</div>
+              <div className="text-muted-foreground text-[10px] uppercase font-medium mt-0.5">Sessions</div>
             </div>
-            <div>
-              <div className="text-2xl font-bold">
+            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-2">
+              <div className="text-xl font-bold tracking-tight text-foreground">
                 {Math.round(todayStats.focusMinutes / 60)}h
               </div>
-              <div className="text-muted-foreground text-xs">Focus Time</div>
+              <div className="text-muted-foreground text-[10px] uppercase font-medium mt-0.5">Focus Time</div>
             </div>
-            <div>
-              <div className="text-2xl font-bold">{todayStats.tasksCompleted}</div>
-              <div className="text-muted-foreground text-xs">Tasks Done</div>
+            <div className="bg-white/[0.02] border border-white/[0.04] rounded-xl p-2">
+              <div className="text-xl font-bold tracking-tight text-foreground">{todayStats.tasksCompleted}</div>
+              <div className="text-muted-foreground text-[10px] uppercase font-medium mt-0.5">Tasks Done</div>
             </div>
           </div>
         </CardContent>
-      </Card>
+      </GlassCard>
 
       {/* Session History */}
-      <Card>
+      <GlassCard className="bg-card/30 backdrop-blur-xl border border-white/5 shadow-xl p-0 py-4" hover="none">
         <CardHeader className="pb-3">
-          <CardTitle className="flex items-center gap-2 text-base">
-            <Clock className="h-4 w-4 text-primary" />
+          <CardTitle className="flex items-center gap-2 text-sm font-semibold tracking-tight text-foreground/90">
+            <Clock className="h-4 w-4 text-brand-purple" />
             Recent Sessions
           </CardTitle>
         </CardHeader>
         <CardContent>
           {sessionHistory.length > 0 ? (
-            <div className="space-y-3">
+            <div className="space-y-2.5">
               {sessionHistory.map((session) => (
                 <div
                   key={session.id}
-                  className="bg-muted/50 flex items-center gap-3 rounded-lg p-2"
+                  className="group bg-white/[0.02] border border-white/[0.04] flex items-center gap-3 rounded-xl p-3 hover:bg-white/[0.05] hover:border-white/10 hover:shadow-lg transition-all duration-300"
                 >
-                  <div className="h-2 w-2 rounded-full bg-success-solid" />
+                  <div className="relative flex h-2 w-2">
+                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </div>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-medium">{session.title}</p>
-                    <p className="text-muted-foreground text-xs">
+                    <p className="truncate text-xs font-semibold text-foreground group-hover:text-primary-foreground/95 transition-colors">
+                      {session.title}
+                    </p>
+                    <p className="text-muted-foreground text-[10px] mt-0.5">
                       {session.duration} min • {format(new Date(session.completedAt), "h:mm a")}
                     </p>
                   </div>
@@ -212,13 +219,13 @@ export function FocusSidebar() {
               ))}
             </div>
           ) : (
-            <div className="text-muted-foreground py-4 text-center text-sm">
-              <p>No sessions completed today</p>
-              <p className="mt-1 text-xs">Start a focus session to track your progress</p>
+            <div className="text-muted-foreground py-6 text-center text-xs">
+              <p className="font-medium">No sessions completed today</p>
+              <p className="mt-1 text-[10px] text-muted-foreground/60">Start a focus session to track progress</p>
             </div>
           )}
         </CardContent>
-      </Card>
+      </GlassCard>
     </div>
   );
 }

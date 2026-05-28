@@ -8,7 +8,6 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Play,
   Pause,
@@ -42,23 +41,23 @@ import { BELL_SOUND } from "@/lib/sounds";
 const modeConfig = {
   focus: {
     label: "Focus",
-    color: "text-red-500",
-    bgColor: "bg-red-500",
-    ringColor: "ring-red-500",
+    color: "text-brand-pink",
+    bgColor: "bg-brand-pink",
+    ringColor: "ring-brand-pink",
     icon: Target,
   },
   shortBreak: {
     label: "Short Break",
-    color: "text-green-500",
-    bgColor: "bg-green-500",
-    ringColor: "ring-green-500",
+    color: "text-emerald-400",
+    bgColor: "bg-emerald-400",
+    ringColor: "ring-emerald-400",
     icon: Coffee,
   },
   longBreak: {
     label: "Long Break",
-    color: "text-blue-500",
-    bgColor: "bg-blue-500",
-    ringColor: "ring-blue-500",
+    color: "text-brand-blue",
+    bgColor: "bg-brand-blue",
+    ringColor: "ring-brand-blue",
     icon: Zap,
   },
 };
@@ -217,21 +216,21 @@ export function FocusTimer() {
 
   return (
     <>
-      <Card
+      <div
         className={cn(
           "mx-auto w-full transition-all duration-500",
           zenMode
-            ? "bg-background/95 fixed inset-0 z-50 flex h-screen w-screen max-w-none flex-col items-center justify-center rounded-none backdrop-blur-sm"
-            : "max-w-md border-2 shadow-lg"
+            ? "bg-background/95 fixed inset-0 z-[100] flex h-screen w-screen max-w-none flex-col items-center justify-center rounded-none backdrop-blur-md p-6"
+            : "w-full bg-transparent"
         )}
       >
-        <CardHeader className="relative mx-auto w-full max-w-md pb-2 text-center">
+        <div className="relative mx-auto w-full max-w-md pb-4 text-center">
           {/* Zen Mode Toggle */}
           {zenMode && (
             <Button
               variant="ghost"
               size="icon"
-              className="absolute top-0 right-4"
+              className="absolute top-4 right-4"
               onClick={() => setZenMode(false)}
             >
               <Minimize2 className="h-5 w-5" />
@@ -240,10 +239,10 @@ export function FocusTimer() {
 
           <div className="flex items-center justify-between gap-4">
             {!zenMode && (
-              <CardTitle className="flex items-center gap-2 text-lg">
+              <h2 className="flex items-center gap-2 text-lg font-semibold tracking-tight">
                 <Icon className={cn("h-5 w-5", currentConfig.color)} />
                 {currentConfig.label}
-              </CardTitle>
+              </h2>
             )}
 
             <div className={cn("flex items-center", zenMode ? "mx-auto" : "")}>
@@ -255,7 +254,7 @@ export function FocusTimer() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-full hover:bg-white/10"
                   onClick={() => setZenMode(true)}
                   title="Zen Mode"
                 >
@@ -265,7 +264,7 @@ export function FocusTimer() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="h-8 w-8"
+                  className="h-8 w-8 rounded-full hover:bg-white/10"
                   onClick={() => updateTimerSettings({ soundEnabled: !timerSettings.soundEnabled })}
                 >
                   {timerSettings.soundEnabled ? (
@@ -277,16 +276,19 @@ export function FocusTimer() {
 
                 <Popover>
                   <PopoverTrigger asChild>
-                    <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <Button variant="ghost" size="icon" className="h-8 w-8 rounded-full hover:bg-white/10">
                       <Settings className="h-4 w-4" />
                     </Button>
                   </PopoverTrigger>
-                  <PopoverContent className="w-80">
+                  <PopoverContent className="w-80 bg-card/90 backdrop-blur-xl border border-white/10 shadow-2xl rounded-2xl p-4">
                     <div className="space-y-4">
-                      <h4 className="font-medium">Timer Settings</h4>
+                      <h4 className="font-semibold text-sm">Timer Settings</h4>
 
                       <div className="space-y-2">
-                        <Label>Focus: {timerSettings.focusDuration} min</Label>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <Label>Focus Duration</Label>
+                          <span>{timerSettings.focusDuration} min</span>
+                        </div>
                         <Slider
                           value={[timerSettings.focusDuration]}
                           onValueChange={([v]) => updateTimerSettings({ focusDuration: v })}
@@ -297,7 +299,10 @@ export function FocusTimer() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Short Break: {timerSettings.shortBreakDuration} min</Label>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <Label>Short Break</Label>
+                          <span>{timerSettings.shortBreakDuration} min</span>
+                        </div>
                         <Slider
                           value={[timerSettings.shortBreakDuration]}
                           onValueChange={([v]) => updateTimerSettings({ shortBreakDuration: v })}
@@ -308,7 +313,10 @@ export function FocusTimer() {
                       </div>
 
                       <div className="space-y-2">
-                        <Label>Long Break: {timerSettings.longBreakDuration} min</Label>
+                        <div className="flex justify-between text-xs text-muted-foreground">
+                          <Label>Long Break</Label>
+                          <span>{timerSettings.longBreakDuration} min</span>
+                        </div>
                         <Slider
                           value={[timerSettings.longBreakDuration]}
                           onValueChange={([v]) => updateTimerSettings({ longBreakDuration: v })}
@@ -318,8 +326,8 @@ export function FocusTimer() {
                         />
                       </div>
 
-                      <div className="flex items-center justify-between">
-                        <Label>Auto-start breaks</Label>
+                      <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                        <Label className="text-xs">Auto-start breaks</Label>
                         <Switch
                           checked={timerSettings.autoStartBreaks}
                           onCheckedChange={(v) => updateTimerSettings({ autoStartBreaks: v })}
@@ -327,7 +335,7 @@ export function FocusTimer() {
                       </div>
 
                       <div className="flex items-center justify-between">
-                        <Label>Auto-start focus</Label>
+                        <Label className="text-xs">Auto-start focus</Label>
                         <Switch
                           checked={timerSettings.autoStartFocus}
                           onCheckedChange={(v) => updateTimerSettings({ autoStartFocus: v })}
@@ -341,25 +349,25 @@ export function FocusTimer() {
           </div>
 
           {/* Mode Tabs */}
-          <div className="bg-muted mt-4 flex gap-1 rounded-lg p-1">
+          <div className="bg-white/5 dark:bg-black/20 border border-white/5 mt-4 flex gap-1 rounded-xl p-1">
             {(Object.keys(modeConfig) as TimerMode[]).map((m) => (
               <button
                 key={m}
                 onClick={() => setTimerMode(m)}
                 className={cn(
-                  "flex-1 rounded-md px-3 py-1.5 text-sm transition-colors",
+                  "flex-1 rounded-lg py-1.5 text-xs font-medium transition-all duration-300",
                   timerMode === m
-                    ? "bg-background text-foreground shadow"
-                    : "text-muted-foreground hover:text-foreground"
+                    ? "bg-white/15 dark:bg-white/10 text-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
                 )}
               >
                 {modeConfig[m].label}
               </button>
             ))}
           </div>
-        </CardHeader>
+        </div>
 
-        <CardContent className="mx-auto flex w-full max-w-md flex-col items-center space-y-8 pt-8">
+        <div className="mx-auto flex w-full max-w-md flex-col items-center space-y-6 pt-2">
           {/* Task Selection */}
           {timerMode === "focus" && (
             <div className="w-full">
@@ -367,16 +375,16 @@ export function FocusTimer() {
                 value={activeTaskId || "none"}
                 onValueChange={(val) => setActiveTimerTask(val === "none" ? null : val)}
               >
-                <SelectTrigger className="bg-background/50 w-full">
+                <SelectTrigger className="bg-white/5 border border-white/10 w-full rounded-xl">
                   <SelectValue placeholder="Select a task to focus on..." />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent className="bg-card/95 border border-white/10 rounded-xl backdrop-blur-xl">
                   <SelectItem value="none">-- No active task --</SelectItem>
                   {incompleteTasks.map((task) => (
                     <SelectItem key={task.id} value={task.id}>
                       <span className="flex items-center gap-2">
                         {task.priority === "P0" && (
-                          <span className="h-2 w-2 rounded-full bg-red-500" />
+                          <span className="h-2 w-2 rounded-full bg-red-500 animate-pulse" />
                         )}
                         <span className="max-w-[200px] truncate">{task.title}</span>
                       </span>
@@ -393,120 +401,221 @@ export function FocusTimer() {
             data-status={isTimerRunning ? "running" : "paused"}
             data-mode={timerMode}
             className={cn(
-              "relative mx-auto transition-all",
-              zenMode ? "h-96 w-96 scale-110" : "h-48 w-48 sm:h-56 sm:w-56"
+              "relative mx-auto transition-all duration-500 flex items-center justify-center",
+              zenMode ? "h-[420px] w-[420px] scale-105" : "h-72 w-72 sm:h-80 sm:w-80 md:h-[350px] md:w-[350px]"
             )}
           >
-            <svg className="h-full w-full -rotate-90 transform" viewBox={zenMode ? "0 0 384 384" : "0 0 200 200"}>
+            <svg className="absolute inset-0 h-full w-full -rotate-90 transform" viewBox="0 0 280 280">
+              <defs>
+                <linearGradient id="gradient-focus" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="hsl(262, 83%, 58%)" />
+                  <stop offset="50%" stopColor="hsl(330, 81%, 60%)" />
+                  <stop offset="100%" stopColor="hsl(217, 91%, 60%)" />
+                </linearGradient>
+                <linearGradient id="gradient-shortBreak" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="hsl(142, 76%, 45%)" />
+                  <stop offset="100%" stopColor="hsl(172, 66%, 50%)" />
+                </linearGradient>
+                <linearGradient id="gradient-longBreak" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="hsl(217, 91%, 60%)" />
+                  <stop offset="100%" stopColor="hsl(199, 89%, 50%)" />
+                </linearGradient>
+                <filter id="timer-glow" x="-20%" y="-20%" width="140%" height="140%">
+                  <feGaussianBlur stdDeviation="8" result="blur" />
+                  <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                </filter>
+              </defs>
+              
+              {/* Outer Precision Ticks (Rotating) */}
               <circle
-                cx={zenMode ? "192" : "100"}
-                cy={zenMode ? "192" : "100"}
-                r={zenMode ? "180" : "90"}
+                cx="140"
+                cy="140"
+                r="132"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth={zenMode ? "12" : "8"}
-                className="text-muted/30"
+                strokeWidth="1.5"
+                strokeDasharray="2 10"
+                className={cn(
+                  "text-white/10 transition-all duration-1000",
+                  isTimerRunning ? "animate-[spin_240s_linear_infinite]" : ""
+                )}
               />
-              <motion.circle
-                cx={zenMode ? "192" : "100"}
-                cy={zenMode ? "192" : "100"}
-                r={zenMode ? "180" : "90"}
+
+              {/* Background circular track */}
+              <circle
+                cx="140"
+                cy="140"
+                r="120"
                 fill="none"
                 stroke="currentColor"
-                strokeWidth={zenMode ? "12" : "8"}
+                strokeWidth="5"
+                className="text-white/[0.04] dark:text-white/[0.03]"
+              />
+              
+              {/* Glow Behind (Only when running) */}
+              {isTimerRunning && (
+                <motion.circle
+                  cx="140"
+                  cy="140"
+                  r="120"
+                  fill="none"
+                  stroke={`url(#gradient-${timerMode})`}
+                  strokeWidth="10"
+                  strokeLinecap="round"
+                  opacity="0.35"
+                  filter="url(#timer-glow)"
+                  strokeDasharray={754}
+                  initial={{ strokeDashoffset: 754 }}
+                  animate={{
+                    strokeDashoffset: 754 - (progress / 100) * 754,
+                  }}
+                  transition={{ duration: 0.5, ease: "linear" }}
+                />
+              )}
+
+              {/* Main Progress Stroke */}
+              <motion.circle
+                cx="140"
+                cy="140"
+                r="120"
+                fill="none"
+                stroke={`url(#gradient-${timerMode})`}
+                strokeWidth="7"
                 strokeLinecap="round"
-                className={currentConfig.color}
-                strokeDasharray={zenMode ? 1130 : 565}
-                initial={{ strokeDashoffset: zenMode ? 1130 : 565 }}
+                strokeDasharray={754}
+                initial={{ strokeDashoffset: 754 }}
                 animate={{
-                  strokeDashoffset:
-                    (zenMode ? 1130 : 565) - (progress / 100) * (zenMode ? 1130 : 565),
+                  strokeDashoffset: 754 - (progress / 100) * 754,
                 }}
                 transition={{ duration: 0.5, ease: "linear" }}
               />
+
+              {/* Inner Decorative Dashboard Ring */}
+              <circle
+                cx="140"
+                cy="140"
+                r="108"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1"
+                strokeDasharray="3 6"
+                className="text-white/5 dark:text-white/[0.02]"
+              />
             </svg>
 
-            <div className="absolute inset-0 flex flex-col items-center justify-center">
+            {/* Centered Timer Content */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center p-6 z-10 select-none">
               <AnimatePresence mode="wait">
                 <motion.span
                   key={timeLeft}
-                  initial={{ opacity: 0.5, scale: 0.9 }}
+                  initial={{ opacity: 0.6, scale: 0.96 }}
                   animate={{ opacity: 1, scale: 1 }}
                   className={cn(
-                    "font-bold tracking-tight tabular-nums",
-                    zenMode ? "text-8xl" : "text-5xl"
+                    "font-extrabold tracking-tight font-mono bg-gradient-to-r bg-clip-text text-transparent transition-all duration-500 drop-shadow-[0_4px_16px_rgba(0,0,0,0.5)]",
+                    timerMode === "focus"
+                      ? "from-purple-400 via-pink-400 to-blue-400"
+                      : timerMode === "shortBreak"
+                      ? "from-emerald-400 to-teal-400"
+                      : "from-blue-400 to-cyan-400",
+                    zenMode ? "text-8xl sm:text-9xl" : "text-6xl sm:text-7xl md:text-8xl"
                   )}
                 >
                   {formatTime(timeLeft)}
                 </motion.span>
               </AnimatePresence>
-              <span data-testid="session-count" className="text-muted-foreground mt-2 text-sm font-medium">
-                Session {completedSessions + 1} / {timerSettings.sessionsBeforeLongBreak}
+              
+              <span className={cn(
+                "mt-3 text-[10px] sm:text-xs font-semibold tracking-[0.2em] uppercase transition-colors duration-500",
+                timerMode === "focus" 
+                  ? "text-brand-pink" 
+                  : timerMode === "shortBreak" 
+                  ? "text-emerald-400" 
+                  : "text-brand-blue"
+              )}>
+                {timerMode === "focus" ? "Focus Session" : timerMode === "shortBreak" ? "Short Break" : "Long Break"}
+              </span>
+
+              <span data-testid="session-count" className="text-muted-foreground/60 mt-1 text-[10px] sm:text-xs font-medium">
+                Session {completedSessions + 1} of {timerSettings.sessionsBeforeLongBreak}
               </span>
             </div>
           </div>
 
           {/* Controls */}
-          <div className="flex items-center justify-center gap-6">
+          <div className="flex items-center justify-center gap-6 z-10 relative">
             <Button
               variant="outline"
               size="icon"
-              className="h-12 w-12 rounded-full"
+              className="h-12 w-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-muted-foreground hover:text-foreground hover:bg-white/10 active:scale-90 transition-all duration-300 shadow-md"
               onClick={resetTimer}
+              title="Reset Timer"
             >
-              <RotateCcw className="text-muted-foreground h-5 w-5" />
+              <RotateCcw className="h-5 w-5" />
             </Button>
 
             <Button
               size="lg"
               className={cn(
-                "rounded-full shadow-lg transition-all active:scale-95",
+                "rounded-full shadow-xl transition-all duration-500 active:scale-95 hover:shadow-primary/30 flex items-center justify-center",
                 zenMode ? "h-20 w-20" : "h-16 w-16",
-                isTimerRunning ? currentConfig.bgColor : "bg-primary hover:bg-primary/90"
+                isTimerRunning
+                  ? "bg-gradient-to-r from-brand-purple via-brand-pink to-brand-blue text-white border-0 hover:opacity-90"
+                  : "bg-white text-black hover:bg-white/90"
               )}
               onClick={() => setTimerRunning(!isTimerRunning)}
             >
               {isTimerRunning ? (
-                <Pause className={cn("fill-current", zenMode ? "h-10 w-10" : "h-8 w-8")} />
+                <Pause className={cn("fill-current", zenMode ? "h-8 w-8" : "h-6 w-6")} />
               ) : (
-                <Play className={cn("ml-1 fill-current", zenMode ? "h-10 w-10" : "h-8 w-8")} />
+                <Play className={cn("ml-1 fill-current", zenMode ? "h-8 w-8" : "h-6 w-6")} />
               )}
             </Button>
 
-            {!zenMode && <div className="h-12 w-12" />}
+            {!zenMode && (
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-muted-foreground hover:text-foreground hover:bg-white/10 active:scale-90 transition-all duration-300 shadow-md"
+                onClick={() => setZenMode(true)}
+                title="Zen Mode"
+              >
+                <Maximize2 className="h-4 w-4" />
+              </Button>
+            )}
             {zenMode && (
               <Button
                 variant="outline"
                 size="icon"
-                className="h-12 w-12 rounded-full"
+                className="h-12 w-12 rounded-full border border-white/10 bg-white/5 backdrop-blur-md text-muted-foreground hover:text-foreground hover:bg-white/10 active:scale-90 transition-all duration-300 shadow-md"
                 onClick={() => setZenMode(false)}
                 title="Exit Zen Mode"
               >
-                <Minimize2 className="text-muted-foreground h-5 w-5" />
+                <Minimize2 className="h-5 w-5" />
               </Button>
             )}
           </div>
 
           {/* Sessions indicator */}
           <div className="flex items-center justify-center gap-2">
-            {Array.from({ length: timerSettings.sessionsBeforeLongBreak }).map((_, i) => (
-              <div
-                key={i}
-                className={cn(
-                  "h-3 w-3 rounded-full border transition-colors",
-                  i < completedSessions % timerSettings.sessionsBeforeLongBreak
-                    ? currentConfig.bgColor + " border-transparent"
-                    : "border-muted-foreground/30 bg-transparent"
-                )}
-              />
-            ))}
+            {Array.from({ length: timerSettings.sessionsBeforeLongBreak }).map((_, i) => {
+              const isActive = i < completedSessions % timerSettings.sessionsBeforeLongBreak;
+              return (
+                <div
+                  key={i}
+                  className={cn(
+                    "h-3 w-3 rounded-full border transition-all duration-500",
+                    isActive
+                      ? "bg-gradient-to-r from-brand-purple via-brand-pink to-brand-blue border-transparent scale-110 shadow-glow"
+                      : "border-white/20 bg-white/5"
+                  )}
+                />
+              );
+            })}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
       {/* Background Dimmer for Zen Mode */}
-      {zenMode && <div className="bg-background/80 fixed inset-0 z-40 -m-8 backdrop-blur-sm" />}
+      {zenMode && <div className="bg-background/95 fixed inset-0 z-40 backdrop-blur-md" />}
     </>
   );
 }
-
-export default FocusTimer;
