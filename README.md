@@ -12,7 +12,7 @@
     <img src="https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=flat-square&logo=drizzle" />
     <img src="https://img.shields.io/badge/PostgreSQL-15-336791?style=flat-square&logo=postgresql" />
     <img src="https://img.shields.io/badge/Gemini-AI-8E75B2?style=flat-square&logo=google-bard" />
-    <img src="https://img.shields.io/badge/Tests-109%20passing-brightgreen?style=flat-square&logo=vitest" />
+    <img src="https://img.shields.io/badge/Tests-193%20passing-brightgreen?style=flat-square&logo=vitest" />
   </p>
 
   <p align="center">
