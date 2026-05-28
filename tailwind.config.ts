@@ -13,6 +13,45 @@ const config: Config = {
   		colors: {
   			background: 'hsl(var(--background))',
   			foreground: 'hsl(var(--foreground))',
+  			surface: {
+  				DEFAULT: 'hsl(var(--surface))',
+  				dim: 'hsl(var(--surface-dim))',
+  				bright: 'hsl(var(--surface-bright))',
+  				container: {
+  					DEFAULT: 'hsl(var(--surface-container))',
+  					lowest: 'hsl(var(--surface-container-lowest))',
+  					low: 'hsl(var(--surface-container-low))',
+  					high: 'hsl(var(--surface-container-high))',
+  					highest: 'hsl(var(--surface-container-highest))'
+  				}
+  			},
+  			'on-surface': {
+  				DEFAULT: 'hsl(var(--on-surface))',
+  				variant: 'hsl(var(--on-surface-variant))'
+  			},
+  			outline: {
+  				DEFAULT: 'hsl(var(--outline-theme))',
+  				variant: 'hsl(var(--outline-variant))'
+  			},
+  			'brand-purple': 'hsl(262, 83%, 58%)',
+  			'brand-pink': 'hsl(330, 81%, 60%)',
+  			'brand-blue': 'hsl(217, 91%, 60%)',
+  			tertiary: {
+  				DEFAULT: 'hsl(var(--tertiary))',
+  				foreground: 'hsl(var(--on-tertiary))',
+  				container: {
+  					DEFAULT: 'hsl(var(--tertiary-container))',
+  					foreground: 'hsl(var(--on-tertiary-container))'
+  				}
+  			},
+  			error: {
+  				DEFAULT: 'hsl(var(--error))',
+  				foreground: 'hsl(var(--on-error))',
+  				container: {
+  					DEFAULT: 'hsl(var(--error-container))',
+  					foreground: 'hsl(var(--on-error-container))'
+  				}
+  			},
   			card: {
   				DEFAULT: 'hsl(var(--card))',
   				foreground: 'hsl(var(--card-foreground))'
@@ -22,6 +61,10 @@ const config: Config = {
   				foreground: 'hsl(var(--popover-foreground))'
   			},
   			primary: {
+  				DEFAULT: 'hsl(var(--primary))',
+  				foreground: 'hsl(var(--primary-foreground))'
+  			},
+  			'primary-container': {
   				DEFAULT: 'hsl(var(--primary))',
   				foreground: 'hsl(var(--primary-foreground))'
   			},
@@ -56,6 +99,10 @@ const config: Config = {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
+  		},
+  		backgroundImage: {
+  			'brand-gradient': 'linear-gradient(135deg, hsl(262, 83%, 58%), hsl(330, 81%, 60%), hsl(217, 91%, 60%))',
+  			'gradient-mesh': 'radial-gradient(at center, hsla(262, 83%, 58%, 0.18) 0px, transparent 60%), radial-gradient(at center, hsla(330, 81%, 60%, 0.18) 0px, transparent 60%), radial-gradient(at center, hsla(217, 91%, 60%, 0.18) 0px, transparent 60%)',
   		}
   	}
   },
