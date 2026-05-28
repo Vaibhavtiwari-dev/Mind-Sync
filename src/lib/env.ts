@@ -48,13 +48,24 @@ let validatedEnv: EnvSchema | null = null;
 export function validateEnv(): EnvSchema {
   if (validatedEnv) return validatedEnv;
 
+  if (typeof window !== "undefined") {
+    // In client/browser environment, bypass server-side validation to avoid errors
+    validatedEnv = {
+      NODE_ENV: (process.env.NODE_ENV as any) || "development",
+      NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY || "",
+    } as EnvSchema;
+    return validatedEnv;
+  }
+
   const result = envSchema.safeParse(process.env);
 
   if (!result.success) {
     const errors = result.error.flatten().fieldErrors;
-    const errorMessages = Object.entries(errors)
-      .map(([field, msgs]) => `  ${field}: ${msgs?.join(", ")}`)
-      .join("\n");
+    const formErrors = result.error.flatten().formErrors;
+    const errorMessages = [
+      ...formErrors.map(msg => `  Global: ${msg}`),
+      ...Object.entries(errors).map(([field, msgs]) => `  ${field}: ${msgs?.join(", ")}`)
+    ].join("\n");
 
     console.error("❌ Invalid environment variables:\n" + errorMessages);
 
