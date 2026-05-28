@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { AppSidebar } from "@/components/layout/AppSidebar";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
@@ -13,6 +14,7 @@ import { ServiceWorkerRegistration } from "@/components/pwa/service-worker-regis
 import { MobileBottomNav } from "@/components/mobile/MobileBottomNav";
 import { StoreHydrator } from "@/components/StoreHydrator";
 import type { InitialData } from "@/app/actions/get-initial-data";
+import Link from "next/link";
 
 export default function DashboardShell({
   children,
@@ -21,12 +23,29 @@ export default function DashboardShell({
   children: React.ReactNode;
   initialData: InitialData | null;
 }) {
+  const meshRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleMouseMove = (e: MouseEvent) => {
+      if (!meshRef.current) return;
+      const x = e.clientX / window.innerWidth;
+      const y = e.clientY / window.innerHeight;
+      meshRef.current.style.background = `radial-gradient(at ${x * 100}% ${y * 100}%, #260059 0%, transparent 50%),
+                                          radial-gradient(at ${100 - x * 100}% ${100 - y * 100}%, #3e001f 0%, transparent 50%),
+                                          radial-gradient(at 100% 100%, #001a42 0%, transparent 50%),
+                                          radial-gradient(at 0% 100%, #15121b 0%, transparent 50%)`;
+    };
+
+    window.addEventListener("mousemove", handleMouseMove);
+    return () => window.removeEventListener("mousemove", handleMouseMove);
+  }, []);
+
   return (
     <div className="flex h-screen overflow-hidden bg-background relative">
       {/* Hydrate store with server data */}
       <StoreHydrator initialData={initialData} />
       {/* Background Gradient Mesh */}
-      <div className="absolute inset-0 bg-gradient-mesh opacity-30 dark:opacity-20 pointer-events-none" />
+      <div ref={meshRef} className="mesh-bg pointer-events-none" />
       
       {/* Accessibility: Skip to main content link */}
       <SkipLink />
@@ -44,7 +63,7 @@ export default function DashboardShell({
       <CommandMenu />
 
       {/* Desktop Sidebar */}
-      <nav className="hidden w-64 flex-shrink-0 md:block relative z-20" aria-label="Main navigation">
+      <nav className="hidden w-[280px] flex-shrink-0 md:block relative z-20" aria-label="Main navigation">
         <AppSidebar />
       </nav>
 
@@ -90,11 +109,37 @@ export default function DashboardShell({
         {/* Main Content Area */}
         <main
           id="main-content"
-          className="custom-scrollbar flex-1 overflow-y-auto p-4 pb-24 md:p-6 md:pb-6 pb-safe pl-safe pr-safe"
+          className="custom-scrollbar flex-1 overflow-y-auto p-margin-mobile md:p-margin-desktop pb-safe pl-safe pr-safe flex flex-col justify-between"
           role="main"
           aria-label="Main content"
         >
-          {children}
+          <div className="flex-1">
+            {children}
+          </div>
+          
+          {/* Footer (Shared Component Identity) */}
+          <footer className="border-t border-outline-variant/20 bg-surface-container-lowest mt-12 py-12 px-margin-mobile md:px-margin-desktop">
+            <div className="max-w-[1440px] mx-auto flex flex-col items-center gap-8">
+              <div className="flex flex-wrap justify-center gap-8">
+                <Link className="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">
+                  Privacy Protocol
+                </Link>
+                <Link className="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">
+                  Neural Terms
+                </Link>
+                <Link className="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">
+                  System Status
+                </Link>
+                <Link className="text-on-surface-variant font-label-sm hover:text-tertiary transition-all" href="#">
+                  Elite Support
+                </Link>
+              </div>
+              <div className="text-center">
+                <p className="font-headline-lg text-2xl font-bold text-on-surface mb-2">Mind-Sync</p>
+                <p className="text-on-surface-variant text-sm font-label-sm">© 2024 Mind-Sync. All Rights Reserved.</p>
+              </div>
+            </div>
+          </footer>
         </main>
       </div>
 

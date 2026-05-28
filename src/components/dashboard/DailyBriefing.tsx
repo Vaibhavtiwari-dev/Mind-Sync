@@ -69,87 +69,95 @@ export function DailyBriefingCard() {
         exit={{ opacity: 0, y: -20 }}
         transition={{ duration: 0.3 }}
       >
-        <Card className="relative overflow-hidden border-purple-500/20 bg-gradient-to-br from-purple-500/5 via-blue-500/5 to-cyan-500/5">
-          {/* Shimmer effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent animate-pulse pointer-events-none" />
+        <Card className="relative overflow-hidden border-0 bg-gradient-to-br from-brand-purple via-brand-pink to-brand-blue dark:from-brand-purple/20 dark:via-brand-pink/10 dark:to-brand-blue/20 dark:border dark:border-purple-500/30 text-white shadow-xl shadow-purple-500/20 dark:shadow-none animate-gradient-shift bg-[size:200%_200%]">
+          {/* Glass mesh gradient overlay for depth */}
+          <div className="absolute inset-0 bg-black/10 dark:bg-black/20 backdrop-blur-[2px] pointer-events-none" />
+          <div className="absolute inset-0 bg-gradient-to-tr from-white/10 via-transparent to-white/5 pointer-events-none" />
+          {/* Shimmer sweep effect */}
+          <div className="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/15 to-transparent pointer-events-none animate-shimmer-sweep" />
 
-          <CardHeader className="flex flex-row items-start justify-between pb-3">
-            <div className="flex items-center gap-2">
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-purple-500/10">
-                <Sparkles className="h-4 w-4 text-purple-500" />
+          <CardHeader className="flex flex-row items-start justify-between pb-4 relative z-10">
+            <div className="flex items-center gap-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/20 dark:bg-purple-500/20 border border-white/20 dark:border-purple-500/35 backdrop-blur-md transition-transform duration-300 hover:rotate-12">
+                <Sparkles className="h-5 w-5 text-white dark:text-purple-300 animate-pulse" />
               </div>
               <div>
-                <CardTitle className="text-base">Daily Briefing</CardTitle>
+                <CardTitle className="text-lg font-extrabold tracking-tight text-white">Daily Briefing</CardTitle>
                 {briefing && (
-                  <p className="text-muted-foreground text-sm mt-0.5">{briefing.greeting}</p>
+                  <p className="text-purple-100/90 dark:text-purple-300 text-xs mt-0.5 font-medium">{briefing.greeting}</p>
                 )}
               </div>
             </div>
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-1.5 relative z-10">
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10 dark:text-purple-300 dark:hover:text-white dark:hover:bg-purple-500/25 rounded-lg"
                 onClick={fetchBriefing}
                 disabled={loading}
                 aria-label="Refresh briefing"
               >
-                <RefreshCw className={`h-3.5 w-3.5 ${loading ? "animate-spin" : ""}`} />
+                <RefreshCw className={`h-4 w-4 ${loading ? "animate-spin" : ""}`} />
               </Button>
               <Button
                 variant="ghost"
                 size="icon"
-                className="h-7 w-7"
+                className="h-8 w-8 text-white/80 hover:text-white hover:bg-white/10 dark:text-purple-300 dark:hover:text-white dark:hover:bg-purple-500/25 rounded-lg"
                 onClick={handleDismiss}
                 aria-label="Dismiss briefing"
               >
-                <X className="h-3.5 w-3.5" />
+                <X className="h-4 w-4" />
               </Button>
             </div>
           </CardHeader>
 
-          <CardContent className="space-y-4 pt-0">
+          <CardContent className="space-y-5 pt-0 pb-6 relative z-10">
             {loading && !briefing && (
-              <div className="space-y-2">
-                <div className="h-4 w-3/4 animate-pulse rounded bg-muted" />
-                <div className="h-4 w-1/2 animate-pulse rounded bg-muted" />
-                <div className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+              <div className="space-y-3 py-2">
+                <div className="h-4 w-3/4 animate-pulse rounded bg-white/10 dark:bg-white/5" />
+                <div className="h-4 w-1/2 animate-pulse rounded bg-white/10 dark:bg-white/5" />
+                <div className="h-4 w-2/3 animate-pulse rounded bg-white/10 dark:bg-white/5" />
               </div>
             )}
 
             {error && (
-              <p className="text-sm text-destructive">{error}</p>
+              <div className="p-3 rounded-lg bg-red-500/10 border border-red-500/20 text-red-100 text-sm">
+                {error}
+              </div>
             )}
 
             {briefing && (
               <>
                 {/* Stats row */}
-                <div className="flex gap-3">
-                  <Badge variant="secondary" className="gap-1">
-                    <CheckCircle2 className="h-3 w-3" />
+                <div className="flex flex-wrap gap-2.5">
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 dark:bg-white/[0.04] text-white dark:text-purple-100 border border-white/15 dark:border-white/[0.08] backdrop-blur-md text-xs font-semibold shadow-sm transition-all duration-300 hover:bg-white/15">
+                    <CheckCircle2 className="h-3.5 w-3.5 text-cyan-300 dark:text-cyan-400" />
                     {briefing.stats.totalTasks} tasks
-                  </Badge>
+                  </span>
                   {briefing.stats.overdueTasks > 0 && (
-                    <Badge variant="destructive" className="gap-1">
-                      <AlertTriangle className="h-3 w-3" />
+                    <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-500/20 dark:bg-red-950/30 text-white dark:text-red-300 border border-red-500/30 text-xs font-semibold shadow-sm animate-pulse">
+                      <AlertTriangle className="h-3.5 w-3.5 text-red-200 dark:text-red-400" />
                       {briefing.stats.overdueTasks} overdue
-                    </Badge>
+                    </span>
                   )}
-                  <Badge variant="secondary" className="gap-1">
-                    <Calendar className="h-3 w-3" />
+                  <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/10 dark:bg-white/[0.04] text-white dark:text-purple-100 border border-white/15 dark:border-white/[0.08] backdrop-blur-md text-xs font-semibold shadow-sm transition-all duration-300 hover:bg-white/15">
+                    <Calendar className="h-3.5 w-3.5 text-cyan-300 dark:text-cyan-400" />
                     {briefing.stats.todayEvents} events
-                  </Badge>
+                  </span>
                 </div>
 
                 {/* Priorities */}
                 {briefing.priorities.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium mb-1.5">🎯 Top Priorities</h4>
-                    <ul className="space-y-1">
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold tracking-wider uppercase text-white/90 flex items-center gap-1.5">
+                      <Sparkles className="h-3.5 w-3.5 text-cyan-300 dark:text-cyan-400" />
+                      Top Priorities
+                    </h4>
+                    <ul className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                       {briefing.priorities.map((p, i) => (
-                        <li key={i} className="text-sm text-muted-foreground flex items-start gap-2">
-                          <span className="text-purple-500 font-medium shrink-0">{i + 1}.</span>
-                          {p}
+                        <li key={i} className="text-sm text-purple-50/90 dark:text-purple-200/90 flex items-start gap-3 bg-white/10 dark:bg-white/[0.03] border border-white/10 dark:border-white/[0.05] p-3.5 rounded-xl backdrop-blur-sm transition-all duration-300 hover:bg-white/15 dark:hover:bg-white/[0.06] hover:scale-[1.01] shadow-sm">
+                          <span className="text-cyan-300 dark:text-cyan-400 font-extrabold shrink-0 bg-white/15 rounded-lg h-5 w-5 flex items-center justify-center text-[10px]">{i + 1}</span>
+                          <span className="leading-snug">{p}</span>
                         </li>
                       ))}
                     </ul>
@@ -157,23 +165,26 @@ export function DailyBriefingCard() {
                 )}
 
                 {/* Schedule */}
-                <div>
-                  <h4 className="text-sm font-medium mb-1 flex items-center gap-1.5">
-                    <Calendar className="h-3.5 w-3.5" /> Schedule
+                <div className="bg-white/10 dark:bg-white/[0.03] border border-white/10 dark:border-white/[0.05] p-4 rounded-xl backdrop-blur-sm space-y-2 shadow-sm">
+                  <h4 className="text-xs font-bold tracking-wider uppercase text-white/90 flex items-center gap-1.5">
+                    <Calendar className="h-3.5 w-3.5 text-cyan-300 dark:text-cyan-400" />
+                    Schedule Overview
                   </h4>
-                  <p className="text-sm text-muted-foreground">{briefing.scheduleOverview}</p>
+                  <p className="text-sm text-purple-50/90 dark:text-purple-200/90 leading-relaxed font-medium">{briefing.scheduleOverview}</p>
                 </div>
 
                 {/* Suggestions */}
                 {briefing.suggestions.length > 0 && (
-                  <div>
-                    <h4 className="text-sm font-medium mb-1 flex items-center gap-1.5">
-                      <Lightbulb className="h-3.5 w-3.5" /> Tips
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-bold tracking-wider uppercase text-white/90 flex items-center gap-1.5">
+                      <Lightbulb className="h-3.5 w-3.5 text-cyan-300 dark:text-cyan-400" />
+                      Tips & Recommendations
                     </h4>
-                    <ul className="space-y-1">
+                    <ul className="space-y-2">
                       {briefing.suggestions.map((s, i) => (
-                        <li key={i} className="text-sm text-muted-foreground">
-                          💡 {s}
+                        <li key={i} className="text-sm text-purple-50/95 dark:text-purple-200/95 flex items-start gap-3 bg-white/10 dark:bg-white/[0.03] border border-white/10 dark:border-white/[0.05] p-3.5 rounded-xl backdrop-blur-sm transition-all duration-300 hover:bg-white/15 dark:hover:bg-white/[0.06] hover:scale-[1.01] shadow-sm">
+                          <span className="shrink-0 bg-white/15 h-6 w-6 rounded-full flex items-center justify-center text-xs">💡</span>
+                          <span className="leading-snug">{s}</span>
                         </li>
                       ))}
                     </ul>
@@ -181,7 +192,7 @@ export function DailyBriefingCard() {
                 )}
 
                 {/* Motivational note */}
-                <p className="text-xs text-muted-foreground/70 italic border-t border-border/50 pt-2">
+                <p className="text-xs text-purple-200/70 dark:text-purple-300/60 italic border-t border-white/10 dark:border-purple-500/20 pt-3 mt-4">
                   {briefing.motivationalNote}
                 </p>
               </>
