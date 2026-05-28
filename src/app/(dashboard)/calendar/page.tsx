@@ -196,11 +196,11 @@ export default function CalendarPage() {
               </span>
             )}
           </h1>
-          <div className="bg-background flex items-center gap-1 rounded-md border p-0.5 shadow-sm">
+          <div className="bg-white/30 dark:bg-white/5 backdrop-blur-md flex items-center gap-1 rounded-lg border border-white/40 dark:border-white/10 p-0.5 shadow-sm">
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className="h-7 w-7 rounded-md hover:bg-white/40 dark:hover:bg-white/10"
               onClick={() => navigate("prev")}
             >
               <ChevronLeft className="h-4 w-4" />
@@ -208,13 +208,18 @@ export default function CalendarPage() {
             <Button
               variant="ghost"
               size="icon"
-              className="h-7 w-7"
+              className="h-7 w-7 rounded-md hover:bg-white/40 dark:hover:bg-white/10"
               onClick={() => navigate("next")}
             >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>
-          <Button variant="outline" size="sm" onClick={goToToday} className="hidden sm:flex">
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={goToToday}
+            className="hidden sm:flex bg-white/30 dark:bg-white/5 backdrop-blur-md border border-white/40 dark:border-white/10 hover:bg-white/40 dark:hover:bg-white/10"
+          >
             Today
           </Button>
         </div>
@@ -314,16 +319,16 @@ export default function CalendarPage() {
       />
 
       {/* View Rendering */}
-      <GlassCard hover="none" className="flex-1 overflow-hidden shadow-sm p-0 flex flex-col">
+      <GlassCard hover="none" className="flex-1 overflow-hidden shadow-md p-0 flex flex-col glass-card border border-white/10">
         {view === "month" && (
           <div className="flex h-full flex-col overflow-x-auto">
             <div className="flex h-full min-w-[600px] flex-col">
               {/* Month Header */}
-              <div className="bg-black/5 dark:bg-white/5 grid grid-cols-7 border-b border-black/5 dark:border-white/10 py-3 text-center">
+              <div className="bg-white/10 dark:bg-white/[0.03] backdrop-blur-lg grid grid-cols-7 border-b border-white/15 dark:border-white/10 py-3.5 text-center">
                 {DAYS.map((day) => (
                   <div
                     key={day}
-                    className="text-muted-foreground text-xs font-medium tracking-widest uppercase"
+                    className="text-muted-foreground text-xs font-bold tracking-widest uppercase opacity-90"
                   >
                     {day}
                   </div>
@@ -331,7 +336,7 @@ export default function CalendarPage() {
               </div>
 
               {/* Month Grid */}
-              <div className="grid flex-1 grid-cols-7 grid-rows-5 divide-x divide-y lg:grid-rows-6">
+              <div className="grid flex-1 grid-cols-7 grid-rows-5 lg:grid-rows-6 divide-x divide-y divide-white/10 dark:divide-white/5">
                 {calendarDays.map((day) => {
                   const isCurrentMonth = isSameMonth(day, monthStart);
                   const isDayToday = isToday(day);
@@ -341,48 +346,58 @@ export default function CalendarPage() {
                     <div
                       key={day.toISOString()}
                       className={cn(
-                        "hover:bg-black/5 dark:hover:bg-white/5 group relative flex min-h-[100px] cursor-pointer flex-col gap-1 p-2 transition-all border-b border-r border-black/5 dark:border-white/5",
-                        !isCurrentMonth && "bg-black/5 dark:bg-white/5 text-muted-foreground/30",
-                        isDayToday && "bg-primary/10 shadow-[inset_0_0_20px_rgba(255,215,0,0.15)]"
+                        "group relative flex min-h-[110px] cursor-pointer flex-col gap-1.5 p-2.5 transition-all duration-300",
+                        !isCurrentMonth 
+                          ? "bg-black/[0.03] dark:bg-white/[0.002] opacity-35 hover:opacity-75 hover:bg-white/5 dark:hover:bg-white/[0.01]" 
+                          : "hover:bg-white/[0.06] dark:hover:bg-white/[0.03] bg-white/[0.01] backdrop-blur-[2px]",
+                        isDayToday && "bg-brand-purple/10 dark:bg-brand-purple/20 shadow-[0_0_20px_rgba(139,92,246,0.2)] border-2 border-brand-purple/40 dark:border-brand-purple/30 z-10 scale-[1.002]"
                       )}
                       onClick={() => handleDateClick(day)}
                     >
-                      <div className="flex items-start justify-between">
+                      <div className="flex items-center justify-between mb-1">
                         <span
                           className={cn(
-                            "group-hover:bg-muted flex h-7 w-7 items-center justify-center rounded-full text-sm font-medium transition-colors",
-                            isDayToday &&
-                              "bg-primary text-primary-foreground group-hover:bg-primary"
+                            "flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold transition-all duration-300",
+                            isDayToday
+                              ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white shadow-md shadow-brand-purple/35 scale-110"
+                              : "text-muted-foreground/80 group-hover:text-foreground group-hover:bg-white/10 group-hover:scale-105"
                           )}
                         >
                           {format(day, "d")}
                         </span>
+                        {dayEvents.length > 0 && !isDayToday && (
+                          <span className="relative flex h-1.5 w-1.5 mr-1">
+                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-purple/60 opacity-75" />
+                            <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-brand-purple/80 dark:bg-brand-purple/95" />
+                          </span>
+                        )}
                       </div>
 
                       {/* Render Events */}
                       <div className="space-y-1">
-                        {dayEvents.slice(0, 4).map((event) => {
+                        {dayEvents.slice(0, 3).map((event) => {
                           const styles = EVENT_STYLES[event.type || "work"];
                           return (
                             <div
                               key={event.id}
                               className={cn(
-                                "cursor-pointer truncate rounded-sm border-l-2 py-0.5 pl-1 text-[10px] transition-colors",
+                                "cursor-pointer truncate rounded-lg border py-1 px-2 text-[10px] font-semibold transition-all hover:translate-x-1 shadow-sm",
                                 styles.bg,
                                 styles.text,
                                 styles.border
                               )}
                             >
-                              <span className="mr-1 opacity-70">
-                                {format(parseISO(event.start), "ha")}
+                              <span className="mr-1 font-bold opacity-75">
+                                {format(parseISO(event.start), "h:mma")}
                               </span>
                               {event.title}
                             </div>
                           );
                         })}
-                        {dayEvents.length > 4 && (
-                          <div className="text-muted-foreground pl-1 text-[10px]">
-                            + {dayEvents.length - 4} more
+                        {dayEvents.length > 3 && (
+                          <div className="text-muted-foreground/80 pl-1 text-[9.5px] font-bold flex items-center gap-1.5 mt-0.5">
+                            <span className="h-1.5 w-1.5 rounded-full bg-brand-purple animate-pulse" />
+                            + {dayEvents.length - 3} more
                           </div>
                         )}
                       </div>

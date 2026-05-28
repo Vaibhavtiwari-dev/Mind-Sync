@@ -1,35 +1,35 @@
 import { GridEvent } from "./TimeGrid";
 
-// Activity type colors - minimal style
+// Activity type colors - high-fidelity glass style with border accents
 export const EVENT_STYLES = {
   work: {
-    bg: "bg-blue-100 dark:bg-blue-900/20",
-    border: "border-blue-200 dark:border-blue-800",
-    text: "text-blue-700 dark:text-blue-300",
+    bg: "bg-blue-500/10 dark:bg-blue-400/12 backdrop-blur-[6px] hover:bg-blue-500/18 dark:hover:bg-blue-400/20 shadow-[0_2px_8px_rgba(59,130,246,0.08)] hover:shadow-[0_4px_16px_rgba(59,130,246,0.16)] transition-all duration-300",
+    border: "border border-blue-500/20 border-l-[3.5px] border-l-blue-500 dark:border-blue-400/15 dark:border-l-blue-400",
+    text: "text-blue-700 dark:text-blue-300 font-semibold tracking-wide text-[10.5px] antialiased",
     label: "Deep Work",
   },
   meeting: {
-    bg: "bg-purple-100 dark:bg-purple-900/20",
-    border: "border-purple-200 dark:border-purple-800",
-    text: "text-purple-700 dark:text-purple-300",
+    bg: "bg-purple-500/10 dark:bg-purple-400/12 backdrop-blur-[6px] hover:bg-purple-500/18 dark:hover:bg-purple-400/20 shadow-[0_2px_8px_rgba(168,85,247,0.08)] hover:shadow-[0_4px_16px_rgba(168,85,247,0.16)] transition-all duration-300",
+    border: "border border-purple-500/20 border-l-[3.5px] border-l-purple-500 dark:border-purple-400/15 dark:border-l-purple-400",
+    text: "text-purple-700 dark:text-purple-300 font-semibold tracking-wide text-[10.5px] antialiased",
     label: "Meeting",
   },
   personal: {
-    bg: "bg-emerald-100 dark:bg-emerald-900/20",
-    border: "border-emerald-200 dark:border-emerald-800",
-    text: "text-emerald-700 dark:text-emerald-300",
+    bg: "bg-emerald-500/10 dark:bg-emerald-400/12 backdrop-blur-[6px] hover:bg-emerald-500/18 dark:hover:bg-emerald-400/20 shadow-[0_2px_8px_rgba(16,185,129,0.08)] hover:shadow-[0_4px_16px_rgba(16,185,129,0.16)] transition-all duration-300",
+    border: "border border-emerald-500/20 border-l-[3.5px] border-l-emerald-500 dark:border-emerald-400/15 dark:border-l-emerald-400",
+    text: "text-emerald-700 dark:text-emerald-300 font-semibold tracking-wide text-[10.5px] antialiased",
     label: "Personal",
   },
   break: {
-    bg: "bg-amber-100 dark:bg-amber-900/20",
-    border: "border-amber-200 dark:border-amber-800",
-    text: "text-amber-700 dark:text-amber-300",
+    bg: "bg-amber-500/10 dark:bg-amber-400/12 backdrop-blur-[6px] hover:bg-amber-500/18 dark:hover:bg-amber-400/20 shadow-[0_2px_8px_rgba(245,158,11,0.08)] hover:shadow-[0_4px_16px_rgba(245,158,11,0.16)] transition-all duration-300",
+    border: "border border-amber-500/20 border-l-[3.5px] border-l-amber-500 dark:border-amber-400/15 dark:border-l-amber-400",
+    text: "text-amber-700 dark:text-amber-300 font-semibold tracking-wide text-[10.5px] antialiased",
     label: "Break",
   },
   shallow: {
-    bg: "bg-slate-100 dark:bg-slate-800/50",
-    border: "border-slate-200 dark:border-slate-700",
-    text: "text-slate-600 dark:text-slate-400",
+    bg: "bg-slate-500/10 dark:bg-slate-400/12 backdrop-blur-[6px] hover:bg-slate-500/18 dark:hover:bg-slate-400/20 shadow-[0_2px_8px_rgba(100,116,139,0.08)] hover:shadow-[0_4px_16px_rgba(100,116,139,0.16)] transition-all duration-300",
+    border: "border border-slate-500/20 border-l-[3.5px] border-l-slate-500 dark:border-slate-400/15 dark:border-l-slate-400",
+    text: "text-slate-700 dark:text-slate-300 font-semibold tracking-wide text-[10.5px] antialiased",
     label: "Shallow Work",
   },
 };

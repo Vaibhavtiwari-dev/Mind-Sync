@@ -13,17 +13,19 @@ interface CalendarViewTabsProps {
 
 export function CalendarViewTabs({ currentView, onViewChange }: CalendarViewTabsProps) {
   return (
-    <div className="bg-muted/40 flex items-center rounded-lg border p-1 shadow-sm">
+    <div className="bg-white/5 backdrop-blur-md flex items-center rounded-xl border border-white/10 p-1 shadow-md gap-0.5">
       <Button
         variant="ghost"
         size="sm"
         onClick={() => onViewChange("month")}
         className={cn(
-          "hover:bg-background/80 h-8 px-3 text-xs font-medium transition-all",
-          currentView === "month" && "bg-background text-foreground hover:bg-background shadow-sm"
+          "h-8 px-3 text-xs font-semibold rounded-lg transition-all duration-300 gap-1.5",
+          currentView === "month"
+            ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white hover:text-white shadow-[0_2px_10px_rgba(139,92,246,0.3)] font-bold scale-[1.02]"
+            : "text-muted-foreground hover:text-foreground hover:bg-white/10"
         )}
       >
-        <CalendarIcon className="mr-2 h-3.5 w-3.5" />
+        <CalendarIcon className="h-3.5 w-3.5" />
         Month
       </Button>
       <Button
@@ -31,11 +33,13 @@ export function CalendarViewTabs({ currentView, onViewChange }: CalendarViewTabs
         size="sm"
         onClick={() => onViewChange("week")}
         className={cn(
-          "hover:bg-background/80 h-8 px-3 text-xs font-medium transition-all",
-          currentView === "week" && "bg-background text-foreground hover:bg-background shadow-sm"
+          "h-8 px-3 text-xs font-semibold rounded-lg transition-all duration-300 gap-1.5",
+          currentView === "week"
+            ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white hover:text-white shadow-[0_2px_10px_rgba(139,92,246,0.3)] font-bold scale-[1.02]"
+            : "text-muted-foreground hover:text-foreground hover:bg-white/10"
         )}
       >
-        <LayoutPanelLeft className="mr-2 h-3.5 w-3.5 rotate-90" />
+        <LayoutPanelLeft className="h-3.5 w-3.5 rotate-90" />
         Week
       </Button>
       <Button
@@ -43,11 +47,13 @@ export function CalendarViewTabs({ currentView, onViewChange }: CalendarViewTabs
         size="sm"
         onClick={() => onViewChange("day")}
         className={cn(
-          "hover:bg-background/80 h-8 px-3 text-xs font-medium transition-all",
-          currentView === "day" && "bg-background text-foreground hover:bg-background shadow-sm"
+          "h-8 px-3 text-xs font-semibold rounded-lg transition-all duration-300 gap-1.5",
+          currentView === "day"
+            ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white hover:text-white shadow-[0_2px_10px_rgba(139,92,246,0.3)] font-bold scale-[1.02]"
+            : "text-muted-foreground hover:text-foreground hover:bg-white/10"
         )}
       >
-        <CalendarDays className="mr-2 h-3.5 w-3.5" />
+        <CalendarDays className="h-3.5 w-3.5" />
         Day
       </Button>
       <Button
@@ -55,11 +61,13 @@ export function CalendarViewTabs({ currentView, onViewChange }: CalendarViewTabs
         size="sm"
         onClick={() => onViewChange("agenda")}
         className={cn(
-          "hover:bg-background/80 h-8 px-3 text-xs font-medium transition-all",
-          currentView === "agenda" && "bg-background text-foreground hover:bg-background shadow-sm"
+          "h-8 px-3 text-xs font-semibold rounded-lg transition-all duration-300 gap-1.5",
+          currentView === "agenda"
+            ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white hover:text-white shadow-[0_2px_10px_rgba(139,92,246,0.3)] font-bold scale-[1.02]"
+            : "text-muted-foreground hover:text-foreground hover:bg-white/10"
         )}
       >
-        <List className="mr-2 h-3.5 w-3.5" />
+        <List className="h-3.5 w-3.5" />
         Agenda
       </Button>
     </div>

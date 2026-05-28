@@ -80,30 +80,35 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
   const isCurrentWeek = weekDays.some((d) => isSameDay(d, currentTime));
 
   return (
-    <div className="bg-card flex h-full flex-col overflow-hidden rounded-lg border shadow-sm">
+    <div className="flex h-full flex-col overflow-hidden bg-transparent">
       {/* Header Row */}
-      <div className="bg-muted/30 flex border-b">
-        <div className="w-16 flex-shrink-0 border-r" /> {/* Time axis placeholder */}
-        <div className="grid flex-1 grid-cols-7 divide-x">
+      <div className="bg-white/5 dark:bg-white/[0.02] backdrop-blur-md flex border-b border-white/10 dark:border-white/5">
+        <div className="w-16 flex-shrink-0 border-r border-white/10 dark:border-white/5" /> {/* Time axis placeholder */}
+        <div className="grid flex-1 grid-cols-7 divide-x divide-white/10 dark:divide-white/5">
           {weekDays.map((day) => {
             const isToday = isSameDay(day, new Date());
             return (
               <div
                 key={day.toISOString()}
-                className={cn("p-2 text-center", isToday && "bg-primary/5")}
+                className={cn(
+                  "p-2 text-center transition-all duration-300",
+                  isToday && "bg-brand-purple/10 dark:bg-brand-purple/20 shadow-[inset_0_0_12px_rgba(139,92,246,0.06)]"
+                )}
               >
                 <div
                   className={cn(
-                    "text-muted-foreground text-xs font-medium uppercase",
-                    isToday && "text-primary"
+                    "text-muted-foreground text-xs font-bold uppercase tracking-wider",
+                    isToday && "text-brand-purple dark:text-brand-purple/90 font-extrabold"
                   )}
                 >
                   {format(day, "EEE")}
                 </div>
                 <div
                   className={cn(
-                    "mx-auto mt-1 flex h-8 w-8 items-center justify-center rounded-full text-lg font-semibold",
-                    isToday && "bg-primary text-primary-foreground"
+                    "mx-auto mt-1 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold transition-all duration-300",
+                    isToday
+                      ? "bg-gradient-to-r from-brand-purple to-brand-pink text-white shadow-md shadow-brand-purple/25 scale-105"
+                      : "text-muted-foreground/80 hover:bg-white/20 dark:hover:bg-white/10"
                   )}
                 >
                   {format(day, "d")}
@@ -118,10 +123,10 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
       <div ref={scrollRef} className="relative flex-1 overflow-y-auto scroll-smooth">
         <div className="relative flex min-h-[1440px]">
           {/* Time Axis */}
-          <div className="bg-background sticky left-0 z-30 w-16 flex-shrink-0 border-r">
+          <div className="bg-white/5 dark:bg-black/35 backdrop-blur-md sticky left-0 z-30 w-16 flex-shrink-0 border-r border-white/10 dark:border-white/5">
             {HOURS.map((hour) => (
               <div key={hour} className="relative h-[60px]">
-                <div className="text-muted-foreground absolute -top-3 right-2 text-xs">
+                <div className="text-muted-foreground/80 absolute -top-3 right-2.5 text-xs font-bold opacity-80 select-none">
                   {hour === 0
                     ? "12 AM"
                     : hour < 12
@@ -135,11 +140,11 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
           </div>
 
           {/* Days Columns */}
-          <div className="relative grid flex-1 grid-cols-7 divide-x">
+          <div className="relative grid flex-1 grid-cols-7 divide-x divide-white/10 dark:divide-white/5">
             {/* Horizontal Grid Lines Background */}
             <div className="pointer-events-none absolute inset-0 z-0">
               {HOURS.map((hour) => (
-                <div key={hour} className="border-border/30 h-[60px] w-full border-b" />
+                <div key={hour} className="border-b border-white/10 dark:border-white/5 h-[60px] w-full" />
               ))}
             </div>
 
@@ -156,8 +161,8 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
                       left: `${(i * 100) / 7}%`,
                     }}
                   >
-                    <div className="-ml-1.5 h-3 w-3 rounded-full bg-red-500" />
-                    <div className="h-[2px] w-full bg-red-500" />
+                    <div className="-ml-1.5 h-3 w-3 rounded-full bg-red-500 shadow-[0_0_8px_rgba(239,68,68,0.6)] animate-pulse" />
+                    <div className="h-[2px] w-full bg-gradient-to-r from-red-500 to-transparent shadow-[0_0_4px_rgba(239,68,68,0.4)]" />
                   </div>
                 );
               })}
@@ -169,7 +174,7 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
               return (
                 <div
                   key={day.toISOString()}
-                  className="group/col hover:bg-muted/5 relative h-full transition-colors"
+                  className="group/col hover:bg-white/5 dark:hover:bg-white/[0.015] relative h-full transition-colors duration-200"
                   onClick={(e) => {
                     const offsetY = (e.nativeEvent as MouseEvent).offsetY;
                     const hour = Math.floor(offsetY / 60);
@@ -186,7 +191,8 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
                       <div
                         key={event.id}
                         className={cn(
-                          "absolute z-10 cursor-pointer truncate rounded border-l-2 p-1 text-[10px] shadow-sm transition-all hover:brightness-95",
+                          "absolute z-10 cursor-pointer rounded-lg p-2 text-xs shadow-sm transition-all duration-300",
+                          "hover:z-20 hover:scale-[1.02] hover:shadow-md backdrop-blur-[6px] flex flex-col justify-between overflow-hidden",
                           styles.bg,
                           styles.border,
                           styles.text
@@ -194,18 +200,20 @@ export function WeekView({ date, onAddEvent, onEditEvent }: WeekViewProps) {
                         style={{
                           top: `${event.start}px`,
                           height: `${event.duration}px`,
-                          left: `${(pos.column / pos.totalColumns) * 100}%`,
-                          width: `${(1 / pos.totalColumns) * 100}%`,
+                          left: `calc(${(pos.column / pos.totalColumns) * 100}% + 2px)`,
+                          width: `calc(${(1 / pos.totalColumns) * 100}% - 4px)`,
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
                           onEditEvent?.(event.id);
                         }}
                       >
-                        <div className="truncate font-semibold">{event.title}</div>
-                        {event.duration > 30 && (
-                          <div className="opacity-75">{event.timeString}</div>
-                        )}
+                        <div>
+                          <div className="truncate font-bold leading-snug tracking-wide text-[10.5px]">{event.title}</div>
+                          {event.duration > 30 && (
+                            <div className="opacity-85 text-[9px] mt-0.5 font-medium">{event.timeString}</div>
+                          )}
+                        </div>
                       </div>
                     );
                   })}
