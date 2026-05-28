@@ -3,12 +3,25 @@
 /**
  * Productivity Score Component
  * Composite score based on tasks, focus, streak, and goals
+ * Redesigned into the Neural Quotient (NQ) consistency gauge with rich high-fidelity styling
  */
 
-import { useMemo } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useMemo, useState } from "react";
+import { GlassCard, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
-import { Zap, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
+import { 
+  Brain, 
+  TrendingUp, 
+  TrendingDown, 
+  Minus, 
+  CheckCircle2, 
+  Clock, 
+  Flame, 
+  Target,
+  Sparkles,
+  Zap
+} from "lucide-react";
 import { DailyActivity } from "@/lib/stats-calculator";
 
 interface ProductivityScoreProps {
@@ -26,7 +39,9 @@ export function ProductivityScore({
   totalTasks,
   goalsProgress = 50,
 }: ProductivityScoreProps) {
-  const score = useMemo(() => {
+  const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
+
+  const calculations = useMemo(() => {
     // Weights
     const TASK_WEIGHT = 0.4;
     const FOCUS_WEIGHT = 0.3;
@@ -55,8 +70,16 @@ export function ProductivityScore({
       streakScore * STREAK_WEIGHT +
       goalsScore * GOALS_WEIGHT;
 
-    return Math.round(total);
+    return {
+      score: Math.round(total),
+      taskScore: Math.round(taskScore),
+      focusScore: Math.round(focusScore),
+      streakScore: Math.round(streakScore),
+      goalsScore: Math.round(goalsScore),
+    };
   }, [data, streak, totalTasks, goalsProgress]);
+
+  const { score, taskScore, focusScore, streakScore, goalsScore } = calculations;
 
   // Calculate previous period score for trend
   const previousScore = useMemo(() => {
@@ -76,77 +99,260 @@ export function ProductivityScore({
 
   const trend = previousScore ? score - previousScore : 0;
   const TrendIcon = trend > 2 ? TrendingUp : trend < -2 ? TrendingDown : Minus;
+  
   const trendColor =
-    trend > 2 ? "text-green-500" : trend < -2 ? "text-red-500" : "text-muted-foreground";
+    trend > 2 
+      ? "text-emerald-400 bg-emerald-500/10 border-emerald-500/20" 
+      : trend < -2 
+        ? "text-rose-400 bg-rose-500/10 border-rose-500/20" 
+        : "text-muted-foreground bg-zinc-500/10 border-zinc-500/20";
 
   const getScoreColor = (s: number) => {
-    if (s >= 80) return "text-green-500";
-    if (s >= 60) return "text-blue-500";
-    if (s >= 40) return "text-yellow-500";
-    return "text-red-500";
-  };
-
-  const getProgressColor = (s: number) => {
-    if (s >= 80) return "bg-green-500";
-    if (s >= 60) return "bg-blue-500";
-    if (s >= 40) return "bg-yellow-500";
-    return "bg-red-500";
+    if (s >= 80) return "text-purple-400";
+    if (s >= 60) return "text-fuchsia-400";
+    if (s >= 40) return "text-pink-400";
+    return "text-indigo-400";
   };
 
   const getLabel = (s: number) => {
-    if (s >= 80) return "Excellent";
-    if (s >= 60) return "Good";
-    if (s >= 40) return "Fair";
-    return "Needs Work";
+    if (s >= 80) return "Hyper-Focus Mode";
+    if (s >= 60) return "Synchronized Flow";
+    if (s >= 40) return "Optimal Balance";
+    return "Consolidating Synapses";
   };
 
+  // SVG Radial circle mathematics
+  const radius = 52;
+  const strokeWidth = 7;
+  const circumference = 2 * Math.PI * radius;
+  const strokeDashoffset = circumference - (score / 100) * circumference;
+
   return (
-    <Card className="relative overflow-hidden">
-      <div
-        className={`absolute top-0 right-0 h-32 w-32 rounded-full ${getProgressColor(score)} opacity-10 blur-3xl`}
-      />
-      <CardHeader className="pb-2">
-        <CardTitle className="text-muted-foreground flex items-center gap-2 text-sm font-medium">
-          <Zap className="h-4 w-4" />
-          Productivity Score
+    <GlassCard 
+      hover="glow" 
+      className="relative overflow-hidden border border-purple-500/20 dark:border-purple-400/30 shadow-[0_0_40px_rgba(168,85,247,0.12)] bg-card/40 backdrop-blur-2xl rounded-2xl p-1"
+    >
+      {/* Visual background atmospheric lights */}
+      <div className="absolute -top-16 -right-16 h-40 w-40 rounded-full bg-gradient-to-br from-purple-500/20 to-pink-500/10 blur-[40px] pointer-events-none" />
+      <div className="absolute -bottom-16 -left-16 h-40 w-40 rounded-full bg-gradient-to-br from-indigo-500/15 to-purple-500/10 blur-[40px] pointer-events-none" />
+
+      <CardHeader className="pb-2 border-b border-purple-500/10 mb-4 mx-2">
+        <CardTitle className="text-muted-foreground flex items-center justify-between text-sm font-semibold tracking-wide">
+          <div className="flex items-center gap-2">
+            <Brain className="h-4.5 w-4.5 text-purple-400 animate-pulse" />
+            <span className="bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-300 bg-clip-text text-transparent font-extrabold uppercase tracking-widest text-[11px]">
+              Neural Quotient
+            </span>
+          </div>
+          <span className="text-[10px] text-purple-400/80 bg-purple-500/10 border border-purple-500/20 px-2 py-0.5 rounded-full font-bold">
+            NQ-v1.4
+          </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex items-baseline gap-3">
-          <span className={`text-4xl font-bold ${getScoreColor(score)}`}>{score}</span>
-          <span className="text-muted-foreground text-lg">/100</span>
-          {trend !== 0 && (
-            <span className={`flex items-center gap-0.5 text-sm ${trendColor}`}>
-              <TrendIcon className="h-3 w-3" />
-              {trend > 0 ? "+" : ""}
-              {trend}
+
+      <CardContent className="flex flex-col items-center space-y-6 px-4">
+        {/* Futuristic Radial Gauge */}
+        <div className="relative flex items-center justify-center w-40 h-40 group cursor-pointer">
+          <svg className="w-full h-full transform -rotate-90 select-none" viewBox="0 0 128 128">
+            {/* SVG Glowing drop filter */}
+            <defs>
+              <filter id="gauge-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="5" result="blur" />
+                <feMerge>
+                  <feMergeNode in="blur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+              
+              <linearGradient id="nq-radial-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stopColor="#a855f7" /> {/* Purple */}
+                <stop offset="50%" stopColor="#ec4899" /> {/* Pink */}
+                <stop offset="100%" stopColor="#6366f1" /> {/* Indigo */}
+              </linearGradient>
+            </defs>
+
+            {/* High-tech Dashed Cybernetic outer track */}
+            <circle
+              cx="64"
+              cy="64"
+              r={radius + 6}
+              className="stroke-purple-500/10"
+              strokeWidth="1"
+              strokeDasharray="4, 4"
+              fill="transparent"
+            />
+
+            {/* Background solid track */}
+            <circle
+              cx="64"
+              cy="64"
+              r={radius}
+              className="stroke-zinc-200/40 dark:stroke-zinc-800/60"
+              strokeWidth={strokeWidth}
+              fill="transparent"
+            />
+
+            {/* Gradient progress circle with drop-shadow neon glow */}
+            <motion.circle
+              cx="64"
+              cy="64"
+              r={radius}
+              stroke="url(#nq-radial-gradient)"
+              strokeWidth={strokeWidth}
+              strokeDasharray={circumference}
+              initial={{ strokeDashoffset: circumference }}
+              animate={{ strokeDashoffset }}
+              transition={{ duration: 1.8, ease: "easeOut" }}
+              strokeLinecap="round"
+              fill="transparent"
+              filter="url(#gauge-glow)"
+              className="transition-all duration-300 group-hover:stroke-[8px]"
+            />
+
+            {/* Inner dynamic pulsing tick circle */}
+            <circle
+              cx="64"
+              cy="64"
+              r={radius - 6}
+              className="stroke-pink-500/15 animate-pulse"
+              strokeWidth="1.5"
+              strokeDasharray="2, 6"
+              fill="transparent"
+            />
+          </svg>
+
+          {/* Central Digital Display */}
+          <div className="absolute flex flex-col items-center justify-center text-center">
+            <motion.div 
+              className="flex items-center justify-center relative"
+              whileHover={{ scale: 1.1 }}
+              transition={{ type: "spring", stiffness: 400, damping: 10 }}
+            >
+              {/* JetBrains Mono typography for high precision */}
+              <span className="font-mono text-4xl font-extrabold tracking-tight bg-gradient-to-r from-purple-300 via-pink-300 to-indigo-300 bg-clip-text text-transparent drop-shadow-[0_0_12px_rgba(236,72,153,0.3)]">
+                {score}
+              </span>
+              <Zap className="h-3.5 w-3.5 text-pink-400 absolute -top-2.5 -right-3 animate-bounce" />
+            </motion.div>
+            
+            <span className="text-[9px] uppercase font-black tracking-widest text-muted-foreground/80 mt-1 flex items-center gap-1">
+              Consistency Index
             </span>
-          )}
+          </div>
         </div>
 
-        <Progress value={score} className="h-2" />
+        {/* NQ Status & Dynamic Trend Card */}
+        <div className="flex flex-col items-center space-y-2.5 w-full text-center">
+          <div className="text-sm font-bold tracking-wide flex items-center gap-1.5 justify-center">
+            <span className="text-muted-foreground/80">Cognitive State:</span>
+            <span className={`font-extrabold underline decoration-2 decoration-purple-500/30 ${getScoreColor(score)}`}>
+              {getLabel(score)}
+            </span>
+          </div>
+          
+          <AnimatePresence mode="wait">
+            {trend !== 0 && (
+              <motion.div 
+                initial={{ opacity: 0, y: 5 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -5 }}
+                className={`inline-flex items-center gap-1 px-3 py-1 rounded-full text-[11px] font-bold border backdrop-blur-md transition-all ${trendColor}`}
+              >
+                <TrendIcon className="h-3 w-3" />
+                <span>
+                  {trend > 0 ? "+" : ""}
+                  {trend}% shift in synaptic consistency
+                </span>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </div>
 
-        <p className={`text-sm font-medium ${getScoreColor(score)}`}>{getLabel(score)}</p>
+        {/* High-Fidelity Sub-Metrics Breakdown Grid */}
+        <div className="grid grid-cols-2 gap-3.5 w-full border-t border-purple-500/10 pt-4.5">
+          <motion.div 
+            onHoverStart={() => setHoveredMetric("tasks")}
+            onHoverEnd={() => setHoveredMetric(null)}
+            className={`flex flex-col p-3 rounded-xl transition-all duration-300 border ${
+              hoveredMetric === "tasks" 
+                ? "bg-purple-500/10 border-purple-500/40 shadow-[0_0_12px_rgba(168,85,247,0.15)]" 
+                : "bg-zinc-500/5 border-zinc-200/5 dark:border-white/5"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] text-muted-foreground flex items-center gap-1.5 font-bold">
+                <CheckCircle2 className="h-3.5 w-3.5 text-purple-400" />
+                Tasks (40%)
+              </span>
+              <span className="text-xs font-black text-purple-300 font-mono">{taskScore}%</span>
+            </div>
+            <Progress value={taskScore} variant="gradient" className="h-1.5" />
+          </motion.div>
 
-        <div className="text-muted-foreground grid grid-cols-4 gap-2 text-xs">
-          <div className="text-center">
-            <div className="text-foreground font-medium">40%</div>
-            <div>Tasks</div>
-          </div>
-          <div className="text-center">
-            <div className="text-foreground font-medium">30%</div>
-            <div>Focus</div>
-          </div>
-          <div className="text-center">
-            <div className="text-foreground font-medium">20%</div>
-            <div>Streak</div>
-          </div>
-          <div className="text-center">
-            <div className="text-foreground font-medium">10%</div>
-            <div>Goals</div>
-          </div>
+          <motion.div 
+            onHoverStart={() => setHoveredMetric("focus")}
+            onHoverEnd={() => setHoveredMetric(null)}
+            className={`flex flex-col p-3 rounded-xl transition-all duration-300 border ${
+              hoveredMetric === "focus" 
+                ? "bg-pink-500/10 border-pink-500/40 shadow-[0_0_12px_rgba(236,72,153,0.15)]" 
+                : "bg-zinc-500/5 border-zinc-200/5 dark:border-white/5"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] text-muted-foreground flex items-center gap-1.5 font-bold">
+                <Clock className="h-3.5 w-3.5 text-pink-400" />
+                Focus (30%)
+              </span>
+              <span className="text-xs font-black text-pink-300 font-mono">{focusScore}%</span>
+            </div>
+            <Progress value={focusScore} variant="gradient" className="h-1.5" />
+          </motion.div>
+
+          <motion.div 
+            onHoverStart={() => setHoveredMetric("streak")}
+            onHoverEnd={() => setHoveredMetric(null)}
+            className={`flex flex-col p-3 rounded-xl transition-all duration-300 border ${
+              hoveredMetric === "streak" 
+                ? "bg-amber-500/10 border-amber-500/40 shadow-[0_0_12px_rgba(245,158,11,0.15)]" 
+                : "bg-zinc-500/5 border-zinc-200/5 dark:border-white/5"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] text-muted-foreground flex items-center gap-1.5 font-bold">
+                <Flame className="h-3.5 w-3.5 text-amber-400" />
+                Streak (20%)
+              </span>
+              <span className="text-xs font-black text-amber-300 font-mono">{streakScore}%</span>
+            </div>
+            <Progress value={streakScore} variant="gradient" className="h-1.5" />
+          </motion.div>
+
+          <motion.div 
+            onHoverStart={() => setHoveredMetric("goals")}
+            onHoverEnd={() => setHoveredMetric(null)}
+            className={`flex flex-col p-3 rounded-xl transition-all duration-300 border ${
+              hoveredMetric === "goals" 
+                ? "bg-indigo-500/10 border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.15)]" 
+                : "bg-zinc-500/5 border-zinc-200/5 dark:border-white/5"
+            }`}
+          >
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[11px] text-muted-foreground flex items-center gap-1.5 font-bold">
+                <Target className="h-3.5 w-3.5 text-indigo-400" />
+                Goals (10%)
+              </span>
+              <span className="text-xs font-black text-indigo-300 font-mono">{goalsScore}%</span>
+            </div>
+            <Progress value={goalsScore} variant="gradient" className="h-1.5" />
+          </motion.div>
+        </div>
+
+        {/* Small motivational quote */}
+        <div className="w-full text-center text-[10px] text-muted-foreground/60 flex items-center justify-center gap-1 pt-1 italic">
+          <Sparkles className="h-3 w-3 text-purple-400/50" />
+          Habit consistency matches neural pathway growth.
         </div>
       </CardContent>
-    </Card>
+    </GlassCard>
   );
 }
