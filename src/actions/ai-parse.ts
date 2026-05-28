@@ -13,6 +13,7 @@ import {
   APIError,
 } from "@/lib/errors";
 import { requireWorkspaceAuth } from "./shared";
+import { getEnvOptional } from "@/lib/env";
 import { checkRateLimit } from "@/lib/rate-limiter";
 import { RateLimitError } from "@/lib/errors";
 import { generateContent } from "@/lib/openai";

@@ -14,6 +14,7 @@ import {
   createErrorResult,
 } from "@/lib/errors";
 import { requireWorkspaceAuth } from "./shared";
+import { getEnvOptional } from "@/lib/env";
 import { generateContent } from "@/lib/openai";
 import { logger } from "@/lib/logger";
 
