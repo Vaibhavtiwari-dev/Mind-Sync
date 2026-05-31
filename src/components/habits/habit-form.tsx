@@ -56,10 +56,10 @@ export function HabitForm({ initialData, defaultTimeOfDay, onSuccess }: HabitFor
   const selectedFrequency = form.watch("frequency");
   const selectedTimeOfDay = form.watch("timeOfDay");
 
-  async function onSubmit(data: Record<string, any>) {
+  async function onSubmit(data: CreateHabitInput) {
     setIsSubmitting(true);
     try {
-      const payload = { ...data } as any;
+      const payload = { ...data };
 
       // Clean empty values to prevent Zod validation errors on backend
       if (!payload.reminderTime || payload.reminderTime === "") {
