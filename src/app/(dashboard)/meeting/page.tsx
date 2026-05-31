@@ -47,6 +47,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { sanitizeNoteContent } from "@/lib/sanitize";
 import { toast } from "sonner";
 
 export default function MeetingPage() {
@@ -367,7 +368,7 @@ export default function MeetingPage() {
           </DialogHeader>
           <div
             className="prose dark:prose-invert mt-4"
-            dangerouslySetInnerHTML={{ __html: meetingMinutes || "" }}
+            dangerouslySetInnerHTML={{ __html: sanitizeNoteContent(meetingMinutes ?? "") }}
           />
         </DialogContent>
       </Dialog>
