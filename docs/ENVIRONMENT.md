@@ -21,9 +21,16 @@ This document describes all environment variables required to run the Mind-Sync 
 
 ### AI Services
 
-| Variable         | Description                           | Required |
-| ---------------- | ------------------------------------- | -------- |
-| `GEMINI_API_KEY` | Google Gemini API key for AI features | Optional |
+| Variable            | Description                            | Required |
+| ------------------- | -------------------------------------- | -------- |
+| `GEMINI_API_KEY`    | Google Gemini API key for AI features  | Optional |
+| `OPENAI_API_KEY`    | OpenAI API key (for AI categorization) | Optional |
+
+### Speech Recognition
+
+| Variable           | Description                  | Required |
+| ------------------- | ---------------------------- | -------- |
+| `DEEPGRAM_API_KEY`  | Deepgram API key for STT     | Optional |
 
 ### Google Calendar Integration
 
@@ -48,7 +55,53 @@ This document describes all environment variables required to run the Mind-Sync 
 | `SENTRY_DSN`        | Sentry error tracking DSN | Optional |
 | `NEXT_PUBLIC_GA_ID` | Google Analytics ID       | Optional |
 
-## GitHub Actions Secrets
+### Email (Resend)
+
+| Variable         | Description            | Required |
+| ---------------- | ---------------------- | -------- |
+| `RESEND_API_KEY` | Resend API key for transactional email | Optional |
+
+### Real-time Collaboration
+
+| Variable                    | Description                  | Required |
+| --------------------------- | ---------------------------- | -------- |
+| `NEXT_PUBLIC_PARTYKIT_HOST` | PartyKit host for real-time sync (default: `localhost:1999`) | Optional |
+
+### Cron Jobs
+
+| Variable       | Description                                         | Required |
+| -------------- | --------------------------------------------------- | -------- |
+| `CRON_SECRET`  | Secret to authenticate cron job invocations          | Optional |
+
+### Rate Limiting
+
+| Variable               | Description                                               | Required |
+| ---------------------- | --------------------------------------------------------- | -------- |
+| `RATE_LIMIT_STRATEGY`  | Rate limiter backend: `"memory"` or `"database"` (default) | Optional |
+
+### Node Environment
+
+| Variable    | Description                                           | Required |
+| ----------- | ----------------------------------------------------- | -------- |
+| `NODE_ENV`  | `development`, `production`, or `test` (set by host)   | Optional |
+
+## Database Migrations
+
+Mind-Sync uses [Drizzle Kit](https://orm.drizzle.team/kit-docs/overview) for schema management.
+
+| Command              | Description                                         |
+| -------------------- | --------------------------------------------------- |
+| `npm run db:push`    | Push schema directly (dev only — can be destructive) |
+| `npm run db:generate`| Generate migration SQL from schema changes           |
+| `npm run db:migrate` | Apply pending migrations safely                      |
+| `npm run db:studio`  | Launch Drizzle Studio (GUI database browser)         |
+
+### Recommended Workflow
+
+1. **Development**: Use `npm run db:push` for rapid iteration
+2. **Before production deploy**: Run `npm run db:generate` to snapshot schema changes, commit the generated SQL
+3. **Production deploy**: Run `npm run db:migrate` to apply pending migrations
+4. **Version control**: Always commit generated migration files in `drizzle/`
 
 The following secrets should be configured in GitHub repository settings:
 
