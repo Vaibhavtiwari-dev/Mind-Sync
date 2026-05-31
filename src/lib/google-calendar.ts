@@ -29,25 +29,88 @@ export interface GoogleCalendar {
 
 import { logger } from "@/lib/logger";
 
+/**
+ * Parse a Retry-After header per RFC 7231 §7.1.3.
+ * Handles both delta-seconds ("120") and HTTP-date ("Fri, 31 Dec 2026 23:59:59 GMT").
+ * Returns milliseconds to wait, or null if the value is unparseable.
+ */
+function parseRetryAfter(value: string): number | null {
+  // Try integer seconds first
+  const seconds = parseInt(value, 10);
+  if (!isNaN(seconds)) return seconds * 1000;
+
+  // Try HTTP-date format
+  const timestamp = new Date(value).getTime();
+  if (!isNaN(timestamp)) return Math.max(0, timestamp - Date.now());
+
+  return null;
+}
+
+/**
+ * Wrapper around fetch to Google APIs with exponential backoff retry.
+ * Retries on 5xx, 429 (rate limit), and network errors up to 3 times.
+ * Does NOT retry 4xx errors (client errors) other than 429.
+ */
+async function googleApiFetch(url: string, options: RequestInit = {}, retries = 3): Promise<Response> {
+  let lastError: Error | null = null;
+
+  for (let attempt = 0; attempt < retries; attempt++) {
+    try {
+      const response = await fetch(url, options);
+
+      // Success — return immediately
+      if (response.ok) return response;
+
+      // 429 (rate limit) or 5xx — retryable
+      if (response.status === 429 || response.status >= 500) {
+        const errorBody = await response.text().catch(() => "Unknown error");
+        lastError = new Error(`Google API error (${response.status}): ${errorBody}`);
+
+        // If we have a Retry-After header, parse it (seconds or HTTP-date);
+        // fall back to exponential backoff if unparseable
+        const exponentialBackoff = Math.min(1000 * Math.pow(2, attempt) + Math.random() * 1000, 10000);
+        const retryAfter = response.headers.get("Retry-After");
+        const delay = retryAfter
+          ? parseRetryAfter(retryAfter) ?? exponentialBackoff
+          : exponentialBackoff;
+
+        logger.warn(`Google API retry ${attempt + 1}/${retries}`, {
+          action: "googleApiFetch",
+          url: url.split("?")[0],
+          status: response.status,
+          delayMs: Math.round(delay),
+        });
+
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        continue;
+      }
+
+      // 4xx (non-429) — not retryable
+      return response;
+    } catch (error) {
+      // Network error — retryable
+      lastError = error instanceof Error ? error : new Error(String(error));
+      if (attempt < retries - 1) {
+        const delay = Math.min(1000 * Math.pow(2, attempt), 5000);
+        await new Promise((resolve) => setTimeout(resolve, delay));
+      }
+    }
+  }
+
+  throw lastError ?? new Error("Google API request failed after retries");
+}
+
 export const GoogleCalendarService = {
   /**
    * List all calendars the user has access to
    */
   async listCalendars(accessToken: string): Promise<GoogleCalendar[]> {
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/users/me/calendarList`,
       {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      logger.error("Google Calendar List Error", new Error(errorBody), { action: "listCalendars", status: response.status });
-      throw new Error(`Failed to fetch calendars: ${response.status}`);
-    }
 
     const data = await response.json();
     return data.items || [];
@@ -89,20 +152,12 @@ export const GoogleCalendarService = {
     if (timeMax) params.append("timeMax", timeMax);
     if (pageToken) params.append("pageToken", pageToken);
 
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events?${params}`,
       {
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-        },
+        headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
-
-    if (!response.ok) {
-      const errorBody = await response.text();
-      logger.error("Google Calendar API Error", new Error(errorBody), { action: "listEvents", status: response.status });
-      throw new Error(`Failed to fetch calendar events: ${response.status}`);
-    }
 
     const data = await response.json();
     return {
@@ -153,7 +208,7 @@ export const GoogleCalendarService = {
       ? "?conferenceDataVersion=1"
       : "";
 
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events${conferenceParam}`,
       {
         method: "POST",
@@ -165,11 +220,6 @@ export const GoogleCalendarService = {
       }
     );
 
-    if (!response.ok) {
-      const errorBody = await response.text();
-      logger.error("Google Create Event Error", new Error(errorBody), { action: "insertEvent" });
-      throw new Error("Failed to create event in Google Calendar");
-    }
     return await response.json();
   },
 
@@ -195,7 +245,7 @@ export const GoogleCalendarService = {
     if (event.end) body.end = { dateTime: event.end };
     if (event.location !== undefined) body.location = event.location;
 
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/${eventId}`,
       {
         method: "PATCH",
@@ -207,11 +257,6 @@ export const GoogleCalendarService = {
       }
     );
 
-    if (!response.ok) {
-      const text = await response.text();
-      logger.error("Google Update Error", new Error(text), { action: "updateEvent" });
-      throw new Error("Failed to update event in Google Calendar");
-    }
     return await response.json();
   },
 
@@ -223,17 +268,13 @@ export const GoogleCalendarService = {
     eventId: string,
     calendarId: string = "primary"
   ): Promise<void> {
-    const response = await fetch(
+    await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/${eventId}`,
       {
         method: "DELETE",
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
-
-    if (!response.ok) {
-      throw new Error("Failed to delete event from Google Calendar");
-    }
   },
 
   /**
@@ -244,16 +285,13 @@ export const GoogleCalendarService = {
     eventId: string,
     calendarId: string = "primary"
   ): Promise<GoogleCalendarEvent> {
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/${eventId}`,
       {
         headers: { Authorization: `Bearer ${accessToken}` },
       }
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to get event from Google Calendar");
-    }
     return await response.json();
   },
 
@@ -265,7 +303,7 @@ export const GoogleCalendarService = {
     text: string,
     calendarId: string = "primary"
   ): Promise<GoogleCalendarEvent> {
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/quickAdd?text=${encodeURIComponent(text)}`,
       {
         method: "POST",
@@ -273,9 +311,6 @@ export const GoogleCalendarService = {
       }
     );
 
-    if (!response.ok) {
-      throw new Error("Failed to quick add event");
-    }
     return await response.json();
   },
 
@@ -289,7 +324,7 @@ export const GoogleCalendarService = {
   ): Promise<{ resourceId: string; expiration: string }> {
     const channelId = `mindsync-${Date.now()}`;
 
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/calendars/${encodeURIComponent(calendarId)}/events/watch`,
       {
         method: "POST",
@@ -304,12 +339,6 @@ export const GoogleCalendarService = {
         }),
       }
     );
-
-    if (!response.ok) {
-      const error = await response.text();
-      logger.error("Watch setup error", new Error(error), { action: "watchCalendar" });
-      throw new Error("Failed to set up calendar watch");
-    }
 
     const data = await response.json();
     return {
@@ -326,7 +355,7 @@ export const GoogleCalendarService = {
     channelId: string,
     resourceId: string
   ): Promise<void> {
-    const response = await fetch(
+    await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/channels/stop`,
       {
         method: "POST",
@@ -340,10 +369,6 @@ export const GoogleCalendarService = {
         }),
       }
     );
-
-    if (!response.ok) {
-      throw new Error("Failed to stop calendar watch");
-    }
   },
 
   /**
@@ -355,7 +380,7 @@ export const GoogleCalendarService = {
     timeMax: string,
     calendarIds: string[] = ["primary"]
   ): Promise<Record<string, { busy: { start: string; end: string }[] }>> {
-    const response = await fetch(
+    const response = await googleApiFetch(
       `https://www.googleapis.com/calendar/v3/freeBusy`,
       {
         method: "POST",
@@ -370,10 +395,6 @@ export const GoogleCalendarService = {
         }),
       }
     );
-
-    if (!response.ok) {
-      throw new Error("Failed to get free/busy information");
-    }
 
     const data = await response.json();
     return data.calendars;
