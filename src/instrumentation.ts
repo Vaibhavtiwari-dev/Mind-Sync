@@ -4,7 +4,8 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === "nodejs") {
     Sentry.init({
       dsn: process.env.SENTRY_DSN,
-      tracesSampleRate: 1,
+      // Sample 100% of traces in dev, 10% in production to reduce overhead
+      tracesSampleRate: process.env.NODE_ENV === "production" ? 0.1 : 1,
       debug: false,
     });
   }

@@ -79,6 +79,7 @@ export const tasks = pgTable("tasks", {
   index("idx_tasks_user_priority").on(table.userId, table.priority),
   index("idx_tasks_user_created").on(table.userId, table.createdAt),
   index("idx_tasks_depends_on").on(table.dependsOn),
+  index("idx_tasks_workspace").on(table.workspaceId),
 ]);
 
 export const events = pgTable("events", {
@@ -101,6 +102,7 @@ export const events = pgTable("events", {
 }, (table) => [
   index("idx_events_user_start").on(table.userId, table.startTime),
   index("idx_events_user_end").on(table.userId, table.endTime),
+  index("idx_events_workspace").on(table.workspaceId),
 ]);
 
 export const notes = pgTable("notes", {
@@ -126,6 +128,7 @@ export const notes = pgTable("notes", {
 }, (table) => [
   index("idx_notes_user_updated").on(table.userId, table.updatedAt),
   index("idx_notes_user_type").on(table.userId, table.type),
+  index("idx_notes_workspace").on(table.workspaceId),
 ]);
 
 // Attachments for tasks and notes
@@ -142,7 +145,10 @@ export const attachments = pgTable("attachments", {
   size: integer("size"), // bytes
   mimeType: text("mime_type"),
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  index("idx_attachments_task").on(table.taskId),
+  index("idx_attachments_note").on(table.noteId),
+]);
 
 // Task templates for quick creation
 export const taskTemplates = pgTable("task_templates", {
@@ -166,7 +172,10 @@ export const recurringTaskInstances = pgTable("recurring_task_instances", {
   instanceDate: timestamp("instance_date").notNull(),
   taskId: uuid("task_id").references(() => tasks.id), // Created task instance
   createdAt: timestamp("created_at").defaultNow(),
-});
+}, (table) => [
+  index("idx_recurring_instances_template").on(table.templateTaskId),
+  index("idx_recurring_instances_task").on(table.taskId),
+]);
 
 export const goals = pgTable("goals", {
   id: uuid("id").primaryKey().defaultRandom(),
@@ -184,7 +193,9 @@ export const goals = pgTable("goals", {
   status: goalStatusEnum("status").default("active").notNull(),
   createdAt: timestamp("created_at").defaultNow(),
   updatedAt: timestamp("updated_at").defaultNow(),
-});
+}, (table) => [
+  index("idx_goals_workspace").on(table.workspaceId),
+]);
 
 // Rate limiting table for distributed rate limiting (works across serverless instances)
 export const rateLimits = pgTable("rate_limits", {
