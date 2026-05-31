@@ -1,6 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
+import { ErrorBoundary } from "@/components/providers/error-boundary";
 
 // Lazy-load the Tiptap editor — only loads when user opens a note
 const Editor = dynamic(
@@ -109,7 +110,9 @@ export default function NoteEditorPage() {
         </div>
       </header>
       <div className="flex-1 overflow-auto">
-        <Editor note={note} key={note.id} />
+        <ErrorBoundary>
+          <Editor note={note} key={note.id} />
+        </ErrorBoundary>
       </div>
     </div>
   );

@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
+import { ErrorBoundary } from '@/components/providers/error-boundary';
 
 const Hero3D = dynamic(
   () => import('./Hero3D').then((mod) => mod.Hero3D),
@@ -11,8 +12,10 @@ const Hero3D = dynamic(
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex flex-col items-center justify-center pt-24 pb-16 px-6 overflow-hidden bg-transparent">
-      {/* Three.js Orb */}
-      <Hero3D />
+      {/* Three.js Orb - isolated error boundary prevents crashes from breaking the landing page */}
+      <ErrorBoundary>
+        <Hero3D />
+      </ErrorBoundary>
 
       {/* Hero Content */}
       <div className="text-center max-w-4xl z-10">
