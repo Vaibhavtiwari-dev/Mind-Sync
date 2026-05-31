@@ -141,7 +141,7 @@ describe("Events Server Actions", () => {
     });
 
     it("should reject invalid data", async () => {
-      const result = await createEvent({ id: "invalid-id", title: "", startTime: new Date(), endTime: new Date(), type: "work" });
+      const result = await createEvent({ id: "invalid-id", title: "", start: new Date().toISOString(), end: new Date().toISOString(), type: "work" });
       expect(result.success).toBe(false);
       if (!result.success) expect(result.error).toContain("Event title is required");
       expect(db.insert).not.toHaveBeenCalled();

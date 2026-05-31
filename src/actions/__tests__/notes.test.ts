@@ -124,7 +124,7 @@ describe("Notes Server Actions", () => {
     });
 
     it("should reject invalid data", async () => {
-      const result = await createNote({ id: "invalid-id", title: "", content: "" });
+      const result = await createNote({ id: "invalid-id", title: "", content: "", preview: "", date: new Date().toISOString() });
       expect(result.success).toBe(false);
       if (!result.success) expect(result.error).toContain("Note title is required");
       expect(db.insert).not.toHaveBeenCalled();
