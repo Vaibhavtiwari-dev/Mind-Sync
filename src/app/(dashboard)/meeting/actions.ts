@@ -1,6 +1,7 @@
 "use server";
 
 import { generateContent } from "@/lib/openai";
+import { sanitizeNoteContent } from "@/lib/sanitize";
 import { logger } from "@/lib/logger";
 
 interface MeetingMinutesResult {
@@ -46,7 +47,7 @@ export async function generateMeetingMinutes(transcript: string): Promise<Meetin
 
     const text = await generateContent(prompt);
 
-    return { success: true, data: text };
+    return { success: true, data: sanitizeNoteContent(text) };
   } catch (error) {
     logger.error("Error generating meeting minutes", error as Error, { action: "generateMeetingMinutes" });
     return { success: false, error: "Failed to generate meeting minutes. Please try again." };
