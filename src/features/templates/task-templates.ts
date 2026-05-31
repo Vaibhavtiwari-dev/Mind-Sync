@@ -15,6 +15,7 @@ import {
   createErrorResult,
 } from "@/lib/errors";
 import { revalidatePath } from "next/cache";
+import { logger } from "@/lib/logger";
 
 // Types
 export interface TaskTemplateItem {
@@ -186,7 +187,7 @@ export async function getTemplates(): Promise<ActionResult<TaskTemplate[]>> {
 
     return createSuccessResult(allTemplates);
   } catch (error) {
-    console.error("[Templates] Get error:", error);
+    logger.error("[Templates] Get error", error instanceof Error ? error : new Error(String(error)), { action: "templates_get" });
     return createErrorResult(error);
   }
 }
@@ -217,7 +218,7 @@ export async function createTemplate(data: {
     revalidatePath("/dashboard");
     return createSuccessResult({ id });
   } catch (error) {
-    console.error("[Templates] Create error:", error);
+    logger.error("[Templates] Create error", error instanceof Error ? error : new Error(String(error)), { action: "templates_create" });
     return createErrorResult(error);
   }
 }
@@ -275,7 +276,7 @@ export async function applyTemplate(
     revalidatePath("/dashboard");
     return createSuccessResult({ created });
   } catch (error) {
-    console.error("[Templates] Apply error:", error);
+    logger.error("[Templates] Apply error", error instanceof Error ? error : new Error(String(error)), { action: "templates_apply" });
     return createErrorResult(error);
   }
 }
@@ -301,7 +302,7 @@ export async function deleteTemplate(
     revalidatePath("/dashboard");
     return createSuccessResult(undefined);
   } catch (error) {
-    console.error("[Templates] Delete error:", error);
+    logger.error("[Templates] Delete error", error instanceof Error ? error : new Error(String(error)), { action: "templates_delete" });
     return createErrorResult(error);
   }
 }
