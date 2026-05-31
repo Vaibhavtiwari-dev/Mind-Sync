@@ -1,6 +1,8 @@
 import { getInitialData } from "@/app/actions/get-initial-data";
 import DashboardShell from "./DashboardShell";
 
+export const dynamic = "force-dynamic";
+
 /**
  * Server component layout for the dashboard route group.
  * Fetches initial data from the DB and passes it to the client shell
