@@ -34,7 +34,7 @@ export function CreateHabitButton({
     <Sheet open={open} onOpenChange={setOpen}>
       <SheetTrigger asChild>
         {className ? (
-          <Button variant={variant as any} size={size} className={className}>
+          <Button variant={variant} size={size} className={className}>
             <Plus className="h-4 w-4" /> {label}
           </Button>
         ) : (
