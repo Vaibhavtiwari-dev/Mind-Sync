@@ -3,6 +3,7 @@ import { tasks, events, notes, goals, habits, habitLogs } from "@/db/schema";
 import { eq, and, desc, asc } from "drizzle-orm";
 import { unstable_cache } from "next/cache";
 import { cache } from "react";
+import { logger } from "@/lib/logger";
 
 // --- Tags for Cache Invalidation ---
 export const CACHE_TAGS = {
@@ -86,7 +87,7 @@ export const getCachedGoals = cache(async (workspaceId: string) => {
       }
     )();
   } catch (error) {
-    console.error("[getCachedGoals] DB error:", error instanceof Error ? error.message : error);
+    logger.error("[getCachedGoals] DB error", error instanceof Error ? error : new Error(String(error)), { action: "getCachedGoals" });
     return [];
   }
 });
@@ -109,7 +110,7 @@ export const getCachedHabits = cache(async (userId: string) => {
       }
     )();
   } catch (error) {
-    console.error("[getCachedHabits] DB error:", error instanceof Error ? error.message : error);
+    logger.error("[getCachedHabits] DB error", error instanceof Error ? error : new Error(String(error)), { action: "getCachedHabits" });
     return [];
   }
 });
@@ -124,7 +125,7 @@ export const getCachedHabitLogs = cache(async (userId: string) => {
           .from(habitLogs)
           .where(
               and(
-                  eq(habitLogs.userId, userId),
+                  eq(habitLogs.userId, userId)
               )
           )
           .orderBy(desc(habitLogs.date));
@@ -136,7 +137,7 @@ export const getCachedHabitLogs = cache(async (userId: string) => {
       }
     )();
   } catch (error) {
-    console.error("[getCachedHabitLogs] DB error:", error instanceof Error ? error.message : error);
+    logger.error("[getCachedHabitLogs] DB error", error instanceof Error ? error : new Error(String(error)), { action: "getCachedHabitLogs" });
     return [];
   }
 });
